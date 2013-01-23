@@ -1,0 +1,62 @@
+######################################
+# variable inputs
+######################################
+default_lb_name = 'Lbaas_test_node'
+default_nodes = [{"address": "15.185.227.167","port": "80"}
+                ,{"address": "15.185.227.165","port": "80"}
+                ]
+
+lb_name_variants = [ ('basic_positive_name','the quick, brown fox jumps over the lazy dog.', 200)
+                   , ('too_long_name', 'a'*129, 500) 
+                   #, ('utf_name', unichr(9911).format(u'')*10, 200)
+                   , ('null_name','', 200)
+                   , ('whitespace_name',' ', 200)
+                   , ('long_whitespace_name',' '*128, 200)
+                   , ('long_positive_name','a'*128, 200)
+                   , ('nonalpha_name','!@#@!', 200)
+                   , ('overlong_utf8_name', unichr(9911).format(u'')*1000, 500)
+                   #, ('overlong_whitespace_name', ' '*150, 500)
+                   ]
+
+node_variants = [#one node
+                 ('one_node',[{"address": "15.185.227.167","port": "80"}],200)
+                 #two nodes
+                ,('two_nodes', [{"address": "15.185.227.167","port": "80"}
+                 ,{"address": "15.185.227.165","port": "80"}],200)
+                 #three nodes
+                ,('three_nodes',[{"address": "15.185.227.167","port": "80"}
+                 ,{"address": "15.185.227.165","port": "80"}
+                 ,{"address": "15.185.227.167","port": "80"}],200)
+                 #five nodes
+                ,('five_nodes',[{"address": "15.185.227.167","port": "80"}
+                 ,{"address": "15.185.227.165","port": "80"}
+                 ,{"address": "15.185.227.165","port": "80"}
+                 ,{"address": "15.185.227.165","port": "80"}
+                 ,{"address": "15.185.227.167","port": "80"}],200)
+                 # > five nodes
+                ,('over_five_nodes',[{"address": "15.185.227.167","port": "80"}
+                 ,{"address": "15.185.227.167","port": "80"}
+                 ,{"address": "15.185.227.165","port": "80"}
+                 ,{"address": "15.185.227.165","port": "80"}
+                 ,{"address": "15.185.227.165","port": "80"}
+                 ,{"address": "15.185.227.167","port": "80"}],413)
+                 # bad_ip
+                ,('bad_ip_address', [{"address": "ImmaBadIP7","port": "80"}
+                 ,{"address": "15.185.227.165","port": "80"}],400)
+                 #no nodes
+                ,('no_nodes', [{}],400)
+                 # no ip
+                ,('no_ip_value',[{"address": "","port": "80"}],400)
+                 # no address
+                ,('no_address',[{"port": "80"}],400)
+                 # no port value
+                ,('no_port_value',[{"address": "15.185.227.165","port": ""}],400)
+                 # no port entry
+                ,('no_port_entry',[{"address": ""}],400)
+                 # garbage value
+                ,('garbage_value',[{"address": "15.185.227.165","port": "80",'ikeelyou':'boomGoesTheDynamite!'}],200)
+                 # duplicate address value
+                ,('duplicate_address_value',[{"address": "15.185.227.165", "port": "80", "address": "15.185.227.167"}],200)
+                 # bad port value
+                ,('bad_port_value',[{"address": "15.185.227.165","port": "iKeelYou"}],400)
+                ]
