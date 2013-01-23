@@ -172,10 +172,18 @@ for test_name in testnames:
                                             , api_user_url, api_headers
                                             , test_name, lb_name, inputs_module.default_nodes
                                             , expected_status = test_expected_status))
+    # testing lb node variants
     for test_description, node_set, expected_status in inputs_module.node_variants:
         suite.addTest(testCreateLoadBalancer( test_description, args, logging, driver
                                             , api_user_url, api_headers
                                             , test_name, inputs_module.default_lb_name, node_set
+                                            , expected_status = expected_status))
+    # algorithm variants
+    for test_description, algorithm, expected_status in inputs_module.algorithm_variants:
+        suite.addTest(testCreateLoadBalancer( test_description, args, logging, driver
+                                            , api_user_url, api_headers
+                                            , test_name, inputs_module.default_lb_name, inputs_module.default_nodes
+                                            , algorithm = algorithm
                                             , expected_status = expected_status))
 result = unittest.TextTestRunner(verbosity=2).run(suite)
 sys.exit(not result.wasSuccessful())

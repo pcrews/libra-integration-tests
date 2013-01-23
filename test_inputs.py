@@ -60,3 +60,9 @@ node_variants = [#one node
                  # bad port value
                 ,('bad_port_value',[{"address": "15.185.227.165","port": "iKeelYou"}],400)
                 ]
+
+algorithm_variants = [('round_robin_algo',"ROUND_ROBIN",200)
+                     ,('least_connections_algo',"LEAST_CONNECTIONS",200)
+                     ,('bad_algorithm',"IDONOTEXIST",400)
+                     ,('fuzzy_good_algo',"ROUND_ROBIN1",400)
+                     ]

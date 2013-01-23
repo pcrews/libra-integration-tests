@@ -19,7 +19,7 @@ class lbaasDriver:
     #-----------------
     # lbaas functions
     #-----------------
-    def create_lb(self, url, name, nodes, headers):
+    def create_lb(self, url, name, nodes, algorithm, headers):
         """ Create a load balancer via the requests library 
             We expect the url to be the proper, fully constructed base url
             we add the 'loadbalancers suffix to the base 
@@ -32,6 +32,8 @@ class lbaasDriver:
         request_data = { "name": "%s" %name
                        , "nodes": nodes 
                        }
+        if algorithm:
+            request_data["algorithm"] = "%s" %algorithm
         request_data = json.dumps(request_data)
         request_result = requests.post(url, data=request_data, headers=headers, verify= False)
         return request_result
