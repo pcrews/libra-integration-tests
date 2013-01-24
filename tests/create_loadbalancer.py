@@ -42,7 +42,7 @@ class testCreateLoadBalancer(unittest.TestCase):
             self.logging.info("name: %s" %self.lb_name)
             self.logging.info("nodes: %s" %self.nodes)    
         result = self.driver.create_lb(self.api_user_url, self.lb_name, self.nodes, self.algorithm, self.api_headers)
-        result_data = ast.literal_eval(result._content)
+        result_data = ast.literal_eval(result.text)
         self.create_result = result
         request_status = str(vars(result)['status_code'])
         if request_status not in self.bad_statuses:
@@ -73,7 +73,7 @@ class testCreateLoadBalancer(unittest.TestCase):
             ###############
             self.logging.info('Validating load balancer list...')
             result = self.driver.list_lbs(self.api_user_url, self.api_headers)
-            result_data = ast.literal_eval(result._content)
+            result_data = ast.literal_eval(result.text)
             loadbalancers = result_data['loadBalancers']
             for loadbalancer in loadbalancers:
                 match = 0
@@ -91,7 +91,7 @@ class testCreateLoadBalancer(unittest.TestCase):
             ################
             self.logging.info('Validating load balancer detail...')
             result = self.driver.list_lb_detail(self.api_user_url, self.lb_id, self.api_headers)
-            result_data = ast.literal_eval(result._content)
+            result_data = ast.literal_eval(result.text)
             if self.args.verbose:
                 for key, item in result_data.items():
                     self.logging.info('%s: %s' %(key, item))
@@ -114,7 +114,7 @@ class testCreateLoadBalancer(unittest.TestCase):
             ###################
             self.logging.info('Validating load balancer nodes url...')
             result = self.driver.list_lb_nodes(self.api_user_url, self.lb_id, self.api_headers)
-            result_data = ast.literal_eval(result._content)
+            result_data = ast.literal_eval(result.text)
             if self.args.verbose:
                 for key, item in result_data.items():
                     self.logging.info('%s: %s' %(key, item))

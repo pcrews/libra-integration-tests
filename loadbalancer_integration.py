@@ -33,7 +33,7 @@ def get_auth_token(auth_url, user_name, tenant_id, password):
     request_data = json.dumps(request_data)
     headers = {"Content-Type": "application/json"}
     request_result = requests.post(auth_url, data=request_data, headers=headers, verify=False)
-    request_data = ast.literal_eval(request_result._content)
+    request_data = ast.literal_eval(request_result.text)
     auth_token = request_data['access']['token']['id']
     return auth_token
 
