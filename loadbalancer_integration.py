@@ -27,7 +27,7 @@ parser.add_argument( '--verbose'
                    , help = 'Controls internal output.  Utilize multiple times to increase output'
                    )
 parser.add_argument( '--driver'
-                   , choices=['http','client']
+                   , choices=['http','python-client']
                    , dest = 'driver'
                    , default = 'http'
                    , help = 'Method for interacting with the lbaas service'
@@ -53,7 +53,19 @@ parser.add_argument( '--os-tenant-id'
                    , action = 'store'
                    , dest = 'ostenantid'
                    , default = None
-                   , help = 'OpenStack tenant id (not name) for os-username'
+                   , help = 'OpenStack tenant id (not name) for os-username for (http driver)'
+                   )
+parser.add_argument( '--os-tenant-name'
+                   , action = 'store'
+                   , dest = 'ostenantname'
+                   , default = None
+                   , help = 'OpenStack tenant name (for python-libraclient)'
+                   )
+parser.add_argument( '--os-region-name'
+                   , action = 'store'
+                   , dest = 'osregionname'
+                   , default = None
+                   , help = 'OpenStack region name (for python-libraclient).  Ex: region-b.geo-1 (no az.)'
                    )
 parser.add_argument( '--os-auth-url'
                    , action = 'store'
@@ -111,23 +123,17 @@ requests_log.setLevel(logging.WARNING)
 # variables:
 ############
 driver_path = 'driver'
-user_name = args.osusername
-tenant_id = args.ostenantid
-password = args.ospassword
-auth_url = args.osauthurl
 api_base_url = args.lbaasapiurl
-api_admin_port = args.lbaasadminport
-api_user_port = args.lbaasuserport
-api_admin_version = args.lbaasadminversion
-api_user_version = args.lbaasuserversion
-api_admin_url = "%s:%s/%s" %(api_base_url, api_admin_port, api_admin_version)
-api_user_url = "%s:%s/%s" %(api_base_url, api_user_port, api_user_version)
+api_admin_url = None
+api_user_url = None
+if api_base_url:
+    api_admin_url = "%s:%s/%s" %(api_base_url, args.lbaasadminport, args.lbaasadminversion)
+    api_user_url = "%s:%s/%s" %(api_base_url, args.lbaasuserport, args.lbaasuserversion)
 
 # load our specific driver
 driver_module = imp.load_source( args.driver
                         , os.path.join(driver_path, args.driver+'.py'))
-driver = driver_module.lbaasDriver( auth_url, user_name, tenant_id, password
-                                  , api_user_url)
+driver = driver_module.lbaasDriver( args, api_user_url)
 
 # get our test input variants (nodes, names, etc)
 inputs_module = imp.load_source( args.variant_module.replace('.py','')

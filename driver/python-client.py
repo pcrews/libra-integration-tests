@@ -1,11 +1,12 @@
-""" http.py
-    methods for interacting with the lbaas service via http requests
+""" python-client.py
+    methods for interacting with the lbaas service via python-libraclient requests
 
 """
 
 import ast
 import json
 import requests
+import commands
 
 class lbaasDriver:
     """ Driver to handle http interaction with the libra lbaas service
@@ -19,29 +20,13 @@ class lbaasDriver:
         self.api_user_url = api_user_url
         self.user_name = args.osusername
         self.auth_url = args.osauthurl
-        self.tenant_id = args.ostenantid
+        self.tenant_name = args.ostenantname
         self.password = args.ospassword
-        self.auth_token = self.get_auth_token()
-        self.api_headers = {"Content-Type": "application/json"
-              ,"X-Auth-Token": "%s" %(self.auth_token) }
+        self.region_name = args.osregionname
+        self.base_cmd = ("libra_client --os_auth_url=%s "
+                         "--os_username=%s --os_password=%s "
+                         "--os_tenant_name=%s  --os_region_name=%s") %(self.auth_url, self.user_name, self.password, self.tenant_name, self.region_name)
         return
-
-    #------------------
-    # utility functions
-    #------------------
-    def get_auth_token(self):
-        """ Get our keystone auth token to work with the api server """
-        request_data = {'auth':{ 'tenantId': self.tenant_id
-                               , 'passwordCredentials':{'username': self.user_name
-                                                       , 'password': self.password}
-                               }
-                       }
-        request_data = json.dumps(request_data)
-        headers = {"Content-Type": "application/json"}
-        request_result = requests.post(self.auth_url, data=request_data, headers=headers, verify=False)
-        request_data = ast.literal_eval(request_result.text)
-        auth_token = request_data['access']['token']['id']
-        return auth_token
 
     #-----------------
     # lbaas functions
@@ -55,21 +40,26 @@ class lbaasDriver:
             nodes = [{"address": "15.185.227.167","port": "80"},{"address": "15.185.227.165","port": "80"}]
 
         """
-        url = "%s/loadbalancers" %self.api_user_url
-        request_data = { "name": "%s" %name
-                       , "nodes": nodes 
-                       }
+
+        cmd = self.base_cmd + ' create --name=%s' %name
+        for node in nodes:
+            cmd += ' --node=%s:%s' %(node['address'], node['port'])
         if algorithm:
-            request_data["algorithm"] = "%s" %algorithm
-        request_data = json.dumps(request_data)
-        request_result = requests.post(url, data=request_data, headers=self.api_headers, verify= False)
-        return request_result
+            cmd += ' --algorithm=%s' %algorithm
+        status, output = commands.getstatusoutput(cmd)
+        print cmd
+        print status
+        print output
+        print '&'*80 
+        return output
 
     def delete_lb(self, lb_id):
         """ Delete the loadbalancer identified by 'lb_id' """
-        url = "%s/loadbalancers/%s" %(self.api_user_url, lb_id)
-        request_result = requests.delete(url, headers=self.api_headers, verify=False)
-        return request_result
+        cmd = self.base_cmd + ' delete --id=%s' %lb_id
+        status, output = commands.getstatusoutput(cmd)
+        print status
+        print output
+        return output
 
     def list_lbs(self):
         """ List all loadbalancers for the given auth token / tenant id """
