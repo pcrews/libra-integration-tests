@@ -2,6 +2,8 @@
     methods for interacting with the lbaas service via http requests
 
 """
+
+import ast
 import json
 import requests
 
@@ -12,14 +14,39 @@ class lbaasDriver:
 
     """
 
-    def __init__(self):
+    def __init__(self, auth_url, user_name, tenant_id, password, api_user_url):
         """ TODO: put in validation and api-specific whatnot here """
+        self.api_user_url = api_user_url
+        self.user_name = user_name
+        self.auth_url = auth_url
+        self.tenant_id = tenant_id
+        self.password = password
+        self.auth_token = self.get_auth_token()
+        self.api_headers = {"Content-Type": "application/json"
+              ,"X-Auth-Token": "%s" %(self.auth_token) }
         return
+
+    #------------------
+    # utility functions
+    #------------------
+    def get_auth_token(self):
+        """ Get our keystone auth token to work with the api server """
+        request_data = {'auth':{ 'tenantId': self.tenant_id
+                               , 'passwordCredentials':{'username': self.user_name
+                                                       , 'password': self.password}
+                               }
+                       }
+        request_data = json.dumps(request_data)
+        headers = {"Content-Type": "application/json"}
+        request_result = requests.post(self.auth_url, data=request_data, headers=headers, verify=False)
+        request_data = ast.literal_eval(request_result.text)
+        auth_token = request_data['access']['token']['id']
+        return auth_token
 
     #-----------------
     # lbaas functions
     #-----------------
-    def create_lb(self, url, name, nodes, algorithm, headers):
+    def create_lb(self, name, nodes, algorithm):
         """ Create a load balancer via the requests library 
             We expect the url to be the proper, fully constructed base url
             we add the 'loadbalancers suffix to the base 
@@ -28,41 +55,41 @@ class lbaasDriver:
             nodes = [{"address": "15.185.227.167","port": "80"},{"address": "15.185.227.165","port": "80"}]
 
         """
-        url = "%s/loadbalancers" %url
+        url = "%s/loadbalancers" %self.api_user_url
         request_data = { "name": "%s" %name
                        , "nodes": nodes 
                        }
         if algorithm:
             request_data["algorithm"] = "%s" %algorithm
         request_data = json.dumps(request_data)
-        request_result = requests.post(url, data=request_data, headers=headers, verify= False)
+        request_result = requests.post(url, data=request_data, headers=self.api_headers, verify= False)
         return request_result
 
-    def delete_lb(self,url, lb_id, headers):
+    def delete_lb(self, lb_id):
         """ Delete the loadbalancer identified by 'lb_id' """
-        url = "%s/loadbalancers/%s" %(url, lb_id)
-        request_result = requests.delete(url, headers=headers, verify=False)
+        url = "%s/loadbalancers/%s" %(self.api_user_url, lb_id)
+        request_result = requests.delete(url, headers=self.api_headers, verify=False)
         return request_result
 
-    def list_lbs(self,url, headers):
+    def list_lbs(self):
         """ List all loadbalancers for the given auth token / tenant id """
 
-        url = "%s/loadbalancers" %url
-        request_result = requests.get(url, headers=headers, verify=False)
+        url = "%s/loadbalancers" %self.api_user_url
+        request_result = requests.get(url, headers=self.api_headers, verify=False)
         return request_result
 
-    def list_lb_detail(self,url, lb_id, headers):
+    def list_lb_detail(self, lb_id):
         """ Get the detailed info returned by the api server for the specified id """
 
-        url = "%s/loadbalancers/%s" %(url, lb_id)
-        request_result = requests.get(url, headers=headers, verify=False)
+        url = "%s/loadbalancers/%s" %(self.api_user_url, lb_id)
+        request_result = requests.get(url, headers=self.api_headers, verify=False)
         return request_result
 
-    def list_lb_nodes(self,url, lb_id, headers):
+    def list_lb_nodes(self, lb_id):
         """ Get list of nodes for the specified lb_id """
     
-        url = "%s/loadbalancers/%s/nodes" %(url, lb_id)
-        request_result = requests.get(url, headers=headers, verify=False)
+        url = "%s/loadbalancers/%s/nodes" %(self.api_user_url, lb_id)
+        request_result = requests.get(url, headers=self.api_headers, verify=False)
         return request_result
 
     # validation functions

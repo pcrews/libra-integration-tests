@@ -9,7 +9,6 @@ import unittest
 class testCreateLoadBalancer(unittest.TestCase):
 
     def __init__( self, test_description, args, logging, driver
-                , api_user_url, api_headers
                 , testname, lb_name, nodes, lb_id=None
                 , algorithm = None, expected_status=200):
         super(testCreateLoadBalancer, self).__init__(testname)
@@ -17,8 +16,6 @@ class testCreateLoadBalancer(unittest.TestCase):
         self.args = args
         self.logging = logging
         self.driver = driver
-        self.api_user_url = api_user_url
-        self.api_headers = api_headers
         self.algorithm = algorithm
         self.bad_statuses = ['500','413','400']
         if type(lb_name) is int:
@@ -41,7 +38,7 @@ class testCreateLoadBalancer(unittest.TestCase):
         if self.args.verbose:
             self.logging.info("name: %s" %self.lb_name)
             self.logging.info("nodes: %s" %self.nodes)    
-        result = self.driver.create_lb(self.api_user_url, self.lb_name, self.nodes, self.algorithm, self.api_headers)
+        result = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm)
         result_data = ast.literal_eval(result.text)
         self.create_result = result
         request_status = str(vars(result)['status_code'])
@@ -52,7 +49,6 @@ class testCreateLoadBalancer(unittest.TestCase):
             for key, item in result_data.items():
                 self.logging.info('%s : %s' %(key, item))
             self.logging.info("")
-
 
     def test_createLoadBalancer(self):
         """ test loadbalancer creation
@@ -72,7 +68,7 @@ class testCreateLoadBalancer(unittest.TestCase):
             # test lb list
             ###############
             self.logging.info('Validating load balancer list...')
-            result = self.driver.list_lbs(self.api_user_url, self.api_headers)
+            result = self.driver.list_lbs()
             result_data = ast.literal_eval(result.text)
             loadbalancers = result_data['loadBalancers']
             for loadbalancer in loadbalancers:
@@ -90,7 +86,7 @@ class testCreateLoadBalancer(unittest.TestCase):
             # test detail
             ################
             self.logging.info('Validating load balancer detail...')
-            result = self.driver.list_lb_detail(self.api_user_url, self.lb_id, self.api_headers)
+            result = self.driver.list_lb_detail(self.lb_id)
             result_data = ast.literal_eval(result.text)
             if self.args.verbose:
                 for key, item in result_data.items():
@@ -113,7 +109,7 @@ class testCreateLoadBalancer(unittest.TestCase):
             # test nodes list
             ###################
             self.logging.info('Validating load balancer nodes url...')
-            result = self.driver.list_lb_nodes(self.api_user_url, self.lb_id, self.api_headers)
+            result = self.driver.list_lb_nodes(self.lb_id)
             result_data = ast.literal_eval(result.text)
             if self.args.verbose:
                 for key, item in result_data.items():
@@ -126,5 +122,5 @@ class testCreateLoadBalancer(unittest.TestCase):
         # delete the load balancer
         ##########################
         self.logging.info("Deleting loadbalancer: %s" %self.lb_id)
-        result = self.driver.delete_lb(self.api_user_url, self.lb_id, self.api_headers)
+        result = self.driver.delete_lb(self.lb_id)
 

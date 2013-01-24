@@ -16,27 +16,6 @@ import argparse
 
 from tests.create_loadbalancer import testCreateLoadBalancer
 
-############
-# functions
-############
-
-#------------------
-# utility functions
-#------------------
-def get_auth_token(auth_url, user_name, tenant_id, password):
-    """ Get our keystone auth token to work with the api server """
-    request_data = {'auth':{ 'tenantId': tenant_id
-                           , 'passwordCredentials':{'username': user_name
-                                                   , 'password': password}
-                           }
-                   }
-    request_data = json.dumps(request_data)
-    headers = {"Content-Type": "application/json"}
-    request_result = requests.post(auth_url, data=request_data, headers=headers, verify=False)
-    request_data = ast.literal_eval(request_result.text)
-    auth_token = request_data['access']['token']['id']
-    return auth_token
-
 #######
 # main
 #######
@@ -136,7 +115,6 @@ user_name = args.osusername
 tenant_id = args.ostenantid
 password = args.ospassword
 auth_url = args.osauthurl
-auth_token = get_auth_token(auth_url, user_name, tenant_id, password)
 api_base_url = args.lbaasapiurl
 api_admin_port = args.lbaasadminport
 api_user_port = args.lbaasuserport
@@ -144,12 +122,12 @@ api_admin_version = args.lbaasadminversion
 api_user_version = args.lbaasuserversion
 api_admin_url = "%s:%s/%s" %(api_base_url, api_admin_port, api_admin_version)
 api_user_url = "%s:%s/%s" %(api_base_url, api_user_port, api_user_version)
-api_headers = {"Content-Type": "application/json"
-              ,"X-Auth-Token": "%s" %(auth_token) }
+
 # load our specific driver
 driver_module = imp.load_source( args.driver
                         , os.path.join(driver_path, args.driver+'.py'))
-driver = driver_module.lbaasDriver()
+driver = driver_module.lbaasDriver( auth_url, user_name, tenant_id, password
+                                  , api_user_url)
 
 # get our test input variants (nodes, names, etc)
 inputs_module = imp.load_source( args.variant_module.replace('.py','')
@@ -169,19 +147,16 @@ for test_name in testnames:
     # testing lb name variants
     for test_description, lb_name, test_expected_status in inputs_module.lb_name_variants:
         suite.addTest(testCreateLoadBalancer( test_description, args, logging, driver
-                                            , api_user_url, api_headers
                                             , test_name, lb_name, inputs_module.default_nodes
                                             , expected_status = test_expected_status))
     # testing lb node variants
     for test_description, node_set, expected_status in inputs_module.node_variants:
         suite.addTest(testCreateLoadBalancer( test_description, args, logging, driver
-                                            , api_user_url, api_headers
                                             , test_name, inputs_module.default_lb_name, node_set
                                             , expected_status = expected_status))
     # algorithm variants
     for test_description, algorithm, expected_status in inputs_module.algorithm_variants:
         suite.addTest(testCreateLoadBalancer( test_description, args, logging, driver
-                                            , api_user_url, api_headers
                                             , test_name, inputs_module.default_lb_name, inputs_module.default_nodes
                                             , algorithm = algorithm
                                             , expected_status = expected_status))
