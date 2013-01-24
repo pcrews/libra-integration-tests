@@ -41,7 +41,7 @@ class lbaasDriver:
 
         """
 
-        cmd = self.base_cmd + ' create --name=%s' %name
+        cmd = self.base_cmd + ' create --name="%s"' %name
         for node in nodes:
             cmd += ' --node=%s:%s' %(node['address'], node['port'])
         if algorithm:
@@ -50,6 +50,9 @@ class lbaasDriver:
         print cmd
         print status
         print output
+        for idx, line in enumerate(output.split('\n')):
+            print "%s::: %s" %(idx,line)
+            print '^'*80
         print '&'*80 
         return output
 
