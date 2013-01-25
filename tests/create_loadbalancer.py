@@ -38,16 +38,9 @@ class testCreateLoadBalancer(unittest.TestCase):
         if self.args.verbose:
             self.logging.info("name: %s" %self.lb_name)
             self.logging.info("nodes: %s" %self.nodes)    
-        result = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm)
-        result_data = ast.literal_eval(result.text)
-        self.create_result = result
-        request_status = str(vars(result)['status_code'])
-        if request_status not in self.bad_statuses:
-            self.lb_id = result_data['id']
+        self.create_result, self.actual_status, self.lb_id = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm, self.bad_statuses)
         if self.args.verbose:
             self.logging.info('load balancer id: %s' %self.lb_id)
-            for key, item in result_data.items():
-                self.logging.info('%s : %s' %(key, item))
             self.logging.info("")
 
     def test_createLoadBalancer(self):
@@ -57,8 +50,7 @@ class testCreateLoadBalancer(unittest.TestCase):
         # test create result
         #####################
 
-        actual_status, http_validation = self.driver.validate_status(self.expected_status, self.create_result)
-        self.actual_status = actual_status
+        http_validation = self.driver.validate_status(self.expected_status, self.actual_status)
         self.assertEqual(http_validation, True
                         , msg = "ERROR: load balancer create failed.  Expected: %s || Actual: %s" \
                         %(self.expected_status, vars(self.create_result))
@@ -68,9 +60,7 @@ class testCreateLoadBalancer(unittest.TestCase):
             # test lb list
             ###############
             self.logging.info('Validating load balancer list...')
-            result = self.driver.list_lbs()
-            result_data = ast.literal_eval(result.text)
-            loadbalancers = result_data['loadBalancers']
+            loadbalancers = self.driver.list_lbs()
             for loadbalancer in loadbalancers:
                 match = 0
                 if self.args.verbose:
@@ -86,8 +76,7 @@ class testCreateLoadBalancer(unittest.TestCase):
             # test detail
             ################
             self.logging.info('Validating load balancer detail...')
-            result = self.driver.list_lb_detail(self.lb_id)
-            result_data = ast.literal_eval(result.text)
+            result_data = self.driver.list_lb_detail(self.lb_id)
             if self.args.verbose:
                 for key, item in result_data.items():
                     self.logging.info('%s: %s' %(key, item))
@@ -109,8 +98,7 @@ class testCreateLoadBalancer(unittest.TestCase):
             # test nodes list
             ###################
             self.logging.info('Validating load balancer nodes url...')
-            result = self.driver.list_lb_nodes(self.lb_id)
-            result_data = ast.literal_eval(result.text)
+            result_data = self.driver.list_lb_nodes(self.lb_id)
             if self.args.verbose:
                 for key, item in result_data.items():
                     self.logging.info('%s: %s' %(key, item))

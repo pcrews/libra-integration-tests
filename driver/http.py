@@ -41,12 +41,13 @@ class lbaasDriver:
         request_result = requests.post(self.auth_url, data=request_data, headers=headers, verify=False)
         request_data = ast.literal_eval(request_result.text)
         auth_token = request_data['access']['token']['id']
+        print auth_token, '<'*80
         return auth_token
 
     #-----------------
     # lbaas functions
     #-----------------
-    def create_lb(self, name, nodes, algorithm):
+    def create_lb(self, name, nodes, algorithm, bad_statuses):
         """ Create a load balancer via the requests library 
             We expect the url to be the proper, fully constructed base url
             we add the 'loadbalancers suffix to the base 
@@ -59,11 +60,16 @@ class lbaasDriver:
         request_data = { "name": "%s" %name
                        , "nodes": nodes 
                        }
+        lb_id = None
         if algorithm:
             request_data["algorithm"] = "%s" %algorithm
         request_data = json.dumps(request_data)
         request_result = requests.post(url, data=request_data, headers=self.api_headers, verify= False)
-        return request_result
+        result_data = ast.literal_eval(request_result.text)
+        request_status = str(request_result.status_code)
+        if request_status not in bad_statuses:
+            lb_id = result_data['id']
+        return request_result, request_status, lb_id
 
     def delete_lb(self, lb_id):
         """ Delete the loadbalancer identified by 'lb_id' """
@@ -76,21 +82,21 @@ class lbaasDriver:
 
         url = "%s/loadbalancers" %self.api_user_url
         request_result = requests.get(url, headers=self.api_headers, verify=False)
-        return request_result
-
+        return ast.literal_eval(request_result.text)['loadBalancers']
+ 
     def list_lb_detail(self, lb_id):
         """ Get the detailed info returned by the api server for the specified id """
 
         url = "%s/loadbalancers/%s" %(self.api_user_url, lb_id)
         request_result = requests.get(url, headers=self.api_headers, verify=False)
-        return request_result
+        return ast.literal_eval(request_result.text)
 
     def list_lb_nodes(self, lb_id):
         """ Get list of nodes for the specified lb_id """
     
         url = "%s/loadbalancers/%s/nodes" %(self.api_user_url, lb_id)
         request_result = requests.get(url, headers=self.api_headers, verify=False)
-        return request_result
+        return ast.literal_eval(request_result.text)
 
     # validation functions
     # these should likely live in a separate file, but putting
@@ -116,14 +122,13 @@ class lbaasDriver:
                 error = 1                
         return error, error_list
 
-    def validate_status(self,expected_status, result):
+    def validate_status(self,expected_status, actual_status):
         """ See what the result_dictionary status_code is and
             compare it to our expected result """
         
-        actual_status = str(vars(result)['status_code'])
-        if actual_status == str(expected_status):
+        if str(actual_status) == str(expected_status):
             result = True
         else:
             result = False
-        return actual_status, result
+        return result
 

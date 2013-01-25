@@ -32,7 +32,7 @@ parser.add_argument( '--driver'
                    , default = 'http'
                    , help = 'Method for interacting with the lbaas service'
                    )
-parser.add_argument( '--variants_module'
+parser.add_argument( '--variants-module'
                    , dest = 'variant_module'
                    , default = 'test_inputs.py'
                    , help = 'Module containing test inputs'

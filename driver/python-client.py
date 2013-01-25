@@ -31,7 +31,7 @@ class lbaasDriver:
     #-----------------
     # lbaas functions
     #-----------------
-    def create_lb(self, name, nodes, algorithm):
+    def create_lb(self, name, nodes, algorithm, bad_statuses):
         """ Create a load balancer via the requests library 
             We expect the url to be the proper, fully constructed base url
             we add the 'loadbalancers suffix to the base 
@@ -52,9 +52,9 @@ class lbaasDriver:
         print output
         for idx, line in enumerate(output.split('\n')):
             print "%s::: %s" %(idx,line)
-            print '^'*80
-        print '&'*80 
-        return output
+        data = output.split('\n')[3]
+        lb_id = data.split('|')[1].strip()
+        return output, lb_id, 200 # TODO detect error statuses!!!!!
 
     def delete_lb(self, lb_id):
         """ Delete the loadbalancer identified by 'lb_id' """
@@ -109,14 +109,13 @@ class lbaasDriver:
                 error = 1                
         return error, error_list
 
-    def validate_status(self,expected_status, result):
+    def validate_status(self,expected_status, actual_status):
         """ See what the result_dictionary status_code is and
             compare it to our expected result """
         
-        actual_status = str(vars(result)['status_code'])
         if actual_status == str(expected_status):
             result = True
         else:
             result = False
-        return actual_status, result
+        return result
 
