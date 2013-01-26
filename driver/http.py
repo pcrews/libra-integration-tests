@@ -41,7 +41,6 @@ class lbaasDriver:
         request_result = requests.post(self.auth_url, data=request_data, headers=headers, verify=False)
         request_data = ast.literal_eval(request_result.text)
         auth_token = request_data['access']['token']['id']
-        print auth_token, '<'*80
         return auth_token
 
     #-----------------
@@ -131,4 +130,16 @@ class lbaasDriver:
         else:
             result = False
         return result
+
+    def validate_lb_list(self, lb_name, loadbalancers):
+        match = False
+        for loadbalancer in loadbalancers:
+            """
+            if self.args.verbose:
+                for key, item in loadbalancer.items():
+                    self.logging.info('%s: %s' %(key, item))
+            """
+            if loadbalancer['name'] == lb_name:
+                    match = True
+        return match
 

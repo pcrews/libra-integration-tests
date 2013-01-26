@@ -41,49 +41,103 @@ class lbaasDriver:
 
         """
 
+        lb_id = None
         cmd = self.base_cmd + ' create --name="%s"' %name
         for node in nodes:
-            cmd += ' --node=%s:%s' %(node['address'], node['port'])
+            node_info = ''
+            address = ''
+            port = ''
+            if 'address' in node:
+                address = node['address']
+            if 'port' in node:
+                port = node['port']
+            cmd += ' --node=%s:%s' %(address, port)
         if algorithm:
             cmd += ' --algorithm=%s' %algorithm
         status, output = commands.getstatusoutput(cmd)
-        print cmd
-        print status
-        print output
-        for idx, line in enumerate(output.split('\n')):
-            print "%s::: %s" %(idx,line)
-        data = output.split('\n')[3]
-        lb_id = data.split('|')[1].strip()
-        return output, lb_id, 200 # TODO detect error statuses!!!!!
+        data = output.split('\n')
+        if len(data) >= 3:
+            data = data[3]
+            print cmd
+            print output
+            print data
+            lb_id = data.split('|')[1].strip()
+            status = 200 
+        else:
+            data = data[0]
+            if 'HTTP' in data:
+                status = data.split('(HTTP')[1].strip().replace(')','')
+        return output, status, lb_id # TODO detect error statuses!!!!!
 
     def delete_lb(self, lb_id):
         """ Delete the loadbalancer identified by 'lb_id' """
-        cmd = self.base_cmd + ' delete --id=%s' %lb_id
-        status, output = commands.getstatusoutput(cmd)
-        print status
-        print output
-        return output
+
+        if lb_id:
+            cmd = self.base_cmd + ' delete --id=%s' %lb_id
+            status, output = commands.getstatusoutput(cmd)
+            return output
 
     def list_lbs(self):
         """ List all loadbalancers for the given auth token / tenant id """
 
         url = "%s/loadbalancers" %self.api_user_url
-        request_result = requests.get(url, headers=self.api_headers, verify=False)
-        return request_result
+        cmd = self.base_cmd + ' list'
+        status, output = commands.getstatusoutput(cmd)
+        data = output.split('\n')
+        field_names = []
+        for field_name in data[1].split('|')[1:-1]:
+            field_names.append(field_name.strip().lower())
+        loadbalancers = []
+        data = output.split('\n')[3:-1] # get the 'meat' / data
+        for lb_row in data:
+            loadbalancer = {}
+            lb_data = lb_row.split('|')[1:-1]
+            for idx, lb_item in enumerate(lb_data):
+                loadbalancer[field_names[idx]] = lb_item[1:-1]
+            loadbalancers.append(loadbalancer)
+        return loadbalancers
 
     def list_lb_detail(self, lb_id):
         """ Get the detailed info returned by the api server for the specified id """
 
-        url = "%s/loadbalancers/%s" %(self.api_user_url, lb_id)
-        request_result = requests.get(url, headers=self.api_headers, verify=False)
-        return request_result
+        cmd = self.base_cmd + ' status --id=%s' %lb_id
+        status, output = commands.getstatusoutput(cmd)
+        data = output.split('\n')
+        field_names = []
+        for field_name in data[1].split('|')[1:-1]:
+            field_names.append(field_name.strip().lower())
+        data = output.split('\n')[3:-1][0] # get the 'meat' / data and expect one line
+        # expect a single line of detail data
+        loadbalancer_detail = {}
+        lb_data = data.split('|')[1:-1]
+        for idx, lb_item in enumerate(lb_data):
+            if field_names[idx] == 'nodes':
+                loadbalancer_detail[field_names[idx]] = ast.literal_eval(lb_item.strip())
+            else:
+                loadbalancer_detail[field_names[idx]] = lb_item[1:-1]
+        return loadbalancer_detail
+
 
     def list_lb_nodes(self, lb_id):
         """ Get list of nodes for the specified lb_id """
     
-        url = "%s/loadbalancers/%s/nodes" %(self.api_user_url, lb_id)
-        request_result = requests.get(url, headers=self.api_headers, verify=False)
-        return request_result
+        cmd = self.base_cmd + ' node-list --id=%s' %lb_id
+        status, output = commands.getstatusoutput(cmd)
+        data = output.split('\n')
+        field_names = []
+        for field_name in data[1].split('|')[1:-1]:
+            field_names.append(field_name.strip().lower())
+        node_dict = {}
+        node_list = []
+        data = output.split('\n')[3:-1] # get the 'meat' / data
+        for node_row in data:
+            node = {}
+            node_data = node_row.split('|')[1:-1]
+            for idx, node_item in enumerate(node_data):
+                node[field_names[idx]] = node_item.strip()
+            node_list.append(node)
+        node_dict['nodes'] = node_list
+        return node_dict
 
     # validation functions
     # these should likely live in a separate file, but putting
@@ -113,9 +167,21 @@ class lbaasDriver:
         """ See what the result_dictionary status_code is and
             compare it to our expected result """
         
-        if actual_status == str(expected_status):
+        if str(actual_status) == str(expected_status):
             result = True
         else:
             result = False
         return result
+
+    def validate_lb_list(self, lb_name, loadbalancers):
+        match = False
+        for loadbalancer in loadbalancers:
+            """
+            if self.args.verbose:
+                for key, item in loadbalancer.items():
+                    self.logging.info('%s: %s' %(key, item))
+            """
+            if loadbalancer['name'] == lb_name:
+                    match = True
+        return match
 

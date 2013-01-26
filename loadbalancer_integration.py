@@ -32,72 +32,72 @@ parser.add_argument( '--driver'
                    , default = 'http'
                    , help = 'Method for interacting with the lbaas service'
                    )
-parser.add_argument( '--variants-module'
+parser.add_argument( '--variants_module'
                    , dest = 'variant_module'
                    , default = 'test_inputs.py'
                    , help = 'Module containing test inputs'
                    )
-parser.add_argument( '--os-username'
+parser.add_argument( '--os_username'
                    , action = 'store'
                    , dest ='osusername'
                    , default = None
                    , help = 'OpenStack username to use for testing.'
                    )
-parser.add_argument( '--os-password'
+parser.add_argument( '--os_password'
                    , action = 'store'
                    , dest = 'ospassword'
                    , default = None
                    , help = 'OpenStack password for os-username'
                    )
-parser.add_argument( '--os-tenant-id'
+parser.add_argument( '--os_tenant_id'
                    , action = 'store'
                    , dest = 'ostenantid'
                    , default = None
                    , help = 'OpenStack tenant id (not name) for os-username for (http driver)'
                    )
-parser.add_argument( '--os-tenant-name'
+parser.add_argument( '--os_tenant_name'
                    , action = 'store'
                    , dest = 'ostenantname'
                    , default = None
                    , help = 'OpenStack tenant name (for python-libraclient)'
                    )
-parser.add_argument( '--os-region-name'
+parser.add_argument( '--os_region_name'
                    , action = 'store'
                    , dest = 'osregionname'
                    , default = None
                    , help = 'OpenStack region name (for python-libraclient).  Ex: region-b.geo-1 (no az.)'
                    )
-parser.add_argument( '--os-auth-url'
+parser.add_argument( '--os_auth_url'
                    , action = 'store'
                    , dest = 'osauthurl'
                    , default = 'https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/tokens'
                    , help = 'OpenStack auth url (keystone endpoint)'
                    )
-parser.add_argument( '--lbaas-api-url'
+parser.add_argument( '--lbaas_api_url'
                    , action = 'store'
                    , dest = 'lbaasapiurl'
                    , default = 'https://lbapi.paas.hpcloud.net'
                    , help = 'url for the lbaas api server'
                    )
-parser.add_argument( '--lbaas-admin-port'
+parser.add_argument( '--lbaas_admin_port'
                    , action = 'store'
                    , dest = 'lbaasadminport'
                    , default = '8889'
                    , help = 'lbaas admin port'
                    )
-parser.add_argument( '--lbaas-user-port'
+parser.add_argument( '--lbaas_user_port'
                    , action = 'store'
                    , dest = 'lbaasuserport'
                    , default = '443'
                    , help = 'lbaas user port'
                    )
-parser.add_argument( '--lbaas-admin-version'
+parser.add_argument( '--lbaas_admin_version'
                    , action = 'store'
                    , dest = 'lbaasadminversion'
                    , default = 'v1'
                    , help = 'version string for admin api'
                    )
-parser.add_argument( '--lbaas-user-version'
+parser.add_argument( '--lbaas_user_version'
                    , action = 'store'
                    , dest = 'lbaasuserversion'
                    , default = 'v1.1'

@@ -53,7 +53,7 @@ class testCreateLoadBalancer(unittest.TestCase):
         http_validation = self.driver.validate_status(self.expected_status, self.actual_status)
         self.assertEqual(http_validation, True
                         , msg = "ERROR: load balancer create failed.  Expected: %s || Actual: %s" \
-                        %(self.expected_status, vars(self.create_result))
+                        %(self.expected_status, self.create_result)
                         )
         if self.actual_status not in self.bad_statuses:
             ###############
@@ -61,14 +61,8 @@ class testCreateLoadBalancer(unittest.TestCase):
             ###############
             self.logging.info('Validating load balancer list...')
             loadbalancers = self.driver.list_lbs()
-            for loadbalancer in loadbalancers:
-                match = 0
-                if self.args.verbose:
-                    for key, item in loadbalancer.items():
-                        self.logging.info('%s: %s' %(key, item))
-                if loadbalancer['name'] == self.lb_name:
-                    match = 1
-            self.assertEqual(match, 1, msg= "ERROR: load balancer: %s has no match in api loadbalancer list:\n %s" %(self.lb_name, loadbalancers))
+            lb_match = self.driver.validate_lb_list(self.lb_name, loadbalancers)
+            self.assertEqual(lb_match, True, msg= "ERROR: load balancer: %s has no match in api loadbalancer list:\n %s" %(self.lb_name, loadbalancers))
             if self.args.verbose:
                 self.logging.info("")
         
