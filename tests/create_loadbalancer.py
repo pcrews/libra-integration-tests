@@ -75,7 +75,7 @@ class testCreateLoadBalancer(unittest.TestCase):
                 for key, item in result_data.items():
                     self.logging.info('%s: %s' %(key, item))
             # check name
-            self.assertEqual(self.lb_name, result_data['name'], msg="ERROR: lb name: %s || system name: %s" %(self.lb_name, result_data['name']))
+            self.assertEqual(self.lb_name.strip(), result_data['name'].strip(), msg="ERROR: lb name: %s || system name: %s" %(self.lb_name, result_data['name']))
             # check nodes
             system_nodes = result_data['nodes']
             error, error_list = self.driver.validate_lb_nodes(self.nodes, system_nodes)

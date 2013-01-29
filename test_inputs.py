@@ -15,9 +15,13 @@ lb_name_variants = [ ('basic_positive_name','the quick, brown fox jumps over the
                    , ('long_positive_name','a'*128, 200)
                    , ('nonalpha_name','!@#@!', 200)
                    , ('overlong_utf8_name', unichr(9911).format(u'')*1000, 500)
-                   #, ('overlong_whitespace_name', ' '*150, 500)
+                   , ('overlong_whitespace_name', ' '*150, 500)
                    ]
 
+node_variants = [#one node
+                 ('one_node',[{"address": "15.185.227.167","port": "80"}],200)]
+
+"""
 node_variants = [#one node
                  ('one_node',[{"address": "15.185.227.167","port": "80"}],200)
                  #two nodes
@@ -61,8 +65,9 @@ node_variants = [#one node
                 ,('bad_port_value',[{"address": "15.185.227.165","port": "iKeelYou"}],400)
                 ]
 
+"""
 algorithm_variants = [('round_robin_algo',"ROUND_ROBIN",200)
-                     ,('least_connections_algo',"LEAST_CONNECTIONS",200)
-                     ,('bad_algorithm',"IDONOTEXIST",400)
-                     ,('fuzzy_good_algo',"ROUND_ROBIN1",400)
+                     #,('least_connections_algo',"LEAST_CONNECTIONS",200)
+                     #,('bad_algorithm',"IDONOTEXIST",400)
+                     #,('fuzzy_good_algo',"ROUND_ROBIN1",400)
                      ]

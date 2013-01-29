@@ -18,6 +18,7 @@ class lbaasDriver:
     def __init__(self, args, api_user_url):
         """ TODO: put in validation and api-specific whatnot here """
         self.api_user_url = api_user_url
+        self.supported_algorithms = ['ROUND_ROBIN', 'LEAST_CONNECTIONS', None]
         self.user_name = args.osusername
         self.auth_url = args.osauthurl
         self.tenant_name = args.ostenantname
@@ -56,13 +57,19 @@ class lbaasDriver:
             cmd += ' --algorithm=%s' %algorithm
         status, output = commands.getstatusoutput(cmd)
         data = output.split('\n')
-        if len(data) >= 3:
+        if len(data) >= 3 and algorithm in self.supported_algorithms:
             data = data[3]
-            print cmd
-            print output
-            print data
             lb_id = data.split('|')[1].strip()
-            status = 200 
+            status = '200' 
+        elif algorithm not in self.supported_algorithms:
+            status = 'bad status: algorithm'
+            # a bit of a hack for client-side handling of bad algorithms
+            # python-libraclient appears to detect / check and provide a 
+            # 'you used me wrong' type of message vs. a 'from-the-api-server' error code
+            algo_error_string = "Libra command line client create: error: argument --algorithm: invalid choice: '%s'" %algorithm
+            for line in data:
+                if algo_error_string in line:
+                    status = '400'   
         else:
             data = data[0]
             if 'HTTP' in data:
@@ -181,7 +188,12 @@ class lbaasDriver:
                 for key, item in loadbalancer.items():
                     self.logging.info('%s: %s' %(key, item))
             """
-            if loadbalancer['name'] == lb_name:
+            # This is a bit bobo, but we have variable whitespace
+            # padding in client output depending on other names
+            # that exist in the lb list and we test with whitespace
+            # names.  Time to make this perfect isn't available, so
+            # this works for the most part.
+            if lb_name.strip() == loadbalancer['name'].strip():
                     match = True
         return match
 
