@@ -1,0 +1,61 @@
+# Copyright 2012 Hewlett-Packard Development Company, L.P.
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+
+######################################
+# variable inputs
+######################################
+default_values: 
+  default_lb_name: 'Lbaas_test_node'
+  default_nodes: 
+    - address: "15.185.227.167"
+      port: "80"
+    - address: "15.185.227.165"
+      port: "80"
+
+lb_name_variants: 
+    - description: 'nonalpha_name'
+      name: '!@#@!'
+      expected_status: 200
+    - description: 'overlong_name'
+      name: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+      expected_status: 500
+
+
+node_variants:
+    - description: 'one_node'
+      nodes: 
+         - address: "15.185.227.167"
+           port: "80"
+      expected_status: 200
+    - description: 'over_five_nodes'
+      nodes:
+          - address: "15.185.227.167"
+            port: "80"
+          - address: "15.185.227.167"
+            port: "80"
+          - address: "15.185.227.165"
+            port: "80"
+          - address: "15.185.227.165"
+            port: "80"
+          - address: "15.185.227.165"
+            port: "80"
+          - address: "15.185.227.167"
+            port: "80"
+      expected_status: 413
+
+algorithm_variants:
+    - description: 'round_robin_algo'
+      algorithm: "ROUND_ROBIN"
+      expected_status: 200
+                     ]

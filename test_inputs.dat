@@ -1,0 +1,155 @@
+# Copyright 2012 Hewlett-Packard Development Company, L.P.
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+
+######################################
+# variable inputs
+######################################
+default_values: 
+  default_name: 'Lbaas_test_node'
+  default_nodes: 
+    - address: "15.185.227.167"
+      port: "80"
+    - address: "15.185.227.165"
+      port: "80"
+
+lb_name_variants: 
+    - description: 'basic_positive_name'
+      name: 'the quick, brown fox jumps over the lazy dog.'
+      expected_status: 200
+    - description: 'nonalpha_name'
+      name: '!@#@!'
+      expected_status: 200
+    - description: 'overlong_name'
+      name: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+      expected_status: 500
+    - description: 'null_name'
+      name: ''
+      expected_status: 200
+    - description: 'whitespace_name'
+      name: ' '
+      expected_status: 200
+    - description: 'long_whitespace_name'
+      name: "                                                                                                                                "
+      expected_status: 200
+    - description: 'long_postive_name'
+      name: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+      expected_status: 200
+    - description: 'nonalpha_name'
+      name: '!@#@!'
+      expected_status: 200
+    - description:  'overlong_utf8_name'
+      name: ""
+      expected_status: 500
+    - description: overlong_whitespace_name
+      name: "                                                                                                                                  "
+      expected_status: 200
+    - description: 'test_utf8'
+      name: '⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷⚷'
+      expected_status: 500
+
+node_variants:
+    - description: 'one_node'
+      nodes: 
+         - address: "15.185.227.167"
+           port: "80"
+      expected_status: 200
+    - description: 'two_nodes'
+      nodes:
+         - address: "15.185.227.167"
+           port: "80"
+         - address: "15.185.227.165"
+           port: "80"
+      expected_status: 200
+    - description: 'three_nodes'
+      nodes: 
+         - address: "15.185.227.167"
+           port: "80"
+         - address: "15.185.227.165"
+           port: "80"
+         - address: "15.185.227.167"
+           port: "80"
+      expected_status: 200
+    - description: 'five_nodes'
+      nodes:
+         - address: "15.185.227.167"
+           port: "80"
+         - address: "15.185.227.165"
+           port: "80"
+         - address: "15.185.227.165"
+           port: "80"
+         - address: "15.185.227.165"
+           port: "80"
+         - address: "15.185.227.167"
+           port: "80"
+      expected_status: 200
+    - description:  'bad_ip_address1'
+      nodes:
+         - address: "ImmaBadIP7"
+           port: "80"
+         - address: "15.185.227.167"
+           port: "80"
+      expected_status: 400
+    - description: 'no_nodes'
+      nodes: [{}]
+      expected_status: 400
+    - description: 'no_ip_value'
+      nodes:
+          - address: ""
+            port: "80"
+      expected_status: 400
+    - description: 'no_address'
+      nodes:  [{"port": "80"}]
+      expected_status: 400
+    - description: 'null_port_value'
+      nodes: [{"address": "15.185.227.165","port": ""}]
+      expected_status: 400
+    - description: 'no_port_entry'
+      nodes: [{"address": "15.185.227.165"}]
+      expected_status: 400
+    - description: 'garbage_value'
+      nodes: [{"address": "15.185.227.165","port": "80",'ikeelyou':'boomGoesTheDynamite!'}]
+      expected_status: 200
+    - description: 'bad_port_value'
+      nodes: [{"address": "15.185.227.165","port": "iKeelYou"}]
+      expected_status: 400
+    - description: 'over_five_nodes'
+      nodes:
+          - address: "15.185.227.167"
+            port: "80"
+          - address: "15.185.227.167"
+            port: "80"
+          - address: "15.185.227.165"
+            port: "80"
+          - address: "15.185.227.165"
+            port: "80"
+          - address: "15.185.227.165"
+            port: "80"
+          - address: "15.185.227.167"
+            port: "80"
+      expected_status: 413
+
+algorithm_variants:
+    - description: 'round_robin_algo'
+      algorithm: "ROUND_ROBIN"
+      expected_status: 200
+    - description: 'least_connections_algo'
+      algorithm: "LEAST_CONNECTIONS"
+      expected_status: 200
+    - description: 'bad_algorithm'
+      algorithm: "IDONOTEXIST"
+      expected_status: 400
+    - description: 'fuzzy_good_algo'
+      algorithm: "ROUND_ROBIN1"
+      expected_status: 400
+

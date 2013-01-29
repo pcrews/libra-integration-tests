@@ -153,7 +153,7 @@ class lbaasDriver:
                 for key, item in loadbalancer.items():
                     self.logging.info('%s: %s' %(key, item))
             """
-            if loadbalancer['name'] == lb_name:
+            if loadbalancer['name'] == lb_name[0:128]: # api_server trims whitespace...
                     match = True
         return match
 

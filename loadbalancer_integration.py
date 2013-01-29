@@ -22,7 +22,7 @@ import os
 import sys
 import ast
 import imp
-import json
+import yaml
 import unittest
 import logging
 import requests
@@ -48,7 +48,7 @@ parser.add_argument( '--driver'
                    )
 parser.add_argument( '--variants_module'
                    , dest = 'variant_module'
-                   , default = 'test_inputs.py'
+                   , default = 'test_inputs.dat'
                    , help = 'Module containing test inputs'
                    )
 parser.add_argument( '--os_username'
@@ -150,8 +150,9 @@ driver_module = imp.load_source( args.driver
 driver = driver_module.lbaasDriver( args, api_user_url)
 
 # get our test input variants (nodes, names, etc)
-inputs_module = imp.load_source( args.variant_module.replace('.py','')
-                        , os.path.join(os.getcwd(), args.variant_module))
+inputs_file = open(args.variant_module,'r')
+test_inputs = yaml.load(inputs_file)
+inputs_file.close()
 
 ##################################
 # test away!
@@ -165,21 +166,27 @@ testnames = testloader.getTestCaseNames(testCreateLoadBalancer)
 # lb_name variants
 for test_name in testnames:
     # testing lb name variants
-    for test_description, lb_name, test_expected_status in inputs_module.lb_name_variants:
-        suite.addTest(testCreateLoadBalancer( test_description, args, logging, driver
-                                            , test_name, lb_name, inputs_module.default_nodes
-                                            , expected_status = test_expected_status))
+    for test_variant in test_inputs['lb_name_variants']:
+        suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
+                                            , test_name
+                                            , test_variant['name']
+                                            , test_inputs['default_values']['default_nodes']
+                                            , expected_status = test_variant['expected_status']))
     # testing lb node variants
-    for test_description, node_set, expected_status in inputs_module.node_variants:
-        suite.addTest(testCreateLoadBalancer( test_description, args, logging, driver
-                                            , test_name, inputs_module.default_lb_name, node_set
-                                            , expected_status = expected_status))
+    for test_variant in test_inputs['node_variants']:
+        suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
+                                            , test_name
+                                            , test_inputs['default_values']['default_name']
+                                            , test_variant['nodes']
+                                            , expected_status = test_variant['expected_status']))
     # algorithm variants
-    for test_description, algorithm, expected_status in inputs_module.algorithm_variants:
-        suite.addTest(testCreateLoadBalancer( test_description, args, logging, driver
-                                            , test_name, inputs_module.default_lb_name, inputs_module.default_nodes
-                                            , algorithm = algorithm
-                                            , expected_status = expected_status))
+    for test_variant in test_inputs['algorithm_variants']:
+        suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
+                                            , test_name
+                                            , test_inputs['default_values']['default_name']
+                                            , test_inputs['default_values']['default_nodes']
+                                            , algorithm = test_variant['algorithm']
+                                            , expected_status = test_variant['expected_status']))
 result = unittest.TextTestRunner(verbosity=2).run(suite)
 sys.exit(not result.wasSuccessful())
 
