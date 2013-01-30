@@ -117,6 +117,12 @@ parser.add_argument( '--lbaas_user_version'
                    , default = 'v1.1'
                    , help = 'version string for user api'
                    )
+parser.add_argument( '--prod_hack'
+                   , action = 'store_true'
+                   , dest = 'prodhack'
+                   , default = False
+                   , help = 'version string for user api'
+                   )
 # TODO: add --seed option
 # This option must take values such as 'time' to allow for easier 
 # use of random seed values
@@ -165,28 +171,31 @@ suite = unittest.TestSuite()
 testnames = testloader.getTestCaseNames(testCreateLoadBalancer)
 # lb_name variants
 for test_name in testnames:
-    # testing lb name variants
-    for test_variant in test_inputs['lb_name_variants']:
-        suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
-                                            , test_name
-                                            , test_variant['name']
-                                            , test_inputs['default_values']['default_nodes']
-                                            , expected_status = test_variant['expected_status']))
+    # testing lb name variants 
+    if test_inputs['lb_name_variants']:
+        for test_variant in test_inputs['lb_name_variants']:
+            suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
+                                                , test_name
+                                                , test_variant['name']
+                                                , test_inputs['default_values']['default_nodes']
+                                                , expected_status = test_variant['expected_status']))
     # testing lb node variants
-    for test_variant in test_inputs['node_variants']:
-        suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
-                                            , test_name
-                                            , test_inputs['default_values']['default_name']
-                                            , test_variant['nodes']
-                                            , expected_status = test_variant['expected_status']))
+    if test_inputs['node_variants']:
+        for test_variant in test_inputs['node_variants']:
+            suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
+                                                , test_name
+                                                , test_inputs['default_values']['default_name']
+                                                , test_variant['nodes']
+                                                , expected_status = test_variant['expected_status']))
     # algorithm variants
-    for test_variant in test_inputs['algorithm_variants']:
-        suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
-                                            , test_name
-                                            , test_inputs['default_values']['default_name']
-                                            , test_inputs['default_values']['default_nodes']
-                                            , algorithm = test_variant['algorithm']
-                                            , expected_status = test_variant['expected_status']))
+    if test_inputs['algorithm_variants']:
+        for test_variant in test_inputs['algorithm_variants']:
+            suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
+                                                , test_name
+                                                , test_inputs['default_values']['default_name']
+                                                , test_inputs['default_values']['default_nodes']
+                                                , algorithm = test_variant['algorithm']
+                                                , expected_status = test_variant['expected_status']))
 result = unittest.TextTestRunner(verbosity=2).run(suite)
 sys.exit(not result.wasSuccessful())
 
