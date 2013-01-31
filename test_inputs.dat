@@ -121,6 +121,16 @@ node_variants:
     - description: 'bad_port_value'
       nodes: [{"address": "15.185.227.165","port": "iKeelYou"}]
       expected_status: 400
+    - description: 'unsupported_port'
+      nodes: [{"address": "15.185.227.165", "port": "9999"}]
+      expected_status: 200
+    - description: 'port_443'
+      nodes: 
+          - address: "15.185.227.167"
+            port: "443"
+          - address: "15.185.227.167"
+            port: "443"
+      expected_status: 200
     - description: 'over_five_nodes'
       nodes:
           - address: "15.185.227.167"

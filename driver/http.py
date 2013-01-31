@@ -33,7 +33,7 @@ class lbaasDriver:
         self.api_user_url = api_user_url
         self.user_name = args.osusername
         self.auth_url = args.osauthurl
-        self.tenant_id = args.ostenantid
+        self.tenant_name = args.ostenantname
         self.password = args.ospassword
         self.auth_token = self.get_auth_token()
         self.api_headers = {"Content-Type": "application/json"
@@ -45,7 +45,7 @@ class lbaasDriver:
     #------------------
     def get_auth_token(self):
         """ Get our keystone auth token to work with the api server """
-        request_data = {'auth':{ 'tenantId': self.tenant_id
+        request_data = {'auth':{ 'tenantName': self.tenant_name
                                , 'passwordCredentials':{'username': self.user_name
                                                        , 'password': self.password}
                                }
@@ -102,6 +102,8 @@ class lbaasDriver:
 
         url = "%s/loadbalancers/%s" %(self.api_user_url, lb_id)
         request_result = requests.get(url, headers=self.api_headers, verify=False)
+        print request_result.text
+        print '!'*80
         return ast.literal_eval(request_result.text)
 
     def list_lb_nodes(self, lb_id):

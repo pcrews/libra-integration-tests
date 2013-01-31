@@ -64,17 +64,11 @@ parser.add_argument( '--os_password'
                    , default = None
                    , help = 'OpenStack password for os-username'
                    )
-parser.add_argument( '--os_tenant_id'
-                   , action = 'store'
-                   , dest = 'ostenantid'
-                   , default = None
-                   , help = 'OpenStack tenant id (not name) for os-username for (http driver)'
-                   )
 parser.add_argument( '--os_tenant_name'
                    , action = 'store'
                    , dest = 'ostenantname'
                    , default = None
-                   , help = 'OpenStack tenant name (for python-libraclient)'
+                   , help = 'OpenStack tenant name'
                    )
 parser.add_argument( '--os_region_name'
                    , action = 'store'
