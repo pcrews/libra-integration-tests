@@ -62,8 +62,8 @@ class testCreateLoadBalancer(unittest.TestCase):
             self.logging.info("name: %s" %self.lb_name)
             self.logging.info("nodes: %s" %self.nodes)    
 
-    def test_loadBalancerOps(self):
-        """ test the various Atlas API functions against Libra
+    def test_createLoadBalancer(self):
+        """ test creation of loadbalancers for libra
         """
         # Create our loadbalancer
         self.create_result, self.actual_status, self.lb_id = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm, self.bad_statuses)
@@ -71,7 +71,6 @@ class testCreateLoadBalancer(unittest.TestCase):
             self.logging.info('load balancer id: %s' %self.lb_id)
             self.logging.info("")
         self.validate_loadBalancer()
-        # Update it
         
     def tearDown(self):
         ##########################

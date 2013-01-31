@@ -111,6 +111,17 @@ class lbaasDriver:
         request_result = requests.get(url, headers=self.api_headers, verify=False)
         return ast.literal_eval(request_result.text)
 
+    def update_lb(self, lb_id, update_data):
+        """ We get a dictionary of update_data
+            containing a new name, algorithm, or both
+            and we execute an UPDATE API call and see
+            what happens
+        """
+        url = "%s/loadbalancers/%s" %(self.api_user_url, lb_id)
+        request_data = json.dumps(update_data)
+        request_result = requests.put(url, data=request_data, headers=self.api_headers, verify=False)
+        return ast.literal_eval(request_result.text), str(request_result.status_code)
+
     # validation functions
     # these should likely live in a separate file, but putting
     # validation + actions together for now 

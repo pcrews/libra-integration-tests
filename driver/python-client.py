@@ -162,6 +162,37 @@ class lbaasDriver:
         node_dict['nodes'] = node_list
         return node_dict
 
+    def update_lb(self, lb_id, update_data):
+        """ We get a dictionary of update_data
+            containing a new name, algorithm, or both
+            and we execute an UPDATE API call and see
+            what happens
+        """
+        
+        cmd = self.base_cmd + ' modify --id=%s' %(lb_id)
+        if 'name' in update_data:
+            cmd += ' --name="%s"' %update_data['name']
+        if 'algorithm' in update_data:
+            cmd += ' --algorithm=%s' %update_data['algorithm']
+        status, output = commands.getstatusoutput(cmd)
+        data = output.split('\n')
+        if output.strip() == '':
+            status = '200'
+        elif 'algorithm' in update_data and update_data['algorithm'] not in self.supported_algorithms:
+            status = 'bad status: algorithm'
+            # a bit of a hack for client-side handling of bad algorithms
+            # python-libraclient appears to detect / check and provide a 
+            # 'you used me wrong' type of message vs. a 'from-the-api-server' error code
+            algo_error_string = "Libra command line client modify: error: argument --algorithm: invalid choice: '%s'" %update_data['algorithm']
+            for line in data:
+                if algo_error_string in line:
+                    status = '400'   
+        else:
+            data = data[0]
+            if 'HTTP' in data:
+                status = data.split('(HTTP')[1].strip().replace(')','')
+        return output, status
+
     # validation functions
     # these should likely live in a separate file, but putting
     # validation + actions together for now 

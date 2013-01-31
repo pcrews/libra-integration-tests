@@ -29,10 +29,11 @@ import requests
 import argparse
 
 from tests.create_loadbalancer import testCreateLoadBalancer
+from tests.update_loadbalancer import testUpdateLoadBalancer
 
-#######
-# main
-#######
+##########
+# parser
+##########
 parser = argparse.ArgumentParser(description='test_loadbalancer_operations.py - integration test suite for libra lbaas service')
 parser.add_argument( '--verbose'
                    , action = 'count'
@@ -123,10 +124,10 @@ parser.add_argument( '--prod_hack'
                    , default = False
                    , help = 'version string for user api'
                    )
-# TODO: add --seed option
-# This option must take values such as 'time' to allow for easier 
-# use of random seed values
-              
+
+#######
+# main
+#######  
 args = parser.parse_args(sys.argv[1:])
 if args.verbose:
     logging.info("VERBOSE: argument values:")
@@ -155,10 +156,7 @@ driver_module = imp.load_source( args.driver
                         , os.path.join(driver_path, args.driver+'.py'))
 driver = driver_module.lbaasDriver( args, api_user_url)
 
-# get our test input variants (nodes, names, etc)
-inputs_file = open(args.variant_module,'r')
-test_inputs = yaml.load(inputs_file)
-inputs_file.close()
+
 
 ##################################
 # test away!
@@ -166,8 +164,14 @@ inputs_file.close()
 
 testloader = unittest.TestLoader()
 suite = unittest.TestSuite()
-
+#########################
 # create operation tests
+#########################
+# get our test input variants (nodes, names, etc)
+inputs_file = open(args.variant_module,'r')
+test_inputs = yaml.load(inputs_file)
+inputs_file.close()
+
 testnames = testloader.getTestCaseNames(testCreateLoadBalancer)
 # lb_name variants
 for test_name in testnames:
@@ -196,6 +200,26 @@ for test_name in testnames:
                                                 , test_inputs['default_values']['default_name']
                                                 , test_inputs['default_values']['default_nodes']
                                                 , algorithm = test_variant['algorithm']
+                                                , expected_status = test_variant['expected_status']))
+#########################
+# update operation tests
+#########################
+# get our test input variants (nodes, names, etc)
+inputs_file = open(args.variant_module,'r')
+test_inputs = yaml.load(inputs_file)
+inputs_file.close()
+testnames = testloader.getTestCaseNames(testUpdateLoadBalancer)
+# lb_name variants
+for test_name in testnames:
+    # testing lb name variants 
+    if test_inputs['update_variants']:
+        for test_variant in test_inputs['update_variants']:
+          if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
+            suite.addTest(testUpdateLoadBalancer( test_variant['description'], args, logging, driver
+                                                , test_name
+                                                , test_inputs['default_values']['default_name']
+                                                , test_inputs['default_values']['default_nodes']
+                                                , test_variant['update_data']
                                                 , expected_status = test_variant['expected_status']))
 result = unittest.TextTestRunner(verbosity=2).run(suite)
 sys.exit(not result.wasSuccessful())
