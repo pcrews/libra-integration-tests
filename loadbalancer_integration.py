@@ -161,10 +161,6 @@ suite = unittest.TestSuite()
 #########################
 # create operation tests
 #########################
-# get our test input variants (nodes, names, etc)
-inputs_file = open(args.variant_module,'r')
-test_inputs = yaml.load(inputs_file)
-inputs_file.close()
 
 testnames = testloader.getTestCaseNames(testCreateLoadBalancer)
 # lb_name variants
@@ -198,10 +194,6 @@ for test_name in testnames:
 #########################
 # update operation tests
 #########################
-# get our test input variants (nodes, names, etc)
-inputs_file = open(args.variant_module,'r')
-test_inputs = yaml.load(inputs_file)
-inputs_file.close()
 testnames = testloader.getTestCaseNames(testUpdateLoadBalancer)
 # lb_name variants
 for test_name in testnames:

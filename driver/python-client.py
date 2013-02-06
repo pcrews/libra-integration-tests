@@ -72,6 +72,9 @@ class lbaasDriver:
         if algorithm:
             cmd += ' --algorithm=%s' %algorithm
         status, output = commands.getstatusoutput(cmd)
+        print cmd
+        print status
+        print output
         data = output.split('\n')
         if len(data) >= 3 and algorithm in self.supported_algorithms:
             data = data[3]
