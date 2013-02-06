@@ -158,6 +158,12 @@ driver = driver_module.lbaasDriver( args, api_user_url)
 
 testloader = unittest.TestLoader()
 suite = unittest.TestSuite()
+
+# get our test input variants (nodes, names, etc)
+inputs_file = open(args.variant_module,'r')
+test_inputs = yaml.load(inputs_file)
+inputs_file.close()
+
 #########################
 # create operation tests
 #########################
