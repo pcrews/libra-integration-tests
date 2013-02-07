@@ -172,7 +172,7 @@ testnames = testloader.getTestCaseNames(testCreateLoadBalancer)
 # lb_name variants
 for test_name in testnames:
     # testing lb name variants 
-    if test_inputs['lb_name_variants']:
+    if 'lb_name_variants' in test_inputs:
         for test_variant in test_inputs['lb_name_variants']:
           if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
             suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
@@ -181,7 +181,7 @@ for test_name in testnames:
                                                 , test_inputs['default_values']['default_nodes']
                                                 , expected_status = test_variant['expected_status']))
     # testing lb node variants
-    if test_inputs['node_variants']:
+    if 'node_variants' in test_inputs:
         for test_variant in test_inputs['node_variants']:
             suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
                                                 , test_name
@@ -189,7 +189,7 @@ for test_name in testnames:
                                                 , test_variant['nodes']
                                                 , expected_status = test_variant['expected_status']))
     # algorithm variants
-    if test_inputs['algorithm_variants']:
+    if 'algorithm_variants' in test_inputs:
         for test_variant in test_inputs['algorithm_variants']:
             suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
                                                 , test_name
@@ -204,7 +204,7 @@ testnames = testloader.getTestCaseNames(testUpdateLoadBalancer)
 # lb_name variants
 for test_name in testnames:
     # testing lb name variants 
-    if test_inputs['update_variants']:
+    if 'update_variants' in test_inputs:
         for test_variant in test_inputs['update_variants']:
           if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
             suite.addTest(testUpdateLoadBalancer( test_variant['description'], args, logging, driver
