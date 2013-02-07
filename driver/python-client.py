@@ -76,6 +76,8 @@ class lbaasDriver:
         print status
         print output
         data = output.split('\n')
+        print data
+        print '@'*80
         if len(data) >= 3 and algorithm in self.supported_algorithms:
             data = data[3]
             lb_id = data.split('|')[1].strip()
