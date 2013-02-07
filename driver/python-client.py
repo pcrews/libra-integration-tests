@@ -82,8 +82,7 @@ class lbaasDriver:
         print status
         print output
         for garbage_item in self.garbage_output:
-            output.replace(garbage_item,'')
-            output = output.strip()
+            output = output.replace(garbage_item,'').strip()
         data = output.split('\n')
         print "OUTPUT: %s" %output
         print "DATA: %s" %data
