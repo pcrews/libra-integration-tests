@@ -16,7 +16,7 @@
 # variable inputs
 ######################################
 default_values: 
-  default_lb_name: 'Lbaas_test_node'
+  default_name: 'Lbaas_test_node'
   default_nodes: 
     - address: "15.185.227.167"
       port: "80"
