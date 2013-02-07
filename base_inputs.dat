@@ -58,4 +58,3 @@ algorithm_variants:
     - description: 'round_robin_algo'
       algorithm: "ROUND_ROBIN"
       expected_status: 200
-                     ]

@@ -51,6 +51,10 @@ class lbaasDriver:
                               ]
         return
 
+    def trim_garbage_output(self, output):
+        for garbage_item in self.garbage_output:
+            output = output.replace(garbage_item,'').strip()
+        return output
     #-----------------
     # lbaas functions
     #-----------------
@@ -78,8 +82,7 @@ class lbaasDriver:
         if algorithm:
             cmd += ' --algorithm=%s' %algorithm
         status, output = commands.getstatusoutput(cmd)
-        for garbage_item in self.garbage_output:
-            output = output.replace(garbage_item,'').strip()
+        output = self.trim_garbage_output(output)
         data = output.split('\n')
         if len(data) >= 3 and algorithm in self.supported_algorithms:
             data = data[3]
@@ -106,6 +109,7 @@ class lbaasDriver:
         if lb_id:
             cmd = self.base_cmd + ' delete --id=%s' %lb_id
             status, output = commands.getstatusoutput(cmd)
+            output = self.trim_garbage_output(output)
             return output
 
     def list_lbs(self):
@@ -114,6 +118,7 @@ class lbaasDriver:
         url = "%s/loadbalancers" %self.api_user_url
         cmd = self.base_cmd + ' list'
         status, output = commands.getstatusoutput(cmd)
+        output = self.trim_garbage_output(output)
         data = output.split('\n')
         field_names = []
         for field_name in data[1].split('|')[1:-1]:
@@ -133,6 +138,7 @@ class lbaasDriver:
 
         cmd = self.base_cmd + ' status --id=%s' %lb_id
         status, output = commands.getstatusoutput(cmd)
+        output = self.trim_garbage_output(output)
         data = output.split('\n')
         field_names = []
         for field_name in data[1].split('|')[1:-1]:
@@ -154,6 +160,7 @@ class lbaasDriver:
     
         cmd = self.base_cmd + ' node-list --id=%s' %lb_id
         status, output = commands.getstatusoutput(cmd)
+        output = self.trim_garbage_output(output)
         data = output.split('\n')
         field_names = []
         for field_name in data[1].split('|')[1:-1]:
@@ -183,6 +190,7 @@ class lbaasDriver:
         if 'algorithm' in update_data:
             cmd += ' --algorithm=%s' %update_data['algorithm']
         status, output = commands.getstatusoutput(cmd)
+        output = self.trim_garbage_output(output)
         data = output.split('\n')
         if output.strip() == '':
             status = '200'
