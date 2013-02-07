@@ -78,15 +78,9 @@ class lbaasDriver:
         if algorithm:
             cmd += ' --algorithm=%s' %algorithm
         status, output = commands.getstatusoutput(cmd)
-        print cmd
-        print status
-        print output
         for garbage_item in self.garbage_output:
             output = output.replace(garbage_item,'').strip()
         data = output.split('\n')
-        print "OUTPUT: %s" %output
-        print "DATA: %s" %data
-        print '@'*80
         if len(data) >= 3 and algorithm in self.supported_algorithms:
             data = data[3]
             lb_id = data.split('|')[1].strip()
