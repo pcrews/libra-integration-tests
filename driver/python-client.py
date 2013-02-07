@@ -42,7 +42,13 @@ class lbaasDriver:
                          "--os_username=%s --os_password=%s "
                          "--os_tenant_name=%s  --os_region_name=%s") %(self.auth_url, self.user_name, self.password, self.tenant_name, self.region_name)
         if args.prodhack:
-            self.base_cmd += " --bypass_url=%s --insecure --service_type=compute " %(self.api_user_url) 
+            self.base_cmd += " --bypass_url=%s --insecure --service_type=compute " %(self.api_user_url)
+        # bit of a hack to eliminate some saltstack garbage we get with the client
+        self.garbage_output = ['/usr/lib/python2.7/getpass.py:83: GetPassWarning: Can not control echo on the terminal.'
+                              ,'passwd = fallback_getpass(prompt, stream)'
+                              ,'Warning: Password input may be echoed.'
+                              ,'Please set a password for your new keyring'
+                              ]
         return
 
     #-----------------
@@ -75,8 +81,12 @@ class lbaasDriver:
         print cmd
         print status
         print output
+        for garbage_item in self.garbage_output:
+            output.replace(garbage_item,'')
+            output = output.strip()
         data = output.split('\n')
-        print data
+        print "OUTPUT: %s" %output
+        print "DATA: %s" %data
         print '@'*80
         if len(data) >= 3 and algorithm in self.supported_algorithms:
             data = data[3]
