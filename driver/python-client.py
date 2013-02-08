@@ -58,7 +58,14 @@ class lbaasDriver:
 
     def execute_cmd(self, cmd):
         status, output = commands.getstatusoutput(cmd)
+        if 'modify' in cmd:
+            print cmd
+            print status
+            print output
         output = self.trim_garbage_output(output)
+        if 'modify' in cmd:
+            print 'POST-garbage output: %s' %output
+            print '#' *80
         return status, output
     #-----------------
     # lbaas functions
@@ -190,10 +197,6 @@ class lbaasDriver:
         if 'algorithm' in update_data:
             cmd += ' --algorithm=%s' %update_data['algorithm']
         status, output = self.execute_cmd(cmd)
-        print status
-        print output
-        print 'UPDATE:'
-        print '^'*80
         data = output.split('\n')
         if output.strip() == '':
             status = '200'
