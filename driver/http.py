@@ -102,8 +102,6 @@ class lbaasDriver:
 
         url = "%s/loadbalancers/%s" %(self.api_user_url, lb_id)
         request_result = requests.get(url, headers=self.api_headers, verify=False)
-        print request_result.text
-        print '!'*80
         return ast.literal_eval(request_result.text)
 
     def list_lb_nodes(self, lb_id):
