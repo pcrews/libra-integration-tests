@@ -12,15 +12,16 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+
 ######################################
 # variable inputs
 ######################################
 default_values: 
   default_name: 'Lbaas_test_node'
   default_nodes: 
-    - address: "15.185.227.167"
+    - address: "15.185.229.230"
       port: "80"
-    - address: "15.185.227.165"
+    - address: "15.185.227.208"
       port: "80"
 
 lb_name_variants: 
@@ -35,22 +36,22 @@ lb_name_variants:
 node_variants:
     - description: 'one_node'
       nodes: 
-         - address: "15.185.227.167"
+         - address: "15.185.229.230"
            port: "80"
       expected_status: 200
     - description: 'over_five_nodes'
       nodes:
-          - address: "15.185.227.167"
+          - address: "15.185.229.230"
             port: "80"
-          - address: "15.185.227.167"
+          - address: "15.185.229.230"
             port: "80"
-          - address: "15.185.227.165"
+          - address: "15.185.227.208"
             port: "80"
-          - address: "15.185.227.165"
+          - address: "15.185.227.208"
             port: "80"
-          - address: "15.185.227.165"
+          - address: "15.185.227.208"
             port: "80"
-          - address: "15.185.227.167"
+          - address: "15.185.229.230"
             port: "80"
       expected_status: 413
 

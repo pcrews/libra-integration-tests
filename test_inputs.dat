@@ -12,15 +12,16 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+    
 ######################################
 # variable inputs
 ######################################
 default_values: 
   default_name: 'Lbaas_test_node'
   default_nodes: 
-    - address: "15.185.227.167"
+    - address: "15.185.227.208"
       port: "80"
-    - address: "15.185.227.165"
+    - address: "15.185.229.230"
       port: "80"
 
 lb_name_variants: 
@@ -59,43 +60,43 @@ lb_name_variants:
 node_variants:
     - description: 'one_node'
       nodes: 
-         - address: "15.185.227.167"
+         - address: "15.185.227.208"
            port: "80"
       expected_status: 200
     - description: 'two_nodes'
       nodes:
-         - address: "15.185.227.167"
+         - address: "15.185.227.208"
            port: "80"
-         - address: "15.185.227.165"
+         - address: "15.185.229.230"
            port: "80"
       expected_status: 200
     - description: 'three_nodes'
       nodes: 
-         - address: "15.185.227.167"
+         - address: "15.185.227.208"
            port: "80"
-         - address: "15.185.227.165"
+         - address: "15.185.229.230"
            port: "80"
-         - address: "15.185.227.167"
+         - address: "15.185.227.208"
            port: "80"
       expected_status: 200
     - description: 'five_nodes'
       nodes:
-         - address: "15.185.227.167"
+         - address: "15.185.227.208"
            port: "80"
-         - address: "15.185.227.165"
+         - address: "15.185.229.230"
            port: "80"
-         - address: "15.185.227.165"
+         - address: "15.185.229.230"
            port: "80"
-         - address: "15.185.227.165"
+         - address: "15.185.229.230"
            port: "80"
-         - address: "15.185.227.167"
+         - address: "15.185.227.208"
            port: "80"
       expected_status: 200
     - description:  'bad_ip_address1'
       nodes:
          - address: "ImmaBadIP7"
            port: "80"
-         - address: "15.185.227.167"
+         - address: "15.185.227.208"
            port: "80"
       expected_status: 400
     - description: 'no_nodes'
@@ -110,40 +111,40 @@ node_variants:
       nodes:  [{"port": "80"}]
       expected_status: 400
     - description: 'null_port_value'
-      nodes: [{"address": "15.185.227.165","port": ""}]
+      nodes: [{"address": "15.185.229.230","port": ""}]
       expected_status: 400
     - description: 'no_port_entry'
-      nodes: [{"address": "15.185.227.165"}]
+      nodes: [{"address": "15.185.229.230"}]
       expected_status: 400
     - description: 'garbage_value'
-      nodes: [{"address": "15.185.227.165","port": "80",'ikeelyou':'boomGoesTheDynamite!'}]
+      nodes: [{"address": "15.185.229.230","port": "80",'ikeelyou':'boomGoesTheDynamite!'}]
       expected_status: 200
     - description: 'bad_port_value'
-      nodes: [{"address": "15.185.227.165","port": "iKeelYou"}]
+      nodes: [{"address": "15.185.229.230","port": "iKeelYou"}]
       expected_status: 400
     - description: 'unsupported_port'
-      nodes: [{"address": "15.185.227.165", "port": "9999"}]
+      nodes: [{"address": "15.185.229.230", "port": "9999"}]
       expected_status: 200
     - description: 'port_443'
       nodes: 
-          - address: "15.185.227.167"
+          - address: "15.185.227.208"
             port: "443"
-          - address: "15.185.227.167"
+          - address: "15.185.227.208"
             port: "443"
       expected_status: 200
     - description: 'over_five_nodes'
       nodes:
-          - address: "15.185.227.167"
+          - address: "15.185.227.208"
             port: "80"
-          - address: "15.185.227.167"
+          - address: "15.185.227.208"
             port: "80"
-          - address: "15.185.227.165"
+          - address: "15.185.229.230"
             port: "80"
-          - address: "15.185.227.165"
+          - address: "15.185.229.230"
             port: "80"
-          - address: "15.185.227.165"
+          - address: "15.185.229.230"
             port: "80"
-          - address: "15.185.227.167"
+          - address: "15.185.227.208"
             port: "80"
       expected_status: 413
 

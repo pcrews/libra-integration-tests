@@ -180,6 +180,7 @@ for test_name in testnames:
                                                 , test_variant['name']
                                                 , test_inputs['default_values']['default_nodes']
                                                 , expected_status = test_variant['expected_status']))
+
     # testing lb node variants
     if 'node_variants' in test_inputs:
         for test_variant in test_inputs['node_variants']:
@@ -213,6 +214,7 @@ for test_name in testnames:
                                                 , test_inputs['default_values']['default_nodes']
                                                 , test_variant['update_data']
                                                 , expected_status = test_variant['expected_status']))
+
 result = unittest.TextTestRunner(verbosity=2).run(suite)
 sys.exit(not result.wasSuccessful())
 

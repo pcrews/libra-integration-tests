@@ -24,7 +24,8 @@ class testUpdateLoadBalancer(unittest.TestCase):
 
     def __init__( self, test_description, args, logging, driver
                 , testname, lb_name, nodes, update_data, lb_id=None
-                , algorithm = None, expected_status=200):
+                , algorithm = None, expected_status=200
+                , backend_nodes = None):
         super(testUpdateLoadBalancer, self).__init__(testname)
         self.test_description = test_description
         self.args = args
@@ -40,6 +41,7 @@ class testUpdateLoadBalancer(unittest.TestCase):
         self.nodes = nodes
         self.lb_id = lb_id
         self.expected_status = expected_status
+        self.backend_nodes = backend_nodes
 
     def report_info(self):
         """ function for dumping info on test failures """
@@ -145,6 +147,34 @@ class testUpdateLoadBalancer(unittest.TestCase):
                     self.logging.info('%s: %s' %(key, item))
             error, error_list = self.driver.validate_lb_nodes(self.nodes, result_data['nodes'])
             self.assertEqual(error, 0, msg = self.report_info() + '\n'.join(error_list))
+
+            ########################
+            # test the loadbalancer
+            ########################
+            self.logging.info('testing loadbalancer function...')
+            result_data = self.driver.list_lb_detail(self.lb_id)
+            ip_list = ast.literal_eval(result_data['ips'])
+            lb_ip = ip_list[0]['address']
+            expected_etags = {}
+            actual_etags = {}
+            self.logging.info('gathering backend node etags...')
+            for backend_node in self.nodes:
+                node_addr = 'http://%s' %backend_node['address']
+                result = requests.get(node_addr)
+                expected_etags[node_addr] = result.headers['etag']
+            self.logging.info('testing lb for function...')
+            request_count = 20
+            for request_iter in range(request_count):
+                result = requests.get('http://%s' %lb_ip)
+                if result.headers['etag'] in actual_etags:
+                    actual_etags[result.headers['etag']] += 1
+                else:
+                    actual_etags[result.headers['etag']] = 1
+            for actual_etag in actual_etags.keys():
+                self.assertTrue(actual_etag in expected_etags.values(), msg = "Received bad etag: %s.  Expected etags: %s" %(actual_etag, expected_etags))
+            expected_hit_count = request_count/len(self.nodes)
+            for actual_etag, count in actual_etags.items():
+                self.assertTrue(count <= expected_hit_count, msg = "loadbalancing appears off.  Executed requests: %d.  Actual request counts: %s" %(request_count, actual_etags))
 
 
 

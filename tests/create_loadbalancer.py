@@ -18,13 +18,16 @@
 """
 
 import ast
+import time
 import unittest
+import requests
 
 class testCreateLoadBalancer(unittest.TestCase):
 
     def __init__( self, test_description, args, logging, driver
                 , testname, lb_name, nodes, lb_id=None
-                , algorithm = None, expected_status=200):
+                , algorithm = None, expected_status=200
+                ):
         super(testCreateLoadBalancer, self).__init__(testname)
         self.test_description = test_description
         self.args = args
@@ -125,6 +128,17 @@ class testCreateLoadBalancer(unittest.TestCase):
             # check algorithm
             # check protocol
             # check status
+            active_wait_time = 30
+            time_decrement = 3
+            status_pass = False
+            while active_wait_time and not status_pass:
+                if result_data['status'] != 'ACTIVE':
+                    time.sleep(time_decrement)
+                    active_wait_time -= time_decrement
+                    result_data = self.driver.list_lb_detail(self.lb_id)
+                else:
+                    status_pass = True
+            self.assertEqual(result_data['status'], 'ACTIVE', msg = 'loadbalancer: %s not in ACTIVE status after %d seconds' %(self.lb_id, active_wait_time))
             # check updated time
             # check created time
             if self.args.verbose:
@@ -140,6 +154,35 @@ class testCreateLoadBalancer(unittest.TestCase):
                     self.logging.info('%s: %s' %(key, item))
             error, error_list = self.driver.validate_lb_nodes(self.nodes, result_data['nodes'])
             self.assertEqual(error, 0, msg = self.report_info() + '\n'.join(error_list))
+
+            ########################
+            # test the loadbalancer
+            ########################
+            self.logging.info('testing loadbalancer function...')
+            result_data = self.driver.list_lb_detail(self.lb_id)
+            ip_list = ast.literal_eval(result_data['ips'])
+            lb_ip = ip_list[0]['address']
+            expected_etags = {}
+            actual_etags = {}
+            self.logging.info('gathering backend node etags...')
+            for backend_node in self.nodes:
+                node_addr = 'http://%s' %backend_node['address']
+                result = requests.get(node_addr)
+                expected_etags[node_addr] = result.headers['etag']
+            self.logging.info('testing lb for function...')
+            request_count = 20
+            for request_iter in range(request_count):
+                result = requests.get('http://%s' %lb_ip)
+                if result.headers['etag'] in actual_etags:
+                    actual_etags[result.headers['etag']] += 1
+                else:
+                    actual_etags[result.headers['etag']] = 1
+            for actual_etag in actual_etags.keys():
+                self.assertTrue(actual_etag in expected_etags.values(), msg = "Received bad etag: %s.  Expected etags: %s" %(actual_etag, expected_etags))
+            expected_hit_count = request_count/len(self.nodes)
+            for actual_etag, count in actual_etags.items():
+                self.assertTrue(count <= expected_hit_count, msg = "loadbalancing appears off.  Executed requests: %d.  Actual request counts: %s" %(request_count, actual_etags))
+           
 
 
 
