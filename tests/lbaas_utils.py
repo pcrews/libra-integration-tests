@@ -101,7 +101,7 @@ def validate_loadBalancer(lb_test_case):
             if 'ips' in result_data:
                 ip_list = ast.literal_eval(result_data['ips'])
             else:
-                ip_list = ast.literal_eval(result_data['virtualIps'])
+                ip_list = result_data['virtualIps']
             lb_ip = ip_list[0]['address']
             expected_etags = {}
             actual_etags = {}
