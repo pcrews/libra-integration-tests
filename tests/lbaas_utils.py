@@ -98,6 +98,8 @@ def validate_loadBalancer(lb_test_case):
             ########################
             lb_test_case.logging.info('testing loadbalancer function...')
             result_data = lb_test_case.driver.list_lb_detail(lb_test_case.lb_id)
+            print result_data
+            print '#'*80
             ip_list = ast.literal_eval(result_data['ips'])
             lb_ip = ip_list[0]['address']
             expected_etags = {}
