@@ -74,8 +74,15 @@ class lbaasDriver:
                        , "nodes": nodes 
                        }
         lb_id = None
+        tcp_https_flag = False
+        for node in nodes:
+            if str(node['port']) == '443':
+                tcp_https_flag = True
         if algorithm:
             request_data["algorithm"] = "%s" %algorithm
+        if tcp_https_flag:
+            request_data['protocol'] = 'TCP'
+            request_data['port'] = '443'
         request_data = json.dumps(request_data)
         request_result = requests.post(url, data=request_data, headers=self.api_headers, verify= False)
         result_data = ast.literal_eval(request_result.text)

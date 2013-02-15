@@ -74,6 +74,7 @@ class lbaasDriver:
         """
 
         lb_id = None
+        tcp_https_flag = False
         cmd = self.base_cmd + ' create --name="%s"' %name
         for node in nodes:
             node_info = ''
@@ -83,9 +84,13 @@ class lbaasDriver:
                 address = node['address']
             if 'port' in node:
                 port = node['port']
+                if str(port) == '443':
+                    tcp_https_flag = True
             cmd += ' --node=%s:%s' %(address, port)
         if algorithm:
             cmd += ' --algorithm=%s' %algorithm
+        if tcp_https_flag:
+            cmd += ' --protocol=TCP --port=443'
         status, output = self.execute_cmd(cmd)
         data = output.split('\n')
         if len(data) >= 3 and algorithm in self.supported_algorithms:

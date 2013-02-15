@@ -21,6 +21,7 @@ import ast
 import time
 import unittest
 import requests
+import lbaas_utils
 
 class testCreateLoadBalancer(unittest.TestCase):
 
@@ -73,7 +74,7 @@ class testCreateLoadBalancer(unittest.TestCase):
         if self.args.verbose:
             self.logging.info('load balancer id: %s' %self.lb_id)
             self.logging.info("")
-        self.validate_loadBalancer()
+        lbaas_utils.validate_loadBalancer(self)
         
     def tearDown(self):
         ##########################
@@ -82,107 +83,7 @@ class testCreateLoadBalancer(unittest.TestCase):
         self.logging.info("Deleting loadbalancer: %s" %self.lb_id)
         result = self.driver.delete_lb(self.lb_id)
 
-    def validate_loadBalancer(self):
-        """ The various things we do to validate a loadbalancer
-            This includes:
-                - testing various READ API methods against provided values
-                - testing the loadbalancer itself
-                  (we expect backend nodes to be formatted to help us test
-                - testing the status returned by the API server against expected status
-        """
 
-        #####################
-        # test create result
-        #####################
-
-        status_validation = self.driver.validate_status(self.expected_status, self.actual_status)
-        self.assertEqual(status_validation, True
-                        , msg = self.report_info() + "ERROR: load balancer create failed.  Expected: %s || Actual: %s" \
-                        %(self.expected_status, self.create_result)
-                        )
-        if self.actual_status not in self.bad_statuses:
-            ###############
-            # test lb list
-            ###############
-            self.logging.info('Validating load balancer list...')
-            loadbalancers = self.driver.list_lbs()
-            lb_match = self.driver.validate_lb_list(self.lb_name, loadbalancers)
-            self.assertEqual(lb_match, True, msg = self.report_info() + "ERROR: load balancer: %s has no match in api loadbalancer list:\n %s" %(self.lb_name, loadbalancers))
-            if self.args.verbose:
-                self.logging.info("")
-        
-            ################
-            # test detail
-            ################
-            self.logging.info('Validating load balancer detail...')
-            result_data = self.driver.list_lb_detail(self.lb_id)
-            if self.args.verbose:
-                for key, item in result_data.items():
-                    self.logging.info('%s: %s' %(key, item))
-            # check name
-            self.assertEqual(self.lb_name.strip(), result_data['name'].strip(), msg = self.report_info() + "ERROR: lb name: %s || system name: %s" %(self.lb_name, result_data['name']))
-            # check nodes
-            system_nodes = result_data['nodes']
-            error, error_list = self.driver.validate_lb_nodes(self.nodes, system_nodes)
-            self.assertEqual(error, 0, msg = self.report_info() + '\n'.join(error_list))
-            # check algorithm
-            # check protocol
-            # check status
-            active_wait_time = 30
-            time_decrement = 3
-            status_pass = False
-            while active_wait_time and not status_pass:
-                if result_data['status'] != 'ACTIVE':
-                    time.sleep(time_decrement)
-                    active_wait_time -= time_decrement
-                    result_data = self.driver.list_lb_detail(self.lb_id)
-                else:
-                    status_pass = True
-            self.assertEqual(result_data['status'], 'ACTIVE', msg = 'loadbalancer: %s not in ACTIVE status after %d seconds' %(self.lb_id, active_wait_time))
-            # check updated time
-            # check created time
-            if self.args.verbose:
-                self.logging.info("")
-
-            ###################
-            # test nodes list
-            ###################
-            self.logging.info('Validating load balancer nodes url...')
-            result_data = self.driver.list_lb_nodes(self.lb_id)
-            if self.args.verbose:
-                for key, item in result_data.items():
-                    self.logging.info('%s: %s' %(key, item))
-            error, error_list = self.driver.validate_lb_nodes(self.nodes, result_data['nodes'])
-            self.assertEqual(error, 0, msg = self.report_info() + '\n'.join(error_list))
-
-            ########################
-            # test the loadbalancer
-            ########################
-            self.logging.info('testing loadbalancer function...')
-            result_data = self.driver.list_lb_detail(self.lb_id)
-            ip_list = ast.literal_eval(result_data['ips'])
-            lb_ip = ip_list[0]['address']
-            expected_etags = {}
-            actual_etags = {}
-            self.logging.info('gathering backend node etags...')
-            for backend_node in self.nodes:
-                node_addr = 'http://%s' %backend_node['address']
-                result = requests.get(node_addr)
-                expected_etags[node_addr] = result.headers['etag']
-            self.logging.info('testing lb for function...')
-            request_count = 20
-            for request_iter in range(request_count):
-                result = requests.get('http://%s' %lb_ip)
-                if result.headers['etag'] in actual_etags:
-                    actual_etags[result.headers['etag']] += 1
-                else:
-                    actual_etags[result.headers['etag']] = 1
-            for actual_etag in actual_etags.keys():
-                self.assertTrue(actual_etag in expected_etags.values(), msg = "Received bad etag: %s.  Expected etags: %s" %(actual_etag, expected_etags))
-            expected_hit_count = request_count/len(self.nodes)
-            for actual_etag, count in actual_etags.items():
-                self.assertTrue(count <= expected_hit_count, msg = "loadbalancing appears off.  Executed requests: %d.  Actual request counts: %s" %(request_count, actual_etags))
-           
 
 
 
