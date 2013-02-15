@@ -76,7 +76,7 @@ class lbaasDriver:
         lb_id = None
         tcp_https_flag = False
         for node in nodes:
-            if str(node['port']) == '443':
+            if 'port' in node and str(node['port']) == '443':
                 tcp_https_flag = True
         if algorithm:
             request_data["algorithm"] = "%s" %algorithm
