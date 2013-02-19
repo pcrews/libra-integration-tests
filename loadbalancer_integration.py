@@ -184,10 +184,26 @@ for test_name in testnames:
     # testing lb node variants
     if 'node_variants' in test_inputs:
         for test_variant in test_inputs['node_variants']:
+            if 'nodes' in test_variant:
+                nodes = test_variant['nodes']
+            else:
+                node_count = test_variant['node_count']
+                node_pool = test_inputs['default_values']['nodes']
+                # we have a node_count value and pull from default_values['nodes']
+                if node_count < len(node_pool):
+                    nodes = test_inputs['default_values']['nodes'][:test_variant['node_count']]
+                else:
+                    nodes = []
+                    idx = 0
+                    while len(nodes) < node_count:
+                        nodes.append(node_pool[idx])
+                        idx += 1
+                        if idx >= len(node_pool):
+                            idx = 0
             suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
                                                 , test_name
                                                 , test_inputs['default_values']['default_name']
-                                                , test_variant['nodes']
+                                                , nodes
                                                 , expected_status = test_variant['expected_status']))
     # algorithm variants
     if 'algorithm_variants' in test_inputs:
