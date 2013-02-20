@@ -91,8 +91,8 @@ node_variants:
     - description: 'five_nodes'
       node_count: 5
       expected_status: 200
-    - description: 'max_nodes_25'
-      node_count: 25
+    - description: 'max_nodes_100'
+      node_count: 100
       expected_status: 200
     - description:  'bad_ip_address1'
       nodes:
@@ -132,7 +132,7 @@ node_variants:
             port: "443"
       expected_status: 200
     - description: 'over_max_nodes'
-      node_count: 26
+      node_count: 101
       expected_status: 413
 
 algorithm_variants:
