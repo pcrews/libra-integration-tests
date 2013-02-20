@@ -194,10 +194,11 @@ for test_name in testnames:
                 nodes = test_variant['nodes']
             else:
                 node_count = test_variant['node_count']
-                if str(node_count).startswith('MAX_BACKEND_COUNT'):
+                if str(test_variant['node_count']).startswith('MAX_BACKEND_COUNT'):
                     node_count = args.maxbackendnodes
-                    if '+1' in node_count:
-                        node_count += 1
+                    if '+' in test_variant['node_count']:
+                        additional_node_count = test_variant['node_count'].split('+')[1]
+                        node_count += int(additional_node_count)
                 node_pool = test_inputs['default_values']['nodes']
                 # we have a node_count value and pull from default_values['nodes']
                 if node_count < len(node_pool):
