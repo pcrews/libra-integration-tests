@@ -195,6 +195,7 @@ class lbaasDriver:
         if 'algorithm' in update_data:
             cmd += ' --algorithm=%s' %update_data['algorithm']
         status, output = self.execute_cmd(cmd)
+        print cmd
         print status
         print output
         print '@'*80
