@@ -201,7 +201,7 @@ for test_name in testnames:
                 node_pool = test_inputs['default_values']['nodes']
                 # we have a node_count value and pull from default_values['nodes']
                 if node_count < len(node_pool):
-                    nodes = test_inputs['default_values']['nodes'][:test_variant['node_count']]
+                    nodes = test_inputs['default_values']['nodes'][:node_count]
                 else:
                     nodes = []
                     idx = 0
