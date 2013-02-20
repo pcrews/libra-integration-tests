@@ -122,7 +122,8 @@ parser.add_argument( '--max_backend_nodes'
                    , action = 'store'
                    , dest = 'maxbackendnodes'
                    , default = 5
-                   , help = 'version string for user api'
+                   , help = 'maximum number of backend nodes allowed per load balancer'
+                   , type = int
                    )
 
 #######
@@ -195,10 +196,9 @@ for test_name in testnames:
             else:
                 node_count = test_variant['node_count']
                 if str(test_variant['node_count']).startswith('MAX_BACKEND_COUNT'):
-                    node_count = args.maxbackendnodes
-                    if '+' in test_variant['node_count']:
-                        additional_node_count = test_variant['node_count'].split('+')[1]
-                        node_count += int(additional_node_count)
+                    node_count = int(args.maxbackendnodes)
+                    if str(test_variant['node_count']).endswith('+1'):
+                        node_count += 1
                 node_pool = test_inputs['default_values']['nodes']
                 # we have a node_count value and pull from default_values['nodes']
                 if node_count < len(node_pool):
@@ -206,10 +206,11 @@ for test_name in testnames:
                 else:
                     nodes = []
                     idx = 0
+                    should_continue = True
                     while len(nodes) < node_count:
                         nodes.append(node_pool[idx])
                         idx += 1
-                        if idx >= len(node_pool):
+                        if idx == len(node_pool):
                             idx = 0
             suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
                                                 , test_name
