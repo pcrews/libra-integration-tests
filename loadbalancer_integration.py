@@ -176,7 +176,6 @@ inputs_file.close()
 # create operation tests
 #########################
 
-
 testnames = testloader.getTestCaseNames(testCreateLoadBalancer)
 # lb_name variants
 for test_name in testnames:
@@ -244,6 +243,7 @@ for test_name in testnames:
                                                 , test_inputs['default_values']['default_nodes']
                                                 , test_variant['update_data']
                                                 , expected_status = test_variant['expected_status']))
+
 
 ###################
 # add node tests

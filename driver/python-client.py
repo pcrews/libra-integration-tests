@@ -232,14 +232,10 @@ class lbaasDriver:
             cmd += ' --node=%s:%s' %(address, port)
         status, output = self.execute_cmd(cmd)
         data = output.split('\n')
-        print data
         if 'HTTP' in data[0]:
-                status = data.split('(HTTP')[1].strip().replace(')','')
+                status = data[0].split('(HTTP')[1].strip().replace(')','')
         else: 
             status = '200' 
-        print cmd
-        print status
-        print output
         return output, status
 
     # validation functions
