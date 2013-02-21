@@ -30,6 +30,7 @@ import argparse
 
 from tests.create_loadbalancer import testCreateLoadBalancer
 from tests.update_loadbalancer import testUpdateLoadBalancer
+from tests.add_nodes import testAddNodes
 
 ##########
 # parser
@@ -175,6 +176,7 @@ inputs_file.close()
 # create operation tests
 #########################
 
+
 testnames = testloader.getTestCaseNames(testCreateLoadBalancer)
 # lb_name variants
 for test_name in testnames:
@@ -202,7 +204,7 @@ for test_name in testnames:
                 node_pool = test_inputs['default_values']['nodes']
                 # we have a node_count value and pull from default_values['nodes']
                 if node_count < len(node_pool):
-                    nodes = test_inputs['default_values']['nodes'][:node_count]
+                    nodes = node_pool[:node_count]
                 else:
                     nodes = []
                     idx = 0
@@ -241,6 +243,46 @@ for test_name in testnames:
                                                 , test_inputs['default_values']['default_name']
                                                 , test_inputs['default_values']['default_nodes']
                                                 , test_variant['update_data']
+                                                , expected_status = test_variant['expected_status']))
+
+###################
+# add node tests
+###################
+testnames = testloader.getTestCaseNames(testAddNodes)
+# lb_name variants
+for test_name in testnames:
+    # testing lb name variants 
+    if 'add_node_variants' in test_inputs:
+        for test_variant in test_inputs['add_node_variants']:
+          if 'skip_test' not in test_variant or test_variant['skip_test'] != args.driver:
+            nodes = []
+            if 'nodes' in test_variant:
+                nodes = test_variant['nodes']
+            else:
+                nodes = []
+                node_count = test_variant['node_count']
+                if str(test_variant['node_count']).startswith('MAX_BACKEND_COUNT'):
+                    node_count = int(args.maxbackendnodes) - len(test_inputs['default_values']['default_nodes'])
+                    if str(test_variant['node_count']).endswith('+1'):
+                        node_count += 1
+                node_pool = test_inputs['default_values']['nodes']
+                # we have a node_count value and pull from default_values['nodes']
+                if node_count < len(node_pool):
+                    nodes = node_pool[:node_count]
+                else:
+                    nodes = []
+                    idx = 0
+                    should_continue = True
+                    while len(nodes) < node_count:
+                        nodes.append(node_pool[idx])
+                        idx += 1
+                        if idx == len(node_pool):
+                            idx = 0
+            suite.addTest(testAddNodes( test_variant['description'], args, logging, driver
+                                                , test_name
+                                                , test_inputs['default_values']['default_name']
+                                                , test_inputs['default_values']['default_nodes']
+                                                , nodes
                                                 , expected_status = test_variant['expected_status']))
 
 result = unittest.TextTestRunner(verbosity=2).run(suite)

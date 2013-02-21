@@ -213,6 +213,35 @@ class lbaasDriver:
                 status = data.split('(HTTP')[1].strip().replace(')','')
         return output, status
 
+    def add_nodes(self, lb_id, add_node_data):
+        """ We get a list of nodes we want to add and
+            try to add them :)
+
+        """
+        cmd = self.base_cmd + ' node-add --id=%s' %(lb_id)
+        for node in add_node_data:
+            node_info = ''
+            address = ''
+            port = ''
+            if 'address' in node:
+                address = node['address']
+            if 'port' in node:
+                port = node['port']
+                if str(port) == '443':
+                    tcp_https_flag = True
+            cmd += ' --node=%s:%s' %(address, port)
+        status, output = self.execute_cmd(cmd)
+        data = output.split('\n')
+        print data
+        if 'HTTP' in data[0]:
+                status = data.split('(HTTP')[1].strip().replace(')','')
+        else: 
+            status = '200' 
+        print cmd
+        print status
+        print output
+        return output, status
+
     # validation functions
     # these should likely live in a separate file, but putting
     # validation + actions together for now 

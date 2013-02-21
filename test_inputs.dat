@@ -177,3 +177,21 @@ update_variants:
     - description: 'multi_attr_change_neg_algo'
       update_data: {"name": "good_new_name", "algorithm": "iWillKeelYou"}
       expected_status: 400
+
+add_node_variants:
+    - description: 'single_node_add'
+      expected_status: 200
+      nodes: [{"address": "15.185.229.95","port": "80"}]
+    - description: 'multi_node_add'
+      expected_status: 200
+      nodes: [{"address": "15.185.229.95","port": "80"}, {"address": "15.185.226.163","port": "80"}]
+    - description: 'single_node_disabled_add'
+      expected_status: 400
+      nodes: [{"address": "15.185.229.95","port": "80","condition":DISABLED}]
+      skip_test: 'python-client'
+    - description: 'add_over_max_nodes'
+      node_count: 'MAX_BACKEND_COUNT +1'
+      expected_status: 413
+    - description: 'add_up_to_max_nodes'
+      node_count: 'MAX_BACKEND_COUNT'
+      expected_status: 200

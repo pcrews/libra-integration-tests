@@ -129,6 +129,18 @@ class lbaasDriver:
         request_result = requests.put(url, data=request_data, headers=self.api_headers, verify=False)
         return ast.literal_eval(request_result.text), str(request_result.status_code)
 
+    def add_nodes(self, lb_id, add_node_data):
+        """ We get a list of nodes we want to add and
+            try to add them :)
+
+        """
+        url = "%s/loadbalancers/%s/nodes" %(self.api_user_url, lb_id)
+        node_data = {}
+        node_data['nodes'] = add_node_data
+        node_data = json.dumps(node_data)
+        request_result = requests.post(url, data=node_data, headers=self.api_headers, verify=False)
+        return ast.literal_eval(request_result.text), str(request_result.status_code)
+
     # validation functions
     # these should likely live in a separate file, but putting
     # validation + actions together for now 
@@ -140,7 +152,7 @@ class lbaasDriver:
         error = 0
         error_list = []
         if len(expected_nodes) != len(system_nodes):
-            error_list.append("ERROR: Node mismatch between request and api server detail: %s || %s" %(nodes, system_nodes))
+            error_list.append("ERROR: Node mismatch between request and api server detail: %s || %s" %(expected_nodes, system_nodes))
             error = 1
         for node in expected_nodes:
             match = 0
