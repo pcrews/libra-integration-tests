@@ -67,12 +67,13 @@ def validate_loadBalancer(lb_test_case):
             # check protocol
             # check status
             active_wait_time = 30
+            total_wait_time = 0
             time_decrement = 3
             status_pass = False
-            while active_wait_time and not status_pass:
+            while total_wait_time != active_wait_time and not status_pass:
                 if result_data['status'] != 'ACTIVE':
                     time.sleep(time_decrement)
-                    active_wait_time -= time_decrement
+                    total_wait_time += time_decrement
                     result_data = lb_test_case.driver.list_lb_detail(lb_test_case.lb_id)
                 else:
                     status_pass = True
