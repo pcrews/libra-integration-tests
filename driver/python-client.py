@@ -74,6 +74,7 @@ class lbaasDriver:
         """
 
         lb_id = None
+        ip_addr = None
         tcp_https_flag = False
         cmd = self.base_cmd + ' create --name="%s"' %name
         for node in nodes:

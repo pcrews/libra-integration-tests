@@ -78,6 +78,7 @@ class lbaasDriver:
                        , "nodes": nodes 
                        }
         lb_id = None
+        lb_addr = None
         tcp_https_flag = False
         for node in nodes:
             if 'port' in node and str(node['port']) == '443':
