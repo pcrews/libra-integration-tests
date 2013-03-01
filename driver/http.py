@@ -91,10 +91,10 @@ class lbaasDriver:
         request_data = json.dumps(request_data)
         request_result = requests.post(url, data=request_data, headers=self.api_headers, verify= False)
         result_data = ast.literal_eval(request_result.text)
-        lb_addr = result_data['virtualIps'][0]['address']
         request_status = str(request_result.status_code)
         if request_status not in bad_statuses:
             lb_id = result_data['id']
+            lb_addr = result_data['virtualIps'][0]['address']
         return request_result, request_status, lb_id, lb_addr
 
     def delete_lb(self, lb_id):
