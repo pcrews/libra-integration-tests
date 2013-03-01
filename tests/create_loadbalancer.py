@@ -70,10 +70,9 @@ class testCreateLoadBalancer(unittest.TestCase):
         """ test creation of loadbalancers for libra
         """
         # Create our loadbalancer
-        self.create_result, self.actual_status, self.lb_id = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm, self.bad_statuses)
-        if self.args.verbose:
-            self.logging.info('load balancer id: %s' %self.lb_id)
-            self.logging.info("")
+        self.create_result, self.actual_status, self.lb_id, self.lb_addr = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm, self.bad_statuses)
+        self.logging.info('load balancer id: %s' %self.lb_id)
+        self.logging.info('load balancer ip addr: %s' %self.lb_addr)
         lbaas_utils.validate_loadBalancer(self)
         
     def tearDown(self):

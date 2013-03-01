@@ -69,10 +69,9 @@ class testAddNodes(unittest.TestCase):
             self.logging.info("name: %s" %self.lb_name)
             self.logging.info("nodes: %s" %self.init_nodes)    
         # Create our loadbalancer
-        self.create_result, self.actual_status, self.lb_id = self.driver.create_lb(self.lb_name, self.init_nodes, self.algorithm, self.bad_statuses)
-        if self.args.verbose:
-            self.logging.info('load balancer id: %s' %self.lb_id)
-            self.logging.info("")
+        self.create_result, self.actual_status, self.lb_id, self.lb_addr = self.driver.create_lb(self.lb_name, self.init_nodes, self.algorithm, self.bad_statuses)
+        self.logging.info('load balancer id: %s' %self.lb_id)
+        self.logging.info('load balancer ip addr: %s' %self.lb_addr)
 
     def test_addNodes(self):
         """ test update of loadbalancers for libra

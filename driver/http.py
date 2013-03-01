@@ -17,6 +17,7 @@
 
 """
 
+import sys
 import ast
 import json
 import requests
@@ -35,7 +36,7 @@ class lbaasDriver:
         self.auth_url = args.osauthurl
         self.tenant_name = args.ostenantname
         self.password = args.ospassword
-        self.auth_token = self.get_auth_token()
+        self.auth_token, self.api_user_url = self.get_auth_token()
         self.api_headers = {"Content-Type": "application/json"
               ,"X-Auth-Token": "%s" %(self.auth_token) }
         return
@@ -54,8 +55,11 @@ class lbaasDriver:
         headers = {"Content-Type": "application/json"}
         request_result = requests.post(self.auth_url, data=request_data, headers=headers, verify=False)
         request_data = ast.literal_eval(request_result.text)
+        for service_data in request_data['access']['serviceCatalog']:
+            if service_data['name'] == 'Load Balancer':
+                endpoint = service_data['endpoints'][0]['publicURL'].replace('\\','')
         auth_token = request_data['access']['token']['id']
-        return auth_token
+        return auth_token, endpoint
 
     #-----------------
     # lbaas functions
@@ -86,10 +90,11 @@ class lbaasDriver:
         request_data = json.dumps(request_data)
         request_result = requests.post(url, data=request_data, headers=self.api_headers, verify= False)
         result_data = ast.literal_eval(request_result.text)
+        lb_addr = result_data['virtualIps'][0]['address']
         request_status = str(request_result.status_code)
         if request_status not in bad_statuses:
             lb_id = result_data['id']
-        return request_result, request_status, lb_id
+        return request_result, request_status, lb_id, lb_addr
 
     def delete_lb(self, lb_id):
         """ Delete the loadbalancer identified by 'lb_id' """

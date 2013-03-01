@@ -95,7 +95,10 @@ class lbaasDriver:
         data = output.split('\n')
         if len(data) >= 3 and algorithm in self.supported_algorithms:
             data = data[3]
-            lb_id = data.split('|')[1].strip()
+            lb_data = data.split('|')
+            lb_id = lb_data[1].strip()
+            lb_stats = ast.literal_eval(lb_data[9].strip())
+            ip_addr = lb_stats[0]['address']
             status = '200' 
         elif algorithm not in self.supported_algorithms:
             status = 'bad status: algorithm'
@@ -110,7 +113,7 @@ class lbaasDriver:
             data = data[0]
             if 'HTTP' in data:
                 status = data.split('(HTTP')[1].strip().replace(')','')
-        return output, status, lb_id # TODO detect error statuses!!!!!
+        return output, status, lb_id, ip_addr # TODO detect error statuses!!!!!
 
     def delete_lb(self, lb_id):
         """ Delete the loadbalancer identified by 'lb_id' """
