@@ -31,12 +31,13 @@ class lbaasDriver:
 
     def __init__(self, args, api_user_url):
         """ TODO: put in validation and api-specific whatnot here """
-        self.api_user_url = api_user_url
         self.user_name = args.osusername
         self.auth_url = args.osauthurl
         self.tenant_name = args.ostenantname
         self.password = args.ospassword
         self.auth_token, self.api_user_url = self.get_auth_token()
+        if api_user_url: # if the user supplies an api_user_url, we use that vs. service_catalog value
+            self.api_user_url = api_user_url
         self.api_headers = {"Content-Type": "application/json"
               ,"X-Auth-Token": "%s" %(self.auth_token) }
         return

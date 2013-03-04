@@ -86,7 +86,7 @@ parser.add_argument( '--os_auth_url'
 parser.add_argument( '--lbaas_api_url'
                    , action = 'store'
                    , dest = 'lbaasapiurl'
-                   , default = 'https://lbapi.paas.hpcloud.net'
+                   , default = None
                    , help = 'url for the lbaas api server'
                    )
 parser.add_argument( '--lbaas_admin_port'
@@ -126,6 +126,7 @@ parser.add_argument( '--max_backend_nodes'
                    , help = 'maximum number of backend nodes allowed per load balancer'
                    , type = int
                    )
+
 
 #######
 # main
