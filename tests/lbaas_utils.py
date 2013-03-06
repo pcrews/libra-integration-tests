@@ -39,16 +39,6 @@ def validate_loadBalancer(lb_test_case):
                         %(lb_test_case.expected_status, lb_test_case.actual_status)
                         )
         if lb_test_case.actual_status not in lb_test_case.bad_statuses:
-            ###############
-            # test lb list
-            ###############
-            lb_test_case.logging.info('Validating load balancer list...')
-            loadbalancers = lb_test_case.driver.list_lbs()
-            lb_match = lb_test_case.driver.validate_lb_list(lb_test_case.lb_name, loadbalancers)
-            lb_test_case.assertEqual(lb_match, True, msg = lb_test_case.report_info() + "ERROR: load balancer: %s has no match in api loadbalancer list:\n %s" %(lb_test_case.lb_name, loadbalancers))
-            if lb_test_case.args.verbose:
-                lb_test_case.logging.info("")
-        
             ################
             # test detail
             ################
@@ -57,14 +47,6 @@ def validate_loadBalancer(lb_test_case):
             if lb_test_case.args.verbose:
                 for key, item in result_data.items():
                     lb_test_case.logging.info('%s: %s' %(key, item))
-            # check name
-            lb_test_case.assertEqual(lb_test_case.lb_name.strip(), result_data['name'].strip(), msg = lb_test_case.report_info() + "ERROR: lb name: %s || system name: %s" %(lb_test_case.lb_name, result_data['name']))
-            # check nodes
-            system_nodes = result_data['nodes']
-            error, error_list = lb_test_case.driver.validate_lb_nodes(lb_test_case.nodes, system_nodes)
-            lb_test_case.assertEqual(error, 0, msg = lb_test_case.report_info() + '\n'.join(error_list))
-            # check algorithm
-            # check protocol
             # check status
             active_wait_time = 30
             total_wait_time = 0
@@ -78,8 +60,26 @@ def validate_loadBalancer(lb_test_case):
                 else:
                     status_pass = True
             lb_test_case.assertEqual(result_data['status'], 'ACTIVE', msg = 'loadbalancer: %s not in ACTIVE status after %d seconds' %(lb_test_case.lb_id, active_wait_time))
+            # check name
+            lb_test_case.assertEqual(lb_test_case.lb_name.strip(), result_data['name'].strip(), msg = lb_test_case.report_info() + "ERROR: lb name: %s || system name: %s" %(lb_test_case.lb_name, result_data['name']))
+            # check nodes
+            system_nodes = result_data['nodes']
+            error, error_list = lb_test_case.driver.validate_lb_nodes(lb_test_case.nodes, system_nodes)
+            lb_test_case.assertEqual(error, 0, msg = lb_test_case.report_info() + '\n'.join(error_list))
+            # check algorithm
+            # check protocol
             # check updated time
             # check created time
+            if lb_test_case.args.verbose:
+                lb_test_case.logging.info("")
+
+            ###############
+            # test lb list
+            ###############
+            lb_test_case.logging.info('Validating load balancer list...')
+            loadbalancers = lb_test_case.driver.list_lbs()
+            lb_match = lb_test_case.driver.validate_lb_list(lb_test_case.lb_name, loadbalancers)
+            lb_test_case.assertEqual(lb_match, True, msg = lb_test_case.report_info() + "ERROR: load balancer: %s has no match in api loadbalancer list:\n %s" %(lb_test_case.lb_name, loadbalancers))
             if lb_test_case.args.verbose:
                 lb_test_case.logging.info("")
 
