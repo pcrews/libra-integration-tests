@@ -1,0 +1,203 @@
+# Copyright 2012 Hewlett-Packard Development Company, L.P.
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+
+    
+######################################
+# variable inputs
+######################################
+default_values: 
+  default_name: 'Lbaas_test_node'
+  default_nodes: 
+    - address: "15.185.227.208"
+      port: "80"
+    - address: "15.185.229.230"
+      port: "80"
+  nodes:
+    - address: "15.185.227.208"
+      port: "80"
+    - address: "15.185.226.163"
+      port: "80"
+    - address: "15.185.229.95"
+      port: "80"
+    - address: "15.185.229.153"
+      port: "80"
+    - address: "15.185.229.165"
+      port: "80"
+    - address: "15.185.229.202"
+      port: "80"
+    - address: "15.185.229.224"
+      port: "80"
+    - address: "15.185.229.226"
+      port: "80"
+    - address: "15.185.229.227"
+      port: "80"
+    - address: "15.185.229.230"
+      port: "80"
+
+lb_name_variants: 
+    - description: 'create_test0'
+      name: 'lbaas-create-test0'
+      expected_status: 200
+    - description: 'create_test1'
+      name: 'lbaas-create-test1'
+      expected_status: 200
+    - description: 'create_test2'
+      name: 'lbaas-create-test2'
+      expected_status: 200
+    - description: 'create_test3'
+      name: 'lbaas-create-test3'
+      expected_status: 200
+    - description: 'create_test4'
+      name: 'lbaas-create-test4'
+      expected_status: 200
+    - description: 'create_test5'
+      name: 'lbaas-create-test5'
+      expected_status: 200
+    - description: 'create_test6'
+      name: 'lbaas-create-test6'
+      expected_status: 200
+    - description: 'create_test7'
+      name: 'lbaas-create-test7'
+      expected_status: 200
+    - description: 'create_test8'
+      name: 'lbaas-create-test8'
+      expected_status: 200
+    - description: 'create_test9'
+      name: 'lbaas-create-test9'
+      expected_status: 200
+    - description: 'create_test10'
+      name: 'lbaas-create-test10'
+      expected_status: 200
+    - description: 'create_test11'
+      name: 'lbaas-create-test11'
+      expected_status: 200
+    - description: 'create_test12'
+      name: 'lbaas-create-test12'
+      expected_status: 200
+    - description: 'create_test13'
+      name: 'lbaas-create-test13'
+      expected_status: 200
+    - description: 'create_test14'
+      name: 'lbaas-create-test14'
+      expected_status: 200
+    - description: 'create_test15'
+      name: 'lbaas-create-test15'
+      expected_status: 200
+    - description: 'create_test16'
+      name: 'lbaas-create-test16'
+      expected_status: 200
+    - description: 'create_test17'
+      name: 'lbaas-create-test17'
+      expected_status: 200
+    - description: 'create_test18'
+      name: 'lbaas-create-test18'
+      expected_status: 200
+    - description: 'create_test19'
+      name: 'lbaas-create-test19'
+      expected_status: 200
+    - description: 'create_test20'
+      name: 'lbaas-create-test20'
+      expected_status: 200
+    - description: 'create_test21'
+      name: 'lbaas-create-test21'
+      expected_status: 200
+    - description: 'create_test22'
+      name: 'lbaas-create-test22'
+      expected_status: 200
+    - description: 'create_test23'
+      name: 'lbaas-create-test23'
+      expected_status: 200
+    - description: 'create_test24'
+      name: 'lbaas-create-test24'
+      expected_status: 200
+    - description: 'create_test25'
+      name: 'lbaas-create-test25'
+      expected_status: 200
+    - description: 'create_test26'
+      name: 'lbaas-create-test26'
+      expected_status: 200
+    - description: 'create_test27'
+      name: 'lbaas-create-test27'
+      expected_status: 200
+    - description: 'create_test28'
+      name: 'lbaas-create-test28'
+      expected_status: 200
+    - description: 'create_test29'
+      name: 'lbaas-create-test29'
+      expected_status: 200
+    - description: 'create_test30'
+      name: 'lbaas-create-test30'
+      expected_status: 200
+    - description: 'create_test31'
+      name: 'lbaas-create-test31'
+      expected_status: 200
+    - description: 'create_test32'
+      name: 'lbaas-create-test32'
+      expected_status: 200
+    - description: 'create_test33'
+      name: 'lbaas-create-test33'
+      expected_status: 200
+    - description: 'create_test34'
+      name: 'lbaas-create-test34'
+      expected_status: 200
+    - description: 'create_test35'
+      name: 'lbaas-create-test35'
+      expected_status: 200
+    - description: 'create_test36'
+      name: 'lbaas-create-test36'
+      expected_status: 200
+    - description: 'create_test37'
+      name: 'lbaas-create-test37'
+      expected_status: 200
+    - description: 'create_test38'
+      name: 'lbaas-create-test38'
+      expected_status: 200
+    - description: 'create_test39'
+      name: 'lbaas-create-test39'
+      expected_status: 200
+    - description: 'create_test40'
+      name: 'lbaas-create-test40'
+      expected_status: 200
+    - description: 'create_test41'
+      name: 'lbaas-create-test41'
+      expected_status: 200
+    - description: 'create_test42'
+      name: 'lbaas-create-test42'
+      expected_status: 200
+    - description: 'create_test43'
+      name: 'lbaas-create-test43'
+      expected_status: 200
+    - description: 'create_test44'
+      name: 'lbaas-create-test44'
+      expected_status: 200
+    - description: 'create_test45'
+      name: 'lbaas-create-test45'
+      expected_status: 200
+    - description: 'create_test46'
+      name: 'lbaas-create-test46'
+      expected_status: 200
+    - description: 'create_test47'
+      name: 'lbaas-create-test47'
+      expected_status: 200
+    - description: 'create_test48'
+      name: 'lbaas-create-test48'
+      expected_status: 200
+    - description: 'create_test49'
+      name: 'lbaas-create-test49'
+      expected_status: 200
+
+
+
+
+
