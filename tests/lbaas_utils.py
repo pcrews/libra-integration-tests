@@ -20,6 +20,20 @@ import ast
 import requests
 import time
 
+def wait_for_active_status(lb_test_case):
+    active_wait_time = 60
+    total_wait_time = 0
+    time_decrement = 3
+    status_pass = False
+    while total_wait_time != active_wait_time and not status_pass:
+        if result_data['status'] != 'ACTIVE':
+            time.sleep(time_decrement)
+            total_wait_time += time_decrement
+            result_data = lb_test_case.driver.list_lb_detail(lb_test_case.lb_id)
+        else:
+            status_pass = True
+    lb_test_case.assertEqual(result_data['status'], 'ACTIVE', msg = 'loadbalancer: %s not in ACTIVE status after %d seconds' %(lb_test_case.lb_id, active_wait_time))
+
 def validate_loadBalancer(lb_test_case):
         """ The various things we do to validate a loadbalancer
             This includes:
@@ -48,18 +62,7 @@ def validate_loadBalancer(lb_test_case):
                 for key, item in result_data.items():
                     lb_test_case.logging.info('%s: %s' %(key, item))
             # check status
-            active_wait_time = 30
-            total_wait_time = 0
-            time_decrement = 3
-            status_pass = False
-            while total_wait_time != active_wait_time and not status_pass:
-                if result_data['status'] != 'ACTIVE':
-                    time.sleep(time_decrement)
-                    total_wait_time += time_decrement
-                    result_data = lb_test_case.driver.list_lb_detail(lb_test_case.lb_id)
-                else:
-                    status_pass = True
-            lb_test_case.assertEqual(result_data['status'], 'ACTIVE', msg = 'loadbalancer: %s not in ACTIVE status after %d seconds' %(lb_test_case.lb_id, active_wait_time))
+            wait_for_active_status(lb_test_case)
             # check name
             lb_test_case.assertEqual(lb_test_case.lb_name.strip(), result_data['name'].strip(), msg = lb_test_case.report_info() + "ERROR: lb name: %s || system name: %s" %(lb_test_case.lb_name, result_data['name']))
             # check nodes

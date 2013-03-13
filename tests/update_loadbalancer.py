@@ -75,6 +75,9 @@ class testUpdateLoadBalancer(unittest.TestCase):
     def test_updateLoadBalancer(self):
         """ test update of loadbalancers for libra
         """
+
+        # wait until our lb is ACTIVE before trying to update it
+        lbaas_utils.wait_for_active_status(self)
         # update our loadbalancer
         self.update_result, self.actual_status = self.driver.update_lb(self.lb_id, self.update_data)
         if 'name' in self.update_data:

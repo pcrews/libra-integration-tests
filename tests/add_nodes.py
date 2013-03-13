@@ -76,6 +76,9 @@ class testAddNodes(unittest.TestCase):
     def test_addNodes(self):
         """ test update of loadbalancers for libra
         """
+
+        # wait until our lb is ACTIVE before trying to update it
+        lbaas_utils.wait_for_active_status(self)
         # add nodes to our loadbalancer
         self.add_node_result, self.actual_status = self.driver.add_nodes(self.lb_id, self.add_node_data)
         if self.actual_status == '200': 
