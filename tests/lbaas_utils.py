@@ -25,6 +25,8 @@ def wait_for_active_status(lb_test_case):
     total_wait_time = 0
     time_decrement = 3
     status_pass = False
+
+    result_data = lb_test_case.driver.list_lb_detail(lb_test_case.lb_id)
     while total_wait_time != active_wait_time and not status_pass:
         if result_data['status'] != 'ACTIVE':
             time.sleep(time_decrement)
@@ -57,12 +59,12 @@ def validate_loadBalancer(lb_test_case):
             # test detail
             ################
             lb_test_case.logging.info('Validating load balancer detail...')
-            result_data = lb_test_case.driver.list_lb_detail(lb_test_case.lb_id)
             if lb_test_case.args.verbose:
                 for key, item in result_data.items():
                     lb_test_case.logging.info('%s: %s' %(key, item))
-            # check status
+            # check status / wait until we are in ACTIVE state
             wait_for_active_status(lb_test_case)
+            result_data = lb_test_case.driver.list_lb_detail(lb_test_case.lb_id)
             # check name
             lb_test_case.assertEqual(lb_test_case.lb_name.strip(), result_data['name'].strip(), msg = lb_test_case.report_info() + "ERROR: lb name: %s || system name: %s" %(lb_test_case.lb_name, result_data['name']))
             # check nodes
