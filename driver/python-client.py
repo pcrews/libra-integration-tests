@@ -216,6 +216,9 @@ class lbaasDriver:
                             ]
             for line in data:
                 for error_string in error_strings:
+                    print line
+                    print error_string
+                    print error_string in line
                     if error_string in line:
                         status = '400'
         else:
