@@ -37,6 +37,7 @@ class lbaasDriver:
         self.auth_url = args.osauthurl
         self.tenant_name = args.ostenantname
         self.password = args.ospassword
+        self.verbose = args.verbose
         self.region_name = args.osregionname
         self.base_cmd = ("libra_client --os_auth_url=%s "
                          "--os_username=%s --os_password=%s "
@@ -59,6 +60,10 @@ class lbaasDriver:
     def execute_cmd(self, cmd):
         status, output = commands.getstatusoutput(cmd)
         output = self.trim_garbage_output(output)
+        if self.verbose:
+            print "Command: %s" %cmd
+            print "Status: %s" %status
+            print "Output: %s" %output
         return status, output
     #-----------------
     # lbaas functions
