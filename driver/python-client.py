@@ -205,13 +205,13 @@ class lbaasDriver:
             cmd += ' --algorithm=%s' %update_data['algorithm']
         status, output = self.execute_cmd(cmd)
         data = output.split('\n')
-        if output.strip() in ['',':']:
-            status = '200'
         print '#'*80
         print "Status_check:: %s" %status
         print status == '512'
         print str(status) == '512'
         print '@'*80
+        if output.strip() in ['',':']:
+            status = '200'
         elif str(status) == '512':
             # a bit of a hack for client-side handling of some bad requests
             # python-libraclient appears to detect / check and provide a 
