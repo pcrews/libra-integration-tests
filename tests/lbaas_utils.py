@@ -49,12 +49,13 @@ def validate_loadBalancer(lb_test_case):
         # test create result
         #####################
 
-        status_validation = lb_test_case.driver.validate_status(lb_test_case.expected_status, lb_test_case.actual_status)
+        lb_test_case.driver.validate_status(lb_test_case.expected_status, lb_test_case.actual_status)
         lb_test_case.assertEqual(status_validation, True
                         , msg = lb_test_case.report_info() + "ERROR: load balancer create failed.  Expected: %s || Actual: %s" \
                         %(lb_test_case.expected_status, lb_test_case.actual_status)
                         )
         if lb_test_case.actual_status not in lb_test_case.bad_statuses:
+            result_data = lb_test_case.driver.list_lb_detail(lb_test_case.lb_id)
             ################
             # test detail
             ################

@@ -63,7 +63,7 @@ class lbaasDriver:
         if self.verbose:
             print "Command: %s" %cmd
             print "Status: %s" %status
-            print "Output: %s" %output
+            print "Output:\n%s" %output
         return status, output
     #-----------------
     # lbaas functions
