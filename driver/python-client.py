@@ -207,15 +207,17 @@ class lbaasDriver:
         data = output.split('\n')
         if output.strip() in ['',':']:
             status = '200'
-        elif 'algorithm' in update_data and update_data['algorithm'] not in self.supported_algorithms:
-            status = 'bad status: algorithm'
-            # a bit of a hack for client-side handling of bad algorithms
+        elif str(status) == '512':
+            # a bit of a hack for client-side handling of some bad requests
             # python-libraclient appears to detect / check and provide a 
             # 'you used me wrong' type of message vs. a 'from-the-api-server' error code
-            algo_error_string = "Libra command line client modify: error: argument --algorithm: invalid choice: '%s'" %update_data['algorithm']
+            error_strings = [ "Invalid IP:port specified for --node"
+                            , "Libra command line client modify: error: argument --algorithm: invalid choice: '%s'" %update_data['algorithm']
+                            ]
             for line in data:
-                if algo_error_string in line:
-                    status = '400'   
+                for error_string in error_strings:
+                    if error_string in line:
+                        status = '400'
         else:
             data = data[0]
             if 'HTTP' in data:
