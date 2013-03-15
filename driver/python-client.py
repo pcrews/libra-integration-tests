@@ -63,7 +63,6 @@ class lbaasDriver:
         if self.verbose:
             print "Command: %s" %cmd
             print "Status: %s" %status
-            print "Output:\n%s" %output
         return status, output
     #-----------------
     # lbaas functions
@@ -106,15 +105,17 @@ class lbaasDriver:
             lb_stats = ast.literal_eval(lb_data[9].strip())
             ip_addr = lb_stats[0]['address']
             status = '200' 
-        elif algorithm not in self.supported_algorithms:
-            status = 'bad status: algorithm'
-            # a bit of a hack for client-side handling of bad algorithms
+        elif str(status) == '512':
+            # a bit of a hack for client-side handling of some bad requests
             # python-libraclient appears to detect / check and provide a 
             # 'you used me wrong' type of message vs. a 'from-the-api-server' error code
-            algo_error_string = "Libra command line client create: error: argument --algorithm: invalid choice: '%s'" %algorithm
+            error_strings = [ "Invalid IP:port specified for --node"
+                            , "Libra command line client modify: error: argument --algorithm: invalid choice: '%s'" %algorithm
+                            ]
             for line in data:
-                if algo_error_string in line:
-                    status = '400'   
+                for error_string in error_strings:
+                    if error_string in line:
+                        status = '400'
         else:
             data = data[0]
             if 'HTTP' in data:
@@ -205,11 +206,6 @@ class lbaasDriver:
             cmd += ' --algorithm=%s' %update_data['algorithm']
         status, output = self.execute_cmd(cmd)
         data = output.split('\n')
-        print '#'*80
-        print "Status_check:: %s" %status
-        print status == '512'
-        print str(status) == '512'
-        print '@'*80
         if output.strip() in ['',':']:
             status = '200'
         elif str(status) == '512':
@@ -221,9 +217,6 @@ class lbaasDriver:
                             ]
             for line in data:
                 for error_string in error_strings:
-                    print line
-                    print error_string
-                    print error_string in line
                     if error_string in line:
                         status = '400'
         else:
