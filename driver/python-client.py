@@ -63,6 +63,7 @@ class lbaasDriver:
         if self.verbose:
             print "Command: %s" %cmd
             print "Status: %s" %status
+            print "Output:\n%s" %output
         return status, output
     #-----------------
     # lbaas functions
@@ -110,7 +111,7 @@ class lbaasDriver:
             # python-libraclient appears to detect / check and provide a 
             # 'you used me wrong' type of message vs. a 'from-the-api-server' error code
             error_strings = [ "Invalid IP:port specified for --node"
-                            , "Libra command line client modify: error: argument --algorithm: invalid choice: '%s'" %algorithm
+                            , "Libra command line client create: error: argument --algorithm: invalid choice: '%s'" %algorithm
                             ]
             for line in data:
                 for error_string in error_strings:
