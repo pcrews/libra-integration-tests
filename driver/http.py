@@ -47,6 +47,8 @@ class lbaasDriver:
     #------------------
     def get_auth_token(self):
         """ Get our keystone auth token to work with the api server """
+
+        endpoint = None
         request_data = {'auth':{ 'tenantName': self.tenant_name
                                , 'passwordCredentials':{'username': self.user_name
                                                        , 'password': self.password}
