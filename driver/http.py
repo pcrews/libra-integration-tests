@@ -35,6 +35,7 @@ class lbaasDriver:
         self.auth_url = args.osauthurl
         self.tenant_name = args.ostenantname
         self.password = args.ospassword
+        self.verbose = args.verbose
         self.auth_token, self.api_user_url = self.get_auth_token()
         if api_user_url: # if the user supplies an api_user_url, we use that vs. service_catalog value
             self.api_user_url = api_user_url
@@ -118,6 +119,10 @@ class lbaasDriver:
 
         url = "%s/loadbalancers/%s" %(self.api_user_url, lb_id)
         request_result = requests.get(url, headers=self.api_headers, verify=False)
+        if self.verbose:
+            print 'HTTP driver: list_lb_detail output...'
+            print request_result.text
+            print '='*80
         return ast.literal_eval(request_result.text)
 
     def list_lb_nodes(self, lb_id):
