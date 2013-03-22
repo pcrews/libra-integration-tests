@@ -121,6 +121,7 @@ class lbaasDriver:
         request_result = requests.get(url, headers=self.api_headers, verify=False)
         if self.verbose:
             print 'HTTP driver: list_lb_detail output...'
+            print 'Status: %s' %request_result.status_code
             print request_result.text
             print '='*80
         return ast.literal_eval(request_result.text)
