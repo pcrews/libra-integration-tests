@@ -20,6 +20,7 @@
 import sys
 import ast
 import json
+import time
 import requests
 
 class lbaasDriver:
@@ -31,6 +32,8 @@ class lbaasDriver:
 
     def __init__(self, args, api_user_url):
         """ TODO: put in validation and api-specific whatnot here """
+        
+        self.wait_decrement = 1 # duration of sleep when we wait for things
         self.user_name = args.osusername
         self.auth_url = args.osauthurl
         self.tenant_name = args.ostenantname
@@ -111,26 +114,21 @@ class lbaasDriver:
         """ List all loadbalancers for the given auth token / tenant id """
 
         url = "%s/loadbalancers" %self.api_user_url
-        request_result = requests.get(url, headers=self.api_headers, verify=False)
+        request_result = self.__get(url, headers=self.api_headers, verify=False)
         return ast.literal_eval(request_result.text)['loadBalancers']
  
     def list_lb_detail(self, lb_id):
         """ Get the detailed info returned by the api server for the specified id """
 
         url = "%s/loadbalancers/%s" %(self.api_user_url, lb_id)
-        request_result = requests.get(url, headers=self.api_headers, verify=False)
-        if self.verbose:
-            print 'HTTP driver: list_lb_detail output...'
-            print 'Status: %s' %request_result.status_code
-            print request_result.text
-            print '='*80
+        request_result = self.__get(url, headers=self.api_headers, verify=False)
         return ast.literal_eval(request_result.text)
 
     def list_lb_nodes(self, lb_id):
         """ Get list of nodes for the specified lb_id """
     
         url = "%s/loadbalancers/%s/nodes" %(self.api_user_url, lb_id)
-        request_result = requests.get(url, headers=self.api_headers, verify=False)
+        request_result = self.__get(url, headers=self.api_headers, verify=False)
         return ast.literal_eval(request_result.text)
 
     def update_lb(self, lb_id, update_data):
@@ -156,6 +154,24 @@ class lbaasDriver:
         request_result = requests.post(url, data=node_data, headers=self.api_headers, verify=False)
         return ast.literal_eval(request_result.text), str(request_result.status_code)
 
+    # http functions
+    def __get(self, url, headers=None, verify=False, retries=10, caller_info=None):
+        good_request = False
+        while retries and not good_request:
+            request_result = requests.get(url, headers=headers, verify=False)
+            if self.verbose:
+                print 'http GET request...'
+                print 'caller: %s' %caller_info
+                print 'status: %s' %request_result.status_code
+                print 'returned: %s' %request_result.text
+                print '+'*80
+            if str(request_result.status_code) == '401':
+                retries -= 1
+                time.sleep(self.wait_decrement)
+            else:
+                good_request = True
+        return request_result
+    
     # validation functions
     # these should likely live in a separate file, but putting
     # validation + actions together for now 
