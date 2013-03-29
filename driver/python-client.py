@@ -254,7 +254,7 @@ class lbaasDriver:
     def modify_node(self, lb_id, node_id, node_data):
         """ Set the node's condition to the value specified """
 
-        cmd = self.base_cmd + ' node-modify --id=%s --nodeid=%s'
+        cmd = self.base_cmd + ' node-modify --id=%s --nodeid=%s' %(lb_id, node_id)
         if 'condition' in node_data:
             cmd += ' --condition=%s' %(node_data['condition'])
         if 'address' in node_data or 'port' in node_data:
