@@ -251,6 +251,25 @@ class lbaasDriver:
             status = '200' 
         return output, status
 
+    def modify_node(self, lb_id, node_id, node_data):
+        """ Set the node's condition to the value specified """
+
+        cmd = self.base_cmd + ' node-modify --id=%s --node-id=%s'
+        if 'condition' in node_data:
+            cmd += ' --condition=%s' %(node_data['condition'])
+        if 'address' in node_data or 'port' in node_data:
+            # hack as client only allows node updates of condition...
+            return '400'
+        status, output = self.execute_cmd(cmd)
+        data = output.split('\n')
+        if 'HTTP' in data[0]:
+                status = data[0].split('(HTTP')[1].strip().replace(')','')
+        elif str(status) == '512':
+            status = self.handle_client_side_errors(data)
+        else: 
+            status = '204' 
+        return status
+
     # validation functions
     # these should likely live in a separate file, but putting
     # validation + actions together for now 
