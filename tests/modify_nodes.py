@@ -114,12 +114,12 @@ class testModifyNode(unittest.TestCase):
         self.assertEqual(str(self.actual_status), expected_status, msg = "ERROR: Attempt to update node port succeeded with status: %s.  Expected status: %s" %(self.actual_status, expected_status))
 
         # lower-case condition
-        self.logging.info("Testing lowercase condition...")
-        mod_node_data = {'condition':'disabled'}
-        self.actual_status = self.driver.modify_node(self.lb_id, mod_node_id, mod_node_data)
-        lbaas_utils.validate_loadBalancer(self, [mod_node_addr])
-        self.actual_status = self.driver.modify_node(self.lb_id, mod_node_id, mod_node_data)
-        lbaas_utils.validate_loadBalancer(self, [mod_node_addr])
+        #self.logging.info("Testing lowercase condition...")
+        #mod_node_data = {'condition':'disabled'}
+        #self.actual_status = self.driver.modify_node(self.lb_id, mod_node_id, mod_node_data)
+        #lbaas_utils.validate_loadBalancer(self, [mod_node_addr])
+        #self.actual_status = self.driver.modify_node(self.lb_id, mod_node_id, mod_node_data)
+        #lbaas_utils.validate_loadBalancer(self, [mod_node_addr])
 
         # lower-case condition
         self.logging.info("Testing bad condition...")
