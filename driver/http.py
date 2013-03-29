@@ -154,6 +154,18 @@ class lbaasDriver:
         request_result = requests.post(url, data=node_data, headers=self.api_headers, verify=False)
         return ast.literal_eval(request_result.text), str(request_result.status_code)
 
+    def modify_node(self, lb_id, node_id, node_data):
+        """ Set the node's condition to the value specified """
+
+        url = "%s/loadbalancers/%s/nodes/%s" %(self.api_user_url, lb_id, node_id)
+        node_data = json.dumps(node_data)
+        request_result = requests.put(url, data=node_data, headers=self.api_headers, verify=False)
+        if self.verbose:
+            print 'http driver modify_node()'
+            print request_result.status_code
+            print request_result.text
+        return request_result.status_code
+
     # http functions
     def __get(self, url, headers=None, verify=False, retries=10, caller_info=None):
         good_request = False

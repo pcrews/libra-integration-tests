@@ -31,6 +31,7 @@ import argparse
 from tests.create_loadbalancer import testCreateLoadBalancer
 from tests.update_loadbalancer import testUpdateLoadBalancer
 from tests.add_nodes import testAddNodes
+from tests.modify_nodes import testModifyNode
 
 ##########
 # parser
@@ -285,8 +286,23 @@ for test_name in testnames:
                                                 , test_inputs['default_values']['default_nodes']
                                                 , nodes
                                                 , expected_status = test_variant['expected_status']))
-
+######################
+# modify node tests
+######################
+testnames = testloader.getTestCaseNames(testModifyNode)
+# lb_name variants
+for test_name in testnames:
+    # testing lb name variants 
+    if 'modify_variants' in test_inputs:
+        for test_variant in test_inputs['modify_variants']:
+          if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
+            suite.addTest(testModifyNode( test_variant['description'], args, logging, driver
+                                                , test_name
+                                                , test_inputs['default_values']['default_name']
+                                                , test_inputs['default_values']['default_nodes']
+                                                , expected_status = test_variant['expected_status']))
 result = unittest.TextTestRunner(verbosity=2).run(suite)
+
 sys.exit(not result.wasSuccessful())
 
 

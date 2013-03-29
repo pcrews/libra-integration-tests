@@ -36,7 +36,7 @@ def wait_for_active_status(lb_test_case):
             status_pass = True
     lb_test_case.assertEqual(result_data['status'], 'ACTIVE', msg = 'loadbalancer: %s not in ACTIVE status after %d seconds' %(lb_test_case.lb_id, active_wait_time))
 
-def validate_loadBalancer(lb_test_case):
+def validate_loadBalancer(lb_test_case, disabled_node_list=[]):
         """ The various things we do to validate a loadbalancer
             This includes:
                 - testing various READ API methods against provided values
@@ -115,11 +115,12 @@ def validate_loadBalancer(lb_test_case):
             url_base='http'
             lb_test_case.logging.info('gathering backend node etags...')
             for backend_node in lb_test_case.nodes:
-                if str(backend_node['port']) == '443':
-                    url_base='https'
-                node_addr = '%s://%s' %(url_base, backend_node['address'])
-                result = requests.get(node_addr, verify= False)
-                expected_etags[node_addr] = result.headers['etag']
+                if backend_node['address'] not in disabled_node_list: #skip any explicitly disabled nodes...
+                    if str(backend_node['port']) == '443':
+                        url_base='https'
+                    node_addr = '%s://%s' %(url_base, backend_node['address'])
+                    result = requests.get(node_addr, verify= False)
+                    expected_etags[node_addr] = result.headers['etag']
             lb_test_case.logging.info('testing lb for function...')
             request_count = 5*len(expected_etags)
             for request_iter in range(request_count):

@@ -207,3 +207,7 @@ add_node_variants:
     - description: 'add_no_node_ip_addr'
       expected_status: 400
       nodes:  [{"port": "80"}]
+
+modify_variants:
+    - description: 'basic_modify'
+      expected_status: 204
