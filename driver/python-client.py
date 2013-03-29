@@ -59,6 +59,8 @@ class lbaasDriver:
         return output
 
     def execute_cmd(self, cmd):
+        if self.verbose:
+            cmd = cmd.replace('libra_client', 'libra_client --debug')
         status, output = commands.getstatusoutput(cmd)
         output = self.trim_garbage_output(output)
         if self.verbose:
