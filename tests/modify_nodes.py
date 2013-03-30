@@ -124,9 +124,9 @@ class testModifyNode(unittest.TestCase):
         # lower-case condition
         self.logging.info("Testing bad condition...")
         mod_node_data = {'condition':'TASERED_BADLY'}
-        expected_status = '400'
+        expected_statuses = ['400','512']
         self.actual_status = self.driver.modify_node(self.lb_id, mod_node_id, mod_node_data)
-        self.assertEqual(str(self.actual_status), expected_status, msg = "ERROR: Attempt to update to bad condition succeeded with status: %s.  Expected status: %s" %(self.actual_status, expected_status))
+        self.assertTrue(str(self.actual_status) in expected_statuses, msg = "ERROR: Attempt to update to bad condition succeeded with status: %s.  Expected status: %s" %(self.actual_status, expected_status))
  
 
     def tearDown(self):
