@@ -61,6 +61,9 @@ class lbaasDriver:
         request_data = json.dumps(request_data)
         headers = {"Content-Type": "application/json"}
         request_result = requests.post(self.auth_url, data=request_data, headers=headers, verify=False)
+        if self.verbose:
+            print 'Status: %s' %request_result.status_code
+            print 'Output:\n%s' %(request_result.text)
         request_data = ast.literal_eval(request_result.text)
         for service_data in request_data['access']['serviceCatalog']:
             if service_data['name'] == 'Load Balancer':
