@@ -32,6 +32,7 @@ from tests.create_loadbalancer import testCreateLoadBalancer
 from tests.update_loadbalancer import testUpdateLoadBalancer
 from tests.add_nodes import testAddNodes
 from tests.modify_nodes import testModifyNode
+from tests.multi_loadbalancer import testMultiLoadBalancer
 
 ##########
 # parser
@@ -301,8 +302,23 @@ for test_name in testnames:
                                                 , test_inputs['default_values']['default_name']
                                                 , test_inputs['default_values']['default_nodes']
                                                 , expected_status = test_variant['expected_status']))
-result = unittest.TextTestRunner(verbosity=2).run(suite)
 
+# multi_loadbalancer tests:
+testnames = testloader.getTestCaseNames(testMultiLoadBalancer)
+for test_name in testnames:
+    # testing lb name variants 
+    if 'multiLB_variants' in test_inputs:
+        for test_variant in test_inputs['multiLB_variants']:
+          if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
+            suite.addTest(testMultiLoadBalancer( test_variant['description'], args, logging, driver
+                                                , test_name
+                                                , test_variant['name1']
+                                                , test_variant['name2']
+                                                , test_variant['nodes1']
+                                                , test_variant['nodes2']
+                                                , expected_status = test_variant['expected_status']))
+
+result = unittest.TextTestRunner(verbosity=2).run(suite)
 sys.exit(not result.wasSuccessful())
 
 

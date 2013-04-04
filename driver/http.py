@@ -74,7 +74,7 @@ class lbaasDriver:
     #-----------------
     # lbaas functions
     #-----------------
-    def create_lb(self, name, nodes, algorithm, bad_statuses):
+    def create_lb(self, name, nodes, algorithm, bad_statuses, vip=None):
         """ Create a load balancer via the requests library 
             We expect the url to be the proper, fully constructed base url
             we add the 'loadbalancers suffix to the base 
@@ -98,6 +98,9 @@ class lbaasDriver:
         if tcp_https_flag:
             request_data['protocol'] = 'TCP'
             request_data['port'] = '443'
+        # dual lb stuff
+        if vip:
+            request_data['virtualIps'] = [{"id":vip}]
         request_data = json.dumps(request_data)
         request_result = requests.post(url, data=request_data, headers=self.api_headers, verify= False)
         result_data = ast.literal_eval(request_result.text)

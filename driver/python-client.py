@@ -84,7 +84,7 @@ class lbaasDriver:
     #-----------------
     # lbaas functions
     #-----------------
-    def create_lb(self, name, nodes, algorithm, bad_statuses):
+    def create_lb(self, name, nodes, algorithm, bad_statuses, vip=None):
         """ Create a load balancer via the requests library 
             We expect the url to be the proper, fully constructed base url
             we add the 'loadbalancers suffix to the base 
@@ -113,6 +113,8 @@ class lbaasDriver:
             cmd += ' --algorithm=%s' %algorithm
         if tcp_https_flag:
             cmd += ' --protocol=TCP --port=443'
+        if vip:
+            cmd += ' --vip=%s' %vip
         status, output = self.execute_cmd(cmd)
         data = output.split('\n')
         if len(data) >= 3 and algorithm in self.supported_algorithms:

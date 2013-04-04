@@ -20,23 +20,29 @@ import ast
 import requests
 import time
 
-def wait_for_active_status(lb_test_case):
+def wait_for_active_status(lb_test_case, lb_id=None):
     active_wait_time = 60
     total_wait_time = 0
     time_decrement = 3
     status_pass = False
-
-    result_data = lb_test_case.driver.list_lb_detail(lb_test_case.lb_id)
+    if not lb_id:
+        lb_id = lb_test_case.lb_id
+    result_data = lb_test_case.driver.list_lb_detail(lb_id)
     while total_wait_time != active_wait_time and not status_pass:
         if result_data['status'] != 'ACTIVE':
             time.sleep(time_decrement)
             total_wait_time += time_decrement
-            result_data = lb_test_case.driver.list_lb_detail(lb_test_case.lb_id)
+            result_data = lb_test_case.driver.list_lb_detail(lb_id)
         else:
             status_pass = True
-    lb_test_case.assertEqual(result_data['status'], 'ACTIVE', msg = 'loadbalancer: %s not in ACTIVE status after %d seconds' %(lb_test_case.lb_id, active_wait_time))
+    lb_test_case.assertEqual(result_data['status'], 'ACTIVE', msg = 'loadbalancer: %s not in ACTIVE status after %d seconds' %(lb_id, active_wait_time))
 
-def validate_loadBalancer(lb_test_case, disabled_node_list=[]):
+def validate_loadBalancer( lb_test_case
+                         , disabled_node_list=[]
+                         , multi=False
+                         , multi_id=None
+                         , multi_name=None
+                         , multi_nodes=None):
         """ The various things we do to validate a loadbalancer
             This includes:
                 - testing various READ API methods against provided values
@@ -44,7 +50,10 @@ def validate_loadBalancer(lb_test_case, disabled_node_list=[]):
                   (we expect backend nodes to be formatted to help us test
                 - testing the status returned by the API server against expected status
         """
-
+        if multi:
+            lb_test_case.lb_id = multi_id
+            lb_test_case.lb_name = multi_name
+            lb_test_case.nodes = multi_nodes
         #####################
         # test create result
         #####################

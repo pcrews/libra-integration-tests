@@ -211,3 +211,12 @@ add_node_variants:
 modify_variants:
     - description: 'basic_modify'
       expected_status: 204
+
+multiLB_variants:
+    - description: 'basic multi_loadbalancer test'
+      expected_status: 200
+      name1: 'multiLB_test_lb1'
+      name2: 'multiLB_test_lb2'
+      nodes1: [{"address": "15.185.229.95","port": "80"}, {"address": "15.185.226.163","port": "80"}]
+      nodes2: [{"address": "15.185.229.227","port": "443"}, {"address": "15.185.229.226","port": "443"}]
+
