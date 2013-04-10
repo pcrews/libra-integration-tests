@@ -191,7 +191,6 @@ class lbaasDriver:
             print 'http driver get_logs()'
             print request_result.status_code
             print request_result.text
-        if request_result.text:
         return request_result.status_code, ast.literal_eval(request_result.text)
 
     # http functions
