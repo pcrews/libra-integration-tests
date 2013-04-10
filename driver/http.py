@@ -185,9 +185,9 @@ class lbaasDriver:
             data['objectStoreBasePath'] = obj_basepath
         if data:
             data = json.dumps(data)
-            result = requests.post(url, data=data, headers=self.api_headers, verify=False)
+            request_result = requests.post(url, data=data, headers=self.api_headers, verify=False)
         else:
-            result = requests.post(url, headers=self.api_headers, verify=False)
+            request_result = requests.post(url, headers=self.api_headers, verify=False)
         if self.verbose:
             print 'http driver get_logs()'
             print request_result.status_code
