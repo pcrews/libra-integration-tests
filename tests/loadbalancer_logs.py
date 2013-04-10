@@ -73,10 +73,10 @@ class testLoadBalancerLogs(unittest.TestCase):
         self.create_result, self.actual_status, self.lb_id, self.lb_addr = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm, self.bad_statuses)
         self.logging.info('load balancer id: %s' %self.lb_id)
         self.logging.info('load balancer ip addr: %s' %self.lb_addr)
-        status_code = self.driver.get_logs(self.lb_id)
+        self.actual_status = self.driver.get_logs(self.lb_id)
         print status_code
         lbaas_utils.validate_loadBalancer(self)
-        status_code = self.driver.get_logs(self.lb_id)
+        self.actual_status = self.driver.get_logs(self.lb_id)
         print status_code
 
         
