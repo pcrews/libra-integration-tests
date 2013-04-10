@@ -59,7 +59,6 @@ class lbaasDriver:
                                }
                        }
         request_data = json.dumps(request_data)
-        headers = {"Content-Type": "application/json"}
         request_result = requests.post(self.auth_url, data=request_data, headers=headers, verify=False)
         if self.verbose:
             print 'Status: %s' %request_result.status_code
@@ -171,6 +170,29 @@ class lbaasDriver:
             print request_result.status_code
             print request_result.text
         return request_result.status_code
+
+    def get_logs(self, lb_id, auth_token=None, obj_endpoint=None, obj_basepath=None):
+        """ Get the logs / archive them for the listed lb_id """
+        
+        url = "%s/loadbalancers/%s/logs" %(self.api_user_url, lb_id)
+        data = {}
+        if auth_token:
+            data['authToken'] = auth_token
+        if obj_endpoint:
+            data['objectStoreEndpoint'] = obj_endpoint
+        if obj_basepath:
+            data['objectStoreBasePath'] = obj_basepath
+        if data:
+            data = json.dumps(data)
+            result = requests.post(url, data=data, headers=self.api_headers, verify=False)
+        else:
+            result = requests.post(url, headers=self.api_headers, verify=False)
+        if self.verbose:
+            print 'http driver get_logs()'
+            print request_result.status_code
+            print request_result.text
+        if request_result.text:
+        return request_result.status_code, ast.literal_eval(request_result.text)
 
     # http functions
     def __get(self, url, headers=None, verify=False, retries=10, caller_info=None):
