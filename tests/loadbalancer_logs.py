@@ -74,10 +74,10 @@ class testLoadBalancerLogs(unittest.TestCase):
         self.logging.info('load balancer id: %s' %self.lb_id)
         self.logging.info('load balancer ip addr: %s' %self.lb_addr)
         self.actual_status = self.driver.get_logs(self.lb_id)
-        self.assertEqual(str(self.actual_status), self.expected_status, msg = "ERROR: Attempt to gather lb logs produced status: %s.  Expected status: %s" %(self.actual_status, self.expected_status))
+        self.assertEqual(str(self.actual_status), str(self.expected_status), msg = "ERROR: Attempt to gather lb logs produced status: %s.  Expected status: %s" %(self.actual_status, self.expected_status))
         lbaas_utils.validate_loadBalancer(self)
         self.actual_status = self.driver.get_logs(self.lb_id)
-        self.assertEqual(str(self.actual_status), self.expected_status, msg = "ERROR: Attempt to gather lb logs produced status: %s.  Expected status: %s" %(self.actual_status, self.expected_status))
+        self.assertEqual(str(self.actual_status), str(self.expected_status), msg = "ERROR: Attempt to gather lb logs produced status: %s.  Expected status: %s" %(self.actual_status, self.expected_status))
 
         
     def tearDown(self):
