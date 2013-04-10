@@ -53,7 +53,7 @@ class lbaasDriver:
         """ Get our keystone auth token to work with the api server """
 
         endpoint = None
-        headers = {"Content-Type": "application/json"}l
+        headers = {"Content-Type": "application/json"}
         request_data = {'auth':{ 'tenantName': self.tenant_name
                                , 'passwordCredentials':{'username': self.user_name
                                                        , 'password': self.password}
