@@ -20,8 +20,7 @@ import ast
 import requests
 import time
 
-def wait_for_active_status(lb_test_case, lb_id=None):
-    active_wait_time = 60
+def wait_for_active_status(lb_test_case, lb_id=None, active_wait_time=60):
     total_wait_time = 0
     time_decrement = 3
     status_pass = False
