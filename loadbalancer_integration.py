@@ -351,7 +351,7 @@ for test_name in testnames:
                                                 , test_variant['name2']
                                                 , test_variant['nodes1']
                                                 , test_variant['nodes2']
-                                                , expected_status = texpected_status))
+                                                , expected_status = expected_status))
 
 # log archive tests
 testnames = testloader.getTestCaseNames(testLoadBalancerLogs)
