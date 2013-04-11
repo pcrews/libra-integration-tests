@@ -123,7 +123,7 @@ class lbaasDriver:
             lb_id = lb_data[1].strip()
             lb_stats = ast.literal_eval(lb_data[9].strip())
             ip_addr = lb_stats[0]['address']
-            status = '200' 
+            status = args.successstatuscode 
         elif str(status) == '512':
             status = self.handle_client_side_errors(data, 'create', algorithm)
         else:
