@@ -105,6 +105,9 @@ class lbaasDriver:
         request_result = requests.post(url, data=request_data, headers=self.api_headers, verify= False)
         result_data = ast.literal_eval(request_result.text)
         request_status = str(request_result.status_code)
+        if self.verbose:
+            print request_status
+            print request_data
         if request_status not in bad_statuses:
             lb_id = result_data['id']
             lb_addr = result_data['virtualIps'][0]['address']
