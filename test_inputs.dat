@@ -48,28 +48,28 @@ default_values:
 lb_name_variants: 
     - description: 'basic_positive_name'
       name: 'the quick, brown fox jumps over the lazy dog.'
-      expected_status: 200
+
     - description: 'nonalpha_name'
       name: '!@#@!'
-      expected_status: 200
+
     - description: 'overlong_name'
       name: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
       expected_status: 400
     - description: 'null_name'
       name: ''
-      expected_status: 200
+
     - description: 'whitespace_name'
       name: ' '
-      expected_status: 200
+
     - description: 'long_whitespace_name'
       name: "                                                                                                                                "
-      expected_status: 200
+
     - description: 'long_postive_name'
       name: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-      expected_status: 200
+
     - description: 'nonalpha_name'
       name: '!@#@!'
-      expected_status: 200
+
     - description: overlong_whitespace_name
       name: "                                                                                                                                  "
       expected_status: 400
@@ -81,19 +81,19 @@ lb_name_variants:
 node_variants:
     - description: 'one_node'
       node_count: 1
-      expected_status: 200
+
     - description: 'two_nodes'
       node_count: 2
-      expected_status: 200
+
     - description: 'three_nodes'
       node_count: 3
-      expected_status: 200
+
     - description: 'five_nodes'
       node_count: 5
-      expected_status: 200
+
     - description: 'max_nodes'
       node_count: 'MAX_BACKEND_COUNT'
-      expected_status: 200
+
     - description:  'bad_ip_address1'
       nodes:
          - address: "ImmaBadIP7"
@@ -120,7 +120,7 @@ node_variants:
       expected_status: 400
     - description: 'garbage_value'
       nodes: [{"address": "15.185.229.230","port": "80",'ikeelyou':'boomGoesTheDynamite!'}]
-      expected_status: 200
+
     - description: 'bad_port_value'
       nodes: [{"address": "15.185.229.230","port": "iKeelYou"}]
       expected_status: 400
@@ -130,7 +130,7 @@ node_variants:
             port: "443"
           - address: "15.185.227.208"
             port: "443"
-      expected_status: 200
+
     - description: 'over_max_nodes'
       node_count: 'MAX_BACKEND_COUNT +1'
       expected_status: 413
@@ -138,10 +138,10 @@ node_variants:
 algorithm_variants:
     - description: 'round_robin_algo'
       algorithm: "ROUND_ROBIN"
-      expected_status: 200
+
     - description: 'least_connections_algo'
       algorithm: "LEAST_CONNECTIONS"
-      expected_status: 200
+
     - description: 'bad_algorithm'
       algorithm: "IDONOTEXIST"
       expected_status: 400
@@ -152,16 +152,16 @@ algorithm_variants:
 update_variants:
     - description: 'positive_name_update'
       update_data: {"name":"This_is_my_new_name"}
-      expected_status: 200
+
     - description: 'negative_name_update'
       update_data: {"name": 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'}
       expected_status: 400
     - description: 'positive_algorithm_RR'
       update_data: {"algorithm": 'ROUND_ROBIN'}
-      expected_status: 200
+
     - description: 'positive_algorithm_LC'
       update_data: {"algorithm": 'LEAST_CONNECTIONS'}
-      expected_status: 200
+
     - description: 'negative_algorithm'
       update_data: {"algorithm": 'IDONTEXIST'}
       expected_status: 400
@@ -170,7 +170,7 @@ update_variants:
       expected_status: 400
     - description: 'multi_attr_change_positive'
       update_data: {"name": "This_is_a_good_new_name", "algorithm": "LEAST_CONNECTIONS"}
-      expected_status: 200
+
     - description: 'multi_attr_change_neg_name'
       update_data: {"name": 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', "algorithm": "LEAST_CONNECTIONS"}
       expected_status: 400
@@ -180,10 +180,10 @@ update_variants:
 
 add_node_variants:
     - description: 'single_node_add'
-      expected_status: 200
+
       nodes: [{"address": "15.185.229.95","port": "80"}]
     - description: 'multi_node_add'
-      expected_status: 200
+
       nodes: [{"address": "15.185.229.95","port": "80"}, {"address": "15.185.226.163","port": "80"}]
     - description: 'single_node_disabled_add'
       expected_status: 400
@@ -194,7 +194,7 @@ add_node_variants:
       expected_status: 413
     - description: 'add_up_to_max_nodes'
       node_count: 'MAX_BACKEND_COUNT'
-      expected_status: 200
+
     - description: 'add_bad_node_ip_addr'
       expected_status: 400
       nodes:  [{"address": "NOTANIPADDR","port": "80"}]
@@ -214,7 +214,7 @@ modify_variants:
 
 multiLB_variants:
     - description: 'basic multi_loadbalancer test'
-      expected_status: 200
+
       name1: 'multiLB_test_lb1'
       name2: 'multiLB_test_lb2'
       nodes1: [{"address": "15.185.229.95","port": "80"}, {"address": "15.185.226.163","port": "80"}]

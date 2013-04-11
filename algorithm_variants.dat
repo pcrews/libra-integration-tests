@@ -48,10 +48,8 @@ default_values:
 algorithm_variants:
     - description: 'round_robin_algo'
       algorithm: "ROUND_ROBIN"
-      expected_status: 200
     - description: 'least_connections_algo'
       algorithm: "LEAST_CONNECTIONS"
-      expected_status: 200
     - description: 'bad_algorithm'
       algorithm: "IDONOTEXIST"
       expected_status: 400

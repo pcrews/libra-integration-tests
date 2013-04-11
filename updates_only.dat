@@ -13,16 +13,16 @@ default_values:
 update_variants:
     - description: 'positive_name_update'
       update_data: {"name":"This_is_my_new_name"}
-      expected_status: 200
+
     - description: 'negative_name_update'
       update_data: {"name": 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'}
       expected_status: 400
     - description: 'positive_algorithm_RR'
       update_data: {"algorithm": 'ROUND_ROBIN'}
-      expected_status: 200
+
     - description: 'positive_algorithm_LC'
       update_data: {"algorithm": 'LEAST_CONNECTIONS'}
-      expected_status: 200
+
     - description: 'negative_algorithm'
       update_data: {"algorithm": 'IDONTEXIST'}
       expected_status: 400
@@ -31,7 +31,7 @@ update_variants:
       expected_status: 400
     - description: 'multi_attr_change_positive'
       update_data: {"name": "This_is_a_good_new_name", "algorithm": "LEAST_CONNECTIONS"}
-      expected_status: 200
+
     - description: 'multi_attr_change_neg_name'
       update_data: {"name": 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', "algorithm": "LEAST_CONNECTIONS"}
       expected_status: 400

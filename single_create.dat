@@ -48,7 +48,6 @@ default_values:
 lb_name_variants: 
     - description: 'test_iter1'
       name: 'lbaas-canary1'
-      expected_status: 200
 
 
 

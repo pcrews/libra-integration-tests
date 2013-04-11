@@ -27,7 +27,6 @@ default_values:
 lb_name_variants: 
     - description: 'nonalpha_name'
       name: '!@#@!'
-      expected_status: 200
     - description: 'overlong_name'
       name: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
       expected_status: 500
@@ -38,7 +37,6 @@ node_variants:
       nodes: 
          - address: "15.185.229.230"
            port: "80"
-      expected_status: 200
     - description: 'over_five_nodes'
       nodes:
           - address: "15.185.229.230"
@@ -58,4 +56,3 @@ node_variants:
 algorithm_variants:
     - description: 'round_robin_algo'
       algorithm: "ROUND_ROBIN"
-      expected_status: 200

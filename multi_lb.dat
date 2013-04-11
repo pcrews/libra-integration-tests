@@ -47,7 +47,7 @@ default_values:
 
 multiLB_variants:
     - description: 'basic multi_loadbalancer test'
-      expected_status: 200
+
       name1: 'multiLB_test_lb1'
       name2: 'multiLB_test_lb2'
       nodes1: [{"address": "15.185.229.95","port": "80"}, {"address": "15.185.226.163","port": "80"}]
