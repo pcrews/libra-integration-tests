@@ -31,6 +31,8 @@ class lbaasDriver:
 
     def __init__(self, args, api_user_url):
         """ TODO: put in validation and api-specific whatnot here """
+
+        self.args = args
         self.api_user_url = api_user_url
         self.supported_algorithms = ['ROUND_ROBIN', 'LEAST_CONNECTIONS', None]
         self.user_name = args.osusername
@@ -123,7 +125,7 @@ class lbaasDriver:
             lb_id = lb_data[1].strip()
             lb_stats = ast.literal_eval(lb_data[9].strip())
             ip_addr = lb_stats[0]['address']
-            status = args.successstatuscode 
+            status = self.args.successstatuscode 
         elif str(status) == '512':
             status = self.handle_client_side_errors(data, 'create', algorithm)
         else:
