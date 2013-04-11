@@ -193,7 +193,7 @@ for test_name in testnames:
     if 'lb_name_variants' in test_inputs:
         for test_variant in test_inputs['lb_name_variants']:
           if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
-            if test_variant['expected_status']:
+            if 'expected_status' in test_variant:
                 expected_status = test_variant['expected_status']
             else:
                 expected_status = args.successstatuscode 
@@ -227,7 +227,7 @@ for test_name in testnames:
                         idx += 1
                         if idx == len(node_pool):
                             idx = 0
-            if test_variant['expected_status']:
+            if 'expected_status' in test_variant:
                 expected_status = test_variant['expected_status']
             else:
                 expected_status = args.successstatuscode 
@@ -239,7 +239,7 @@ for test_name in testnames:
     # algorithm variants
     if 'algorithm_variants' in test_inputs:
         for test_variant in test_inputs['algorithm_variants']:
-            if test_variant['expected_status']:
+            if 'expected_status' in test_variant:
                 expected_status = test_variant['expected_status']
             else:
                 expected_status = args.successstatuscode 
@@ -259,7 +259,7 @@ for test_name in testnames:
     if 'update_variants' in test_inputs:
         for test_variant in test_inputs['update_variants']:
           if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
-            if test_variant['expected_status']:
+            if 'expected_status' in test_variant:
                 expected_status = test_variant['expected_status']
             else:
                 expected_status = args.successstatuscode 
@@ -304,7 +304,7 @@ for test_name in testnames:
                         idx += 1
                         if idx == len(node_pool):
                             idx = 0
-            if test_variant['expected_status']:
+            if 'expected_status' in test_variant:
                 expected_status = test_variant['expected_status']
             else:
                 expected_status = args.successstatuscode 
@@ -324,7 +324,7 @@ for test_name in testnames:
     if 'modify_variants' in test_inputs:
         for test_variant in test_inputs['modify_variants']:
           if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
-            if test_variant['expected_status']:
+            if 'expected_status' in test_variant:
                 expected_status = test_variant['expected_status']
             else:
                 expected_status = args.successstatuscode 
@@ -341,7 +341,7 @@ for test_name in testnames:
     if 'multiLB_variants' in test_inputs:
         for test_variant in test_inputs['multiLB_variants']:
           if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
-            if test_variant['expected_status']:
+            if 'expected_status' in test_variant:
                 expected_status = test_variant['expected_status']
             else:
                 expected_status = args.successstatuscode 
@@ -361,7 +361,7 @@ for test_name in testnames:
     if 'log_variants' in test_inputs:
         for test_variant in test_inputs['log_variants']:
           if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
-            if test_variant['expected_status']:
+            if 'expected_status' in test_variant:
                 expected_status = test_variant['expected_status']
             else:
                 expected_status = args.successstatuscode 
