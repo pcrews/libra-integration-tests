@@ -194,7 +194,7 @@ add_node_variants:
       expected_status: 413
     - description: 'add_up_to_max_nodes'
       node_count: 'MAX_BACKEND_COUNT'
-
+      expected_status=200
     - description: 'add_bad_node_ip_addr'
       expected_status: 400
       nodes:  [{"address": "NOTANIPADDR","port": "80"}]
