@@ -193,10 +193,10 @@ for test_name in testnames:
     if 'lb_name_variants' in test_inputs:
         for test_variant in test_inputs['lb_name_variants']:
           if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
-              if test_variant['expected_status']:
-                  expected_status = test_variant['expected_status']
-              else:
-                  expected_status = args.successstatuscode 
+            if test_variant['expected_status']:
+                expected_status = test_variant['expected_status']
+            else:
+                expected_status = args.successstatuscode 
             suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
                                                 , test_name
                                                 , test_variant['name']
