@@ -191,10 +191,12 @@ class lbaasDriver:
             request_result = requests.post(url, data=data, headers=self.api_headers, verify=False)
         else:
             request_result = requests.post(url, headers=self.api_headers, verify=False)
-        if self.verbose:
-            print 'http driver get_logs()'
-            print request_result.status_code
-            print request_result.text
+        #if self.verbose:
+        print 'http driver get_logs()'
+        print data
+        print request_result.status_code
+        print request_result.text
+        print '@'*80
         return request_result.status_code
 
     # http functions
