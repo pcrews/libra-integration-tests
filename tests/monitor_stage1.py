@@ -78,23 +78,23 @@ class testMonitorStage1(unittest.TestCase):
         lbaas_utils.validate_loadBalancer(self)
         # use fabric to stop libra_worker
         self.logging.info("Stopping libra_worker on lb: %s address: %s" %(self.lb_id, self.lb_addr))
-        cmd = "fab -H %s stop_libra_worker" %(self.lb_addr)
+        cmd = "fab --no-pty -H %s stop_libra_worker" %(self.lb_addr)
         status, output = commands.getstatusoutput(cmd)
-        if self.args.verbose:
-            self.logging.info("Command: %s" %cmd)
-            self.logging.info("Status: %s" %status)
-            self.logging.info("Output: %s" %output)
+        #if self.args.verbose:
+        self.logging.info("Command: %s" %cmd)
+        self.logging.info("Status: %s" %status)
+        self.logging.info("Output: %s" %output)
         # check api to see if ERROR state is set / libra_worker failure is detected
         self.logging.info("Wait / poll api server for loadbalancer to be set to ERROR status...")
         lbaas_utils.wait_for_active_status(self, self.lb_id, active_wait_time=240, desired_status='ERROR')
         # restart libra_worker
         self.logging.info("Starting libra_worker on lb: %s address: %s" %(self.lb_id, self.lb_addr))
-        cmd = "fab -H %s start_libra_worker" %(self.lb_addr)
+        cmd = "fab --no-pty -H %s start_libra_worker" %(self.lb_addr)
         status, output = commands.getstatusoutput(cmd)
-        if self.args.verbose:
-            self.logging.info("Command: %s" %cmd)
-            self.logging.info("Status: %s" %status)
-            self.logging.info("Output: %s" %output)
+        #if self.args.verbose:
+        self.logging.info("Command: %s" %cmd)
+        self.logging.info("Status: %s" %status)
+        self.logging.info("Output: %s" %output)
         # check api to ensure lb state is properly reset
         self.logging.info("Wait / poll api server for loadbalancer to be set to ACTIVE status...")
         lbaas_utils.wait_for_active_status(self, self.lb_id, active_wait_time=240, desired_status='ACTIVE')
