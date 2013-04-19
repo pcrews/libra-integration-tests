@@ -120,7 +120,7 @@ parser.add_argument( '--prod_hack'
                    , action = 'store_true'
                    , dest = 'prodhack'
                    , default = False
-                   , help = 'version string for user api'
+                   , help = 'flag to use with test / dev systems'
                    )
 parser.add_argument( '--max_backend_nodes'
                    , action = 'store'
@@ -135,7 +135,30 @@ parser.add_argument( '--success_status_code'
                    , default = 200
                    , help = 'maximum number of backend nodes allowed per load balancer'
                    )
-
+parser.add_argument( '--swift_user'
+                   , action = 'store'
+                   , dest = 'swiftuser'
+                   , default = None
+                   , help = 'username for object storage (for haproxy log archiving).  Defaults to lbaas_user'
+                   )
+parser.add_argument( '--swift_pw'
+                   , action = 'store'
+                   , dest = 'swiftpw'
+                   , default = None
+                   , help = 'username for object storage (for haproxy log archiving).  Defaults to lbaas_pw'
+                   )
+parser.add_argument( '--swift_tenant_name'
+                   , action = 'store'
+                   , dest = 'swifttenantname'
+                   , default = None
+                   , help = 'username for object storage (for haproxy log archiving).  Defaults to lbaas_tenant_name'
+                   )
+parser.add_argument( '--swift_basepath'
+                   , action = 'store'
+                   , dest = 'swiftbasepath'
+                   , default = 'libra_test_logs'
+                   , help = 'username for object storage (for haproxy log archiving).  Defaults to lbaas_tenant_name'
+                   )
 
 #######
 # main

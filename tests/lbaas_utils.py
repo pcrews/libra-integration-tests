@@ -17,8 +17,32 @@
 """
 
 import ast
-import requests
+import json
 import time
+import requests
+
+def get_auth_token_endpoint(auth_url, username, password, tenant_name, desired_service_name='Object Storage', verbose = False):
+    """ Used for testing the lbaas log archiving feature """
+        
+    endpoint = None
+    headers = {"Content-Type": "application/json"}
+    request_data = {'auth':{ 'tenantName': tenant_name
+                           , 'passwordCredentials':{'username': username
+                                                   , 'password': password}
+                           }
+                   }
+    request_data = json.dumps(request_data)
+    request_result = requests.post(auth_url, data=request_data, headers=headers, verify=False)
+    if verbose:
+        print 'Status: %s' %request_result.status_code
+        print 'Output:\n%s' %(request_result.text)
+    request_data = ast.literal_eval(request_result.text)
+    for service_data in request_data['access']['serviceCatalog']:
+        if service_data['name'] == desired_service_name:
+            endpoint = service_data['endpoints'][0]['publicURL'].replace('\\','')
+    auth_token = request_data['access']['token']['id']
+    tenant_id = request_data['access']['token']['tenant']['id']
+    return auth_token, endpoint, tenant_id
 
 def wait_for_active_status(lb_test_case, lb_id=None, active_wait_time=60):
     total_wait_time = 0

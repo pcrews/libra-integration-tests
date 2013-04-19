@@ -17,6 +17,7 @@
 
 """
 
+import os
 import ast
 import json
 import requests
@@ -53,7 +54,34 @@ class lbaasDriver:
                               ,'Warning: Password input may be echoed.'
                               ,'Please set a password for your new keyring'
                               ]
+        self.get_swift_credentials()
         return
+
+    def get_swift_credentials(self):
+        """ Get our keystone auth token to work with the api server """
+        
+        self.swift_endpoint = None
+        headers = {"Content-Type": "application/json"}
+        request_data = {'auth':{ 'tenantName': self.tenant_name
+                               , 'passwordCredentials':{'username': self.user_name
+                                                       , 'password': self.password}
+                               }
+                       }
+        request_data = json.dumps(request_data)
+        auth_url = self.auth_url
+        if not self.auth_url.endswith('tokens'):
+            auth_url = os.path.join(self.auth_url, 'tokens')
+        request_result = requests.post(auth_url, data=request_data, headers=headers, verify=False)
+        if self.verbose:
+            print 'Status: %s' %request_result.status_code
+            print 'Output:\n%s' %(request_result.text)
+        request_data = ast.literal_eval(request_result.text)
+        for service_data in request_data['access']['serviceCatalog']:
+            if service_data['name'] == 'Object Storage':
+                self.swift_endpoint = service_data['endpoints'][0]['publicURL'].replace('\\','')
+        self.auth_token = request_data['access']['token']['id']
+        self.tenant_id = request_data['access']['token']['tenant']['id']    
+        return 
 
     def trim_garbage_output(self, output):
         for garbage_item in self.garbage_output:
@@ -274,6 +302,26 @@ class lbaasDriver:
             status = '204' 
         return status
 
+    def get_logs(self, lb_id, auth_token=None, obj_endpoint=None, obj_basepath=None):
+        """ Get the logs / archive them for the listed lb_id """
+        
+        if auth_token:
+            use_token = auth_token
+        else:
+            use_token = self.auth_token
+        if obj_endpoint:
+            use_endpoint = obj_endpoint
+        else:
+            use_endpoint = self.swift_endpoint
+        if obj_basepath:
+            use_basepath = obj_basepath
+        cmd = self.base_cmd + ' logs --id=%s --token=%s --endpoint=%s --basepath=%s' %(lb_id, use_token, use_endpoint, use_basepath)
+        status, output = self.execute_cmd(cmd)
+        if not status:
+            status='204'
+        return status
+
+
     # validation functions
     # these should likely live in a separate file, but putting
     # validation + actions together for now 
@@ -324,4 +372,3 @@ class lbaasDriver:
             if lb_name.strip() == loadbalancer['name'].strip():
                     match = True
         return match
-

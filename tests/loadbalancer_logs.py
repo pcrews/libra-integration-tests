@@ -43,6 +43,21 @@ class testLoadBalancerLogs(unittest.TestCase):
         self.nodes = nodes
         self.lb_id = lb_id
         self.expected_status = expected_status
+        # Swift magic
+        self.logging.info("getting Swift credentials / information...")
+        # by default we use the user creds supplied for the lbaas service
+        self.swift_user = self.args.osusername
+        self.swift_tenant_name = self.args.ostenantname
+        self.swift_pass = self.args.ospassword
+        self.auth_url = self.args.osauthurl
+        # we override defaults if command line options given.
+        if self.args.swiftuser:
+            self.swift_user = self.args.swiftuser
+        if self.args.swiftpw:
+            self.swift_pass = self.args.swiftpw
+        if self.args.swifttenantname:
+            self.swift_tenant_name = self.args.swifttenantname
+        self.swift_auth_token, self.swift_endpoint, self.swift_tenant_id = lbaas_utils.get_auth_token_endpoint(self.auth_url, self.swift_user, self.swift_pass, self.swift_tenant_name, verbose = args.verbose)
 
     def report_info(self):
         """ function for dumping info on test failures """
@@ -64,7 +79,9 @@ class testLoadBalancerLogs(unittest.TestCase):
             self.logging.info("  - %s: %s" %(report_value, getattr(self,report_value)))
         if self.args.verbose:
             self.logging.info("name: %s" %self.lb_name)
-            self.logging.info("nodes: %s" %self.nodes)    
+            self.logging.info("nodes: %s" %self.nodes)
+
+
 
     def test_LoadBalancerLogs(self):
         """ test creation of loadbalancers for libra
@@ -74,11 +91,12 @@ class testLoadBalancerLogs(unittest.TestCase):
         self.logging.info('load balancer id: %s' %self.lb_id)
         self.logging.info('load balancer ip addr: %s' %self.lb_addr)
         lbaas_utils.wait_for_active_status(self, active_wait_time=180)
-        self.actual_status = self.driver.get_logs(self.lb_id, obj_basepath='tnetennba')
+
+        self.actual_status = self.driver.get_logs(self.lb_id, auth_token = self.swift_auth_token, obj_endpoint = self.swift_endpoint, obj_basepath = self.args.swiftbasepath)
         self.assertEqual(str(self.actual_status), str(self.expected_status), msg = "ERROR: Attempt to gather lb logs produced status: %s.  Expected status: %s" %(self.actual_status, self.expected_status))
         lbaas_utils.validate_loadBalancer(self)
         lbaas_utils.wait_for_active_status(self, active_wait_time=180)
-        self.actual_status = self.driver.get_logs(self.lb_id, obj_basepath='theShooz')
+        self.actual_status = self.driver.get_logs(self.lb_id, auth_token = self.swift_auth_token, obj_endpoint = self.swift_endpoint, obj_basepath = self.args.swiftbasepath)
         self.assertEqual(str(self.actual_status), str(self.expected_status), msg = "ERROR: Attempt to gather lb logs produced status: %s.  Expected status: %s" %(self.actual_status, self.expected_status))
 
         
@@ -87,6 +105,7 @@ class testLoadBalancerLogs(unittest.TestCase):
         # delete the load balancer
         ##########################
         self.logging.info("Deleting loadbalancer: %s" %self.lb_id)
+        lbaas_utils.wait_for_active_status(self, active_wait_time=180)
         result = self.driver.delete_lb(self.lb_id)
 
 

@@ -32,14 +32,14 @@ class lbaasDriver:
 
     def __init__(self, args, api_user_url):
         """ TODO: put in validation and api-specific whatnot here """
-        
+        self.args = args
         self.wait_decrement = 1 # duration of sleep when we wait for things
         self.user_name = args.osusername
         self.auth_url = args.osauthurl
         self.tenant_name = args.ostenantname
         self.password = args.ospassword
         self.verbose = args.verbose
-        self.auth_token, self.api_user_url = self.get_auth_token()
+        self.auth_token, self.api_user_url, self.swift_endpoint, self.tenant_id = self.get_auth_token()
         if api_user_url: # if the user supplies an api_user_url, we use that vs. service_catalog value
             self.api_user_url = api_user_url
         self.api_headers = {"Content-Type": "application/json"
@@ -51,8 +51,9 @@ class lbaasDriver:
     #------------------
     def get_auth_token(self):
         """ Get our keystone auth token to work with the api server """
-
-        endpoint = None
+        
+        lbaas_endpoint = None
+        swift_endpoint = None
         headers = {"Content-Type": "application/json"}
         request_data = {'auth':{ 'tenantName': self.tenant_name
                                , 'passwordCredentials':{'username': self.user_name
@@ -67,9 +68,12 @@ class lbaasDriver:
         request_data = ast.literal_eval(request_result.text)
         for service_data in request_data['access']['serviceCatalog']:
             if service_data['name'] == 'Load Balancer':
-                endpoint = service_data['endpoints'][0]['publicURL'].replace('\\','')
+                lbaas_endpoint = service_data['endpoints'][0]['publicURL'].replace('\\','')
+            if service_data['name'] == 'Object Storage':
+                swift_endpoint = service_data['endpoints'][0]['publicURL'].replace('\\','')
         auth_token = request_data['access']['token']['id']
-        return auth_token, endpoint
+        tenant_id = request_data['access']['token']['tenant']['id']
+        return auth_token, lbaas_endpoint, swift_endpoint, tenant_id
 
     #-----------------
     # lbaas functions
@@ -117,6 +121,9 @@ class lbaasDriver:
         """ Delete the loadbalancer identified by 'lb_id' """
         url = "%s/loadbalancers/%s" %(self.api_user_url, lb_id)
         request_result = requests.delete(url, headers=self.api_headers, verify=False)
+        if self.verbose:
+            print request_result.status_code
+            print request_result.text
         return request_result
 
     def list_lbs(self):
@@ -182,8 +189,12 @@ class lbaasDriver:
         data = {}
         if auth_token:
             data['authToken'] = auth_token
+        else:
+            data['authToken'] = self.auth_token
         if obj_endpoint:
             data['objectStoreEndpoint'] = obj_endpoint
+        else:
+            data['objectStoreEndpoint'] = self.swift_endpoint
         if obj_basepath:
             data['objectStoreBasePath'] = obj_basepath
         if data:
@@ -191,12 +202,12 @@ class lbaasDriver:
             request_result = requests.post(url, data=data, headers=self.api_headers, verify=False)
         else:
             request_result = requests.post(url, headers=self.api_headers, verify=False)
-        #if self.verbose:
-        print 'http driver get_logs()'
-        print data
-        print request_result.status_code
-        print request_result.text
-        print '@'*80
+        if self.verbose:
+            print 'http driver get_logs()'
+            print url
+            print data
+            print request_result.status_code
+            print request_result.text
         return request_result.status_code
 
     # http functions
