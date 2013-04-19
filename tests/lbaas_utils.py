@@ -44,7 +44,7 @@ def get_auth_token_endpoint(auth_url, username, password, tenant_name, desired_s
     tenant_id = request_data['access']['token']['tenant']['id']
     return auth_token, endpoint, tenant_id
 
-def wait_for_active_status(lb_test_case, lb_id=None, active_wait_time=60):
+def wait_for_active_status(lb_test_case, lb_id=None, active_wait_time=60, desired_status='ACTIVE'):
     total_wait_time = 0
     time_decrement = 3
     status_pass = False
@@ -52,13 +52,15 @@ def wait_for_active_status(lb_test_case, lb_id=None, active_wait_time=60):
         lb_id = lb_test_case.lb_id
     result_data = lb_test_case.driver.list_lb_detail(lb_id)
     while total_wait_time != active_wait_time and not status_pass:
-        if result_data['status'] != 'ACTIVE':
+        #print "Desired status: %s" %desired_status
+        #print "api status: %s" %result_data['status']
+        if result_data['status'] != desired_status:
             time.sleep(time_decrement)
             total_wait_time += time_decrement
             result_data = lb_test_case.driver.list_lb_detail(lb_id)
         else:
             status_pass = True
-    lb_test_case.assertEqual(result_data['status'], 'ACTIVE', msg = 'loadbalancer: %s not in ACTIVE status after %d seconds' %(lb_id, active_wait_time))
+    lb_test_case.assertEqual(result_data['status'], desired_status, msg = 'loadbalancer: %s not in %s status after %d seconds' %(lb_id, desired_status, active_wait_time))
 
 def validate_loadBalancer( lb_test_case
                          , disabled_node_list=[]

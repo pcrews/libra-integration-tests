@@ -34,6 +34,7 @@ from tests.add_nodes import testAddNodes
 from tests.modify_nodes import testModifyNode
 from tests.multi_loadbalancer import testMultiLoadBalancer
 from tests.loadbalancer_logs import testLoadBalancerLogs
+from tests.monitor_stage1 import testMonitorStage1
 
 ##########
 # parser
@@ -394,6 +395,23 @@ for test_name in testnames:
                                               , test_variant['nodes']
                                               , expected_status = expected_status))
 
+# monitor stage 1 tests
+testnames = testloader.getTestCaseNames(testMonitorStage1)
+# lb_name variants
+for test_name in testnames:
+    # testing lb name variants 
+    if 'monitor1_variants' in test_inputs:
+        for test_variant in test_inputs['monitor1_variants']:
+          if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
+            if 'expected_status' in test_variant:
+                expected_status = test_variant['expected_status']
+            else:
+                expected_status = args.successstatuscode 
+            suite.addTest(testMonitorStage1( test_variant['description'], args, logging, driver
+                                              , test_name
+                                              , test_variant['name']
+                                              , test_variant['nodes']
+                                              , expected_status = expected_status))
 
 result = unittest.TextTestRunner(verbosity=2).run(suite)
 sys.exit(not result.wasSuccessful())
