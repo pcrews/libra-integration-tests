@@ -1,4 +1,4 @@
-from fabric.api import run, env, put
+from fabric.api import run, env, put, sudo
 
 env.user = 'ubuntu'
 
@@ -10,7 +10,8 @@ def find_haproxy():
 
 def stop_libra_worker():
     run('sudo killall libra_worker', pty=True)
+    #sudo('killall libra_worker', user='ubuntu')
 
 def start_libra_worker():
     run('sudo libra_worker -c /etc/libra.cfg', pty=True)
-
+    #sudo('libra_worker -c /etc/libra.cfg', user='ubuntu')
