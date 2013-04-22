@@ -9,9 +9,9 @@ def find_haproxy():
     run('sudo ps -aux | grep haproxy')
 
 def stop_libra_worker():
-    run('sudo killall libra_worker', pty=True)
+    run('sudo killall libra_worker')
     #sudo('killall libra_worker', user='ubuntu')
 
 def start_libra_worker():
-    run('sudo libra_worker -c /etc/libra.cfg', pty=True)
+    run('sudo libra_worker -c /etc/libra.cfg')
     #sudo('libra_worker -c /etc/libra.cfg', user='ubuntu')
