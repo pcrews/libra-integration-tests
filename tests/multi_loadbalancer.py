@@ -92,6 +92,9 @@ class testMultiLoadBalancer(unittest.TestCase):
         # create lb2
         self.logging.info('Creating load balancer2...')
         self.create_result, self.actual_status, self.lb_id2, self.lb_addr = self.driver.create_lb(self.lb_name2, self.nodes2, self.algorithm, self.bad_statuses, self.vip)
+        if self.args.verbose:
+            self.logging.info("STATUS: %s" %self.actual_status)
+            self.logging.info("RESULT: %s" %self.create_result.text)
         lbaas_utils.wait_for_active_status(self, self.lb_id2)
         self.logging.info('load balancer2 id: %s' %(self.lb_id2))
         lbaas_utils.validate_loadBalancer( self

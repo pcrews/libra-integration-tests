@@ -113,6 +113,8 @@ class lbaasDriver:
             print request_status
             print request_data
         if request_status not in bad_statuses:
+            if self.verbose:
+                print 'result_data: %s' %result_data
             lb_id = result_data['id']
             lb_addr = result_data['virtualIps'][0]['address']
         return request_result, request_status, lb_id, lb_addr
