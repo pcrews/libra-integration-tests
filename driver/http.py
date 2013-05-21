@@ -110,11 +110,11 @@ class lbaasDriver:
         result_data = ast.literal_eval(request_result.text)
         request_status = str(request_result.status_code)
         if self.verbose:
-            print request_status
-            print request_data
+            print "url: %s" %url
+            print "status: %s" %request_status
+            print "request_data: %s" %request_data
+            print "request result: %s" %result_data
         if request_status not in bad_statuses:
-            if self.verbose:
-                print 'result_data: %s' %result_data
             lb_id = result_data['id']
             lb_addr = result_data['virtualIps'][0]['address']
         return request_result, request_status, lb_id, lb_addr
@@ -220,6 +220,7 @@ class lbaasDriver:
             if self.verbose:
                 print 'http GET request...'
                 print 'caller: %s' %caller_info
+                print 'url: %s' %url
                 print 'status: %s' %request_result.status_code
                 print 'returned: %s' %request_result.text
                 print '+'*80
