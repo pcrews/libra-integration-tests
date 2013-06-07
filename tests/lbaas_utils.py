@@ -104,10 +104,6 @@ def validate_loadBalancer( lb_test_case
             lb_test_case.assertEqual(lb_test_case.lb_name.strip(), result_data['name'].strip(), msg = lb_test_case.report_info() + "ERROR: lb name: %s || system name: %s" %(lb_test_case.lb_name, result_data['name']))
             # check nodes
             system_nodes = result_data['nodes']
-            print 'lb_id: %s' %lb_test_case.lb_id
-            print 'System nodes: %s' %system_nodes
-            print 'Expected nodes: %s' %lb_test_case.nodes
-            print '%'*80
             error, error_list = lb_test_case.driver.validate_lb_nodes(lb_test_case.nodes, system_nodes)
             lb_test_case.assertEqual(error, 0, msg = lb_test_case.report_info() + '\n'.join(error_list))
             # check algorithm

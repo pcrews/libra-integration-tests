@@ -36,6 +36,7 @@ class testAddNodes(unittest.TestCase):
         self.driver = driver
         self.algorithm = algorithm
         self.add_node_data = add_node_data
+        self.good_statuses=['200','202']
         self.bad_statuses = ['500','413','400']
         if type(lb_name) is int:
             self.lb_name = str(lb_name)
@@ -81,7 +82,7 @@ class testAddNodes(unittest.TestCase):
         lbaas_utils.wait_for_active_status(self)
         # add nodes to our loadbalancer
         self.add_node_result, self.actual_status = self.driver.add_nodes(self.lb_id, self.add_node_data)
-        if self.actual_status == '200': 
+        if self.actual_status in self.good_statuses: 
             # good update, we need to update our expected nodes
             self.nodes = self.init_nodes + self.add_node_data
         lbaas_utils.validate_loadBalancer(self)
