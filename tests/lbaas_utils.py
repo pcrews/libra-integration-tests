@@ -100,6 +100,11 @@ def validate_loadBalancer( lb_test_case
             # check status / wait until we are in ACTIVE state
             wait_for_active_status(lb_test_case)
             result_data = lb_test_case.driver.list_lb_detail(lb_test_case.lb_id)
+            if lb_test_case.args.verbose:
+              lb_test_case.logging.info("%"*80)
+              lb_test_case.logging.info("Validating loadbalancer / loadbalancer %s detail output:" %lb_test_case.lb_id)
+              lb_test_case.logging.info(result_data)
+              lb_test_case.logging.info("%"*80)
             # check name
             lb_test_case.assertEqual(lb_test_case.lb_name.strip(), result_data['name'].strip(), msg = lb_test_case.report_info() + "ERROR: lb name: %s || system name: %s" %(lb_test_case.lb_name, result_data['name']))
             # check nodes
