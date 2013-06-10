@@ -90,7 +90,7 @@ class testAddNodes(unittest.TestCase):
             if 'condition' in node and node['condition'] == 'DISABLED':
                 if 'address' in node:
                     disabled_list.append(node['address'])
-        lbaas_utils.validate_loadBalancer(self)
+        lbaas_utils.validate_loadBalancer(self, disabled_list)
         
     def tearDown(self):
         ##########################
