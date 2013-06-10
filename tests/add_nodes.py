@@ -82,6 +82,9 @@ class testAddNodes(unittest.TestCase):
         lbaas_utils.wait_for_active_status(self)
         # add nodes to our loadbalancer
         self.add_node_result, self.actual_status = self.driver.add_nodes(self.lb_id, self.add_node_data)
+        print self.add_node_result
+        print self.actual_status
+        print '^'*80
         if self.actual_status in self.good_statuses: 
             # good update, we need to update our expected nodes
             self.nodes = self.init_nodes + self.add_node_data
