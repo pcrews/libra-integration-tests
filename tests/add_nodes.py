@@ -82,17 +82,14 @@ class testAddNodes(unittest.TestCase):
         lbaas_utils.wait_for_active_status(self)
         # add nodes to our loadbalancer
         self.add_node_result, self.actual_status = self.driver.add_nodes(self.lb_id, self.add_node_data)
-        print self.add_node_result
-        print self.actual_status
-        print '^'*80
+        disabled_list = []
         if self.actual_status in self.good_statuses: 
             # good update, we need to update our expected nodes
             self.nodes = self.init_nodes + self.add_node_data
-        disabled_list = []
-        for node in self.nodes:
-            if 'condition' in node and node['condition'] == 'DISABLED':
-                if 'address' in node:
-                    disabled_list.append(node['address'])
+            for node in self.nodes:
+                if 'condition' in node and node['condition'] == 'DISABLED':
+                    if 'address' in node:
+                        disabled_list.append(node['address'])
         lbaas_utils.validate_loadBalancer(self, disabled_list)
         
     def tearDown(self):
