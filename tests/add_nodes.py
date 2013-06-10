@@ -85,6 +85,11 @@ class testAddNodes(unittest.TestCase):
         if self.actual_status in self.good_statuses: 
             # good update, we need to update our expected nodes
             self.nodes = self.init_nodes + self.add_node_data
+        disabled_list = []
+        for node in self.nodes:
+            if 'condition' in node and node['condition'] == 'DISABLED':
+                if 'address' in node:
+                    disabled_list.append(node['address'])
         lbaas_utils.validate_loadBalancer(self)
         
     def tearDown(self):
