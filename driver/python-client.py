@@ -40,6 +40,7 @@ class lbaasDriver:
         self.auth_url = args.osauthurl
         self.tenant_name = args.ostenantname
         self.password = args.ospassword
+        self.good_status = args.successstatuscode
         self.verbose = args.verbose
         self.region_name = args.osregionname
         self.base_cmd = ("libra_client --os_auth_url=%s "
@@ -247,7 +248,7 @@ class lbaasDriver:
         status, output = self.execute_cmd(cmd)
         data = output.split('\n')
         if output.strip() in ['',':']:
-            status = '200'
+            status = self.good_status 
         elif str(status) == '512':
             status = self.handle_client_side_errors(data, 'modify', update_data['algorithm'])
         else:
@@ -280,7 +281,7 @@ class lbaasDriver:
         elif str(status) == '512':
             status = self.handle_client_side_errors(data)
         else: 
-            status = '200' 
+            status = self.good_status 
         return output, status
 
     def modify_node(self, lb_id, node_id, node_data):
