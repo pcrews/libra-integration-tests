@@ -14,7 +14,7 @@
 
 log_variants:
     - description: 'basic log archiving test'
-      expected_status: 204
+      expected_status: 202
       name: 'log_test_lb'
       nodes: [{"address": "15.185.229.95","port": "80"}, {"address": "15.185.226.163","port": "80"}]
       
