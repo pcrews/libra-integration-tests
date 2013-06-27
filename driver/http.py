@@ -158,7 +158,7 @@ class lbaasDriver:
         url = "%s/loadbalancers/%s" %(self.api_user_url, lb_id)
         request_data = json.dumps(update_data)
         request_result = requests.put(url, data=request_data, headers=self.api_headers, verify=False)
-        return ast.literal_eval(request_result.text), str(request_result.status_code)
+        return str(request_result.status_code)
 
     def add_nodes(self, lb_id, add_node_data):
         """ We get a list of nodes we want to add and

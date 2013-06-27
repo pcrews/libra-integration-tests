@@ -255,7 +255,7 @@ class lbaasDriver:
             data = data[0]
             if 'HTTP' in data:
                 status = data.split('(HTTP')[1].strip().replace(')','')
-        return output, status
+        return status
 
     def add_nodes(self, lb_id, add_node_data):
         """ We get a list of nodes we want to add and
