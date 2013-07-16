@@ -54,6 +54,11 @@ def wait_for_active_status(lb_test_case, lb_id=None, active_wait_time=60, desire
     while total_wait_time != active_wait_time and not status_pass:
         #print "Desired status: %s" %desired_status
         #print "api status: %s" %result_data['status']
+        if 'status' not in result_data:
+            lb_test_case.logging.info('WARNING: no status in result data...')
+            lb_test_case.logging.info('result_data:')
+            lb_test_case.logging.info(result_data)
+            result_data['status'] = None
         if result_data['status'] != desired_status:
             time.sleep(time_decrement)
             total_wait_time += time_decrement
