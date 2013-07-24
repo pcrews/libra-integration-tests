@@ -136,6 +136,12 @@ parser.add_argument( '--success_status_code'
                    , default = 200
                    , help = 'maximum number of backend nodes allowed per load balancer'
                    )
+parser.add_argument( '--active_wait_time'
+                   , action = 'store'
+                   , dest = 'active_wait_time'
+                   , default = 60
+                   , help = 'seconds to wait for a loadbalancer to achieve ACTIVE status'
+                   )
 parser.add_argument( '--swift_user'
                    , action = 'store'
                    , dest = 'swiftuser'
