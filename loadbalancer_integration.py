@@ -138,7 +138,7 @@ parser.add_argument( '--success_status_code'
                    )
 parser.add_argument( '--active_wait_time'
                    , action = 'store'
-                   , dest = 'active_wait_time'
+                   , dest = 'activewaittime'
                    , default = 60
                    , help = 'seconds to wait for a loadbalancer to achieve ACTIVE status'
                    )

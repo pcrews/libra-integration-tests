@@ -48,7 +48,8 @@ def wait_for_active_status(lb_test_case, lb_id=None, active_wait_time=60, desire
     total_wait_time = 0
     time_decrement = 3
     status_pass = False
-    active_wait_time = lb_test_case.args.active_wait_time
+    active_wait_time = int(lb_test_case.args.activewaittime)
+    print 
     if not lb_id:
         lb_id = lb_test_case.lb_id
     result_data = lb_test_case.driver.list_lb_detail(lb_id)
