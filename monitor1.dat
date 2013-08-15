@@ -16,5 +16,6 @@ monitor1_variants:
     - description: 'basic stage1 monitoring test'
       expected_status: 202
       name: 'monitor_test_lb'
-      nodes: [{"address": "15.185.229.95","port": "80"}, {"address": "15.185.226.163","port": "80"}]
+      nodes: [{"address": "15.185.154.184","port": "80"}, {"address": "15.185.154.247","port": "80"}]
+
       

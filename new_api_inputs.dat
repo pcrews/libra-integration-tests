@@ -35,7 +35,7 @@ default_values:
       port: "80"
     - address: "15.185.152.245"
       port: "80"
-    - address: "15.185.157.131"
+    - address: "15.185.179.196"
       port: "80"
     - address: "15.185.153.8"
       port: "80"

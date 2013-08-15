@@ -44,11 +44,12 @@ def get_auth_token_endpoint(auth_url, username, password, tenant_name, desired_s
     tenant_id = request_data['access']['token']['tenant']['id']
     return auth_token, endpoint, tenant_id
 
-def wait_for_active_status(lb_test_case, lb_id=None, active_wait_time=60, desired_status='ACTIVE'):
+def wait_for_active_status(lb_test_case, lb_id=None, active_wait_time=None, desired_status='ACTIVE'):
     total_wait_time = 0
     time_decrement = 3
     status_pass = False
-    active_wait_time = int(lb_test_case.args.activewaittime)
+    if not active_wait_time:
+        active_wait_time = int(lb_test_case.args.activewaittime)
     print 
     if not lb_id:
         lb_id = lb_test_case.lb_id
