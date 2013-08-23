@@ -209,7 +209,7 @@ add_node_variants:
 
 modify_variants:
     - description: 'basic_modify'
-      disabled: True
+      #disabled: True
 
 
 multiLB_variants:
