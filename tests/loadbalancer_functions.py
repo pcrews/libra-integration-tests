@@ -231,6 +231,7 @@ class testLoadBalancerFuncs(unittest.TestCase):
         """
         if self.functional_inputs and 'multiLB_variants' in self.functional_inputs:
             self.logging.info("Testing multiple loadbalancers on one device...")
+            self.main_lb_id = copy.deepcopy(self.lb_id)
             for multi_variant in self.functional_inputs['multiLB_variants']: 
                 self.lb_name2 = multi_variant['name2']
                 self.nodes2 = multi_variant['nodes2']
@@ -270,7 +271,7 @@ class testLoadBalancerFuncs(unittest.TestCase):
         # delete the load balancer
         ##########################
         self.logging.info("Deleting loadbalancer: %s" %self.lb_id)
-        result = self.driver.delete_lb(self.lb_id)
+        result = self.driver.delete_lb(self.main_lb_id)
 
 
 
