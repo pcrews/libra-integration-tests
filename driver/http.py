@@ -87,6 +87,7 @@ class lbaasDriver:
             nodes = [{"address": "15.185.227.167","port": "80"},{"address": "15.185.227.165","port": "80"}]
 
         """
+
         url = "%s/loadbalancers" %self.api_user_url
         request_data = { "name": "%s" %name
                        , "nodes": nodes 
@@ -148,6 +149,12 @@ class lbaasDriver:
         url = "%s/loadbalancers/%s/nodes" %(self.api_user_url, lb_id)
         request_result = self.__get(url, headers=self.api_headers, verify=False)
         return ast.literal_eval(request_result.text)
+
+    def delete_lb_node(self, lb_id, node_id):
+        """ Remove specified node_id from lb_id """
+        url = "%s/loadbalancers/%s/nodes/%s" %(self.api_user_url, lb_id, node_id)
+        request_result = requests.delete(url, headers=self.api_headers, verify=False)
+        return str(request_result.status_code)
 
     def update_lb(self, lb_id, update_data):
         """ We get a dictionary of update_data
@@ -251,7 +258,6 @@ class lbaasDriver:
                     match = 1
             if not match:
                 error_list.append("ERROR: Node: %s has no match from api server" %(node))
-                error_list.append("ERROR: %s" %vars(result))
                 error = 1                
         return error, error_list
 

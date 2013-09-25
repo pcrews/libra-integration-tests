@@ -74,6 +74,14 @@ class testCreateLoadBalancer(unittest.TestCase):
         self.logging.info('load balancer id: %s' %self.lb_id)
         self.logging.info('load balancer ip addr: %s' %self.lb_addr)
         lbaas_utils.validate_loadBalancer(self)
+
+        # test updates
+
+        # test add_nodes
+
+        # test modify_nodes
+
+        # test multi_lb
         
     def tearDown(self):
         ##########################

@@ -28,6 +28,7 @@ import logging
 import requests
 import argparse
 
+from tests.loadbalancer_functions import testLoadBalancerFuncs
 from tests.create_loadbalancer import testCreateLoadBalancer
 from tests.update_loadbalancer import testUpdateLoadBalancer
 from tests.add_nodes import testAddNodes
@@ -54,7 +55,7 @@ parser.add_argument( '--driver'
                    )
 parser.add_argument( '--variants_module'
                    , dest = 'variant_module'
-                   , default = 'test_inputs.dat'
+                   , default = 'combined_inputs.dat'
                    , help = 'Module containing test inputs'
                    )
 parser.add_argument( '--os_username'
@@ -126,14 +127,14 @@ parser.add_argument( '--prod_hack'
 parser.add_argument( '--max_backend_nodes'
                    , action = 'store'
                    , dest = 'maxbackendnodes'
-                   , default = 5
+                   , default = 50
                    , help = 'maximum number of backend nodes allowed per load balancer'
                    , type = int
                    )
 parser.add_argument( '--success_status_code'
                    , action = 'store'
                    , dest = 'successstatuscode'
-                   , default = 200
+                   , default = 202
                    , help = 'maximum number of backend nodes allowed per load balancer'
                    )
 parser.add_argument( '--active_wait_time'
@@ -213,8 +214,30 @@ test_inputs = yaml.load(inputs_file)
 inputs_file.close()
 
 #########################
-# create operation tests
+# full functional tests
 #########################
+
+# testing full functional test variants 
+testnames = testloader.getTestCaseNames(testLoadBalancerFuncs)
+for test_name in testnames:
+    if 'full_func_variants' in test_inputs:
+        for test_variant in test_inputs['full_func_variants']:
+          if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
+            if 'expected_status' in test_variant:
+                expected_status = test_variant['expected_status']
+            else:
+                expected_status = args.successstatuscode 
+            suite.addTest(testLoadBalancerFuncs( test_variant['description'], args, logging, driver
+                                                , test_name
+                                                , test_variant['name']
+                                                , test_inputs['default_values']['default_nodes']
+                                                , expected_status = expected_status
+                                                , functional_inputs = test_inputs['functional_inputs']
+                                                , test_nodes = test_inputs['default_values']['nodes']))
+
+#####################
+# create lb variants
+#####################
 
 testnames = testloader.getTestCaseNames(testCreateLoadBalancer)
 # lb_name variants
@@ -315,7 +338,6 @@ for test_name in testnames:
             if 'nodes' in test_variant:
                 nodes = test_variant['nodes']
             else:
-                nodes = []
                 node_count = test_variant['node_count']
                 if str(test_variant['node_count']).startswith('MAX_BACKEND_COUNT'):
                     node_count = int(args.maxbackendnodes) - len(test_inputs['default_values']['default_nodes'])

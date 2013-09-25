@@ -78,111 +78,9 @@ lb_name_variants:
       expected_status: 400
       disabled: True
 
-node_variants:
-    - description: 'one_node'
-      node_count: 1
-
-    #- description: 'two_nodes'
-    #  node_count: 2
-
-    #- description: 'five_nodes'
-    #  node_count: 5
-
-    - description: 'max_nodes'
-      node_count: 'MAX_BACKEND_COUNT'
-
-    - description:  'bad_ip_address1'
-      nodes:
-         - address: "ImmaBadIP7"
-           port: "80"
-         - address: "15.185.166.104"
-           port: "80"
-      expected_status: 400
-
-    - description: 'no_nodes'
-      nodes: [{}]
-      expected_status: 400
-
-    - description: 'no_ip_value'
-      nodes:
-          - address: ""
-            port: "80"
-      expected_status: 400
-
-    - description: 'no_address'
-      nodes:  [{"port": "80"}]
-      expected_status: 400
-
-    - description: 'null_port_value'
-      nodes: [{"address": "15.185.175.196","port": ""}]
-      expected_status: 400
-
-    - description: 'no_port_entry'
-      nodes: [{"address": "15.185.175.196"}]
-      expected_status: 400
-
-    - description: 'garbage_value'
-      nodes: [{"address": "15.185.175.196","port": "80",'ikeelyou':'boomGoesTheDynamite!'}]
-
-    - description: 'bad_port_value'
-      nodes: [{"address": "15.185.175.196","port": "iKeelYou"}]
-      expected_status: 400
-
-    - description: 'port_443'
-      nodes: 
-          - address: "15.185.166.104"
-            port: "443"
-          - address: "15.185.166.104"
-            port: "443"
-
-    - description: 'over_max_nodes'
-      node_count: 'MAX_BACKEND_COUNT +1'
-      expected_status: 413
-
-algorithm_variants:
-    #- description: 'round_robin_algo'
-    #  algorithm: "ROUND_ROBIN"
-
-    - description: 'least_connections_algo'
-      algorithm: "LEAST_CONNECTIONS"
-
-    - description: 'bad_algorithm'
-      algorithm: "IDONOTEXIST"
-      expected_status: 400
-    - description: 'fuzzy_good_algo'
-      algorithm: "ROUND_ROBIN1"
-      expected_status: 400
 
 functional_inputs:
-  update_variants:
-    - description: 'positive_name_update'
-      update_data: {"name":"This_is_my_new_name"}
-
-    - description: 'negative_name_update'
-      update_data: {"name": 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'}
-      expected_status: 400
-    - description: 'positive_algorithm_RR'
-      update_data: {"algorithm": 'ROUND_ROBIN'}
-
-    - description: 'positive_algorithm_LC'
-      update_data: {"algorithm": 'LEAST_CONNECTIONS'}
-
-    - description: 'negative_algorithm'
-      update_data: {"algorithm": 'IDONTEXIST'}
-      expected_status: 400
-    - description: 'negative_algorithm_fuzz'
-      update_data: {"algorithm": 'ROUND_ROBIN1'}
-      expected_status: 400
-    - description: 'multi_attr_change_positive'
-      update_data: {"name": "This_is_a_good_new_name", "algorithm": "LEAST_CONNECTIONS"}
-
-    - description: 'multi_attr_change_neg_name'
-      update_data: {"name": 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', "algorithm": "LEAST_CONNECTIONS"}
-      expected_status: 400
-    - description: 'multi_attr_change_neg_algo'
-      update_data: {"name": "good_new_name", "algorithm": "iWillKeelYou"}
-      expected_status: 400
-
+ 
   add_node_variants:
     - description: 'single_node_add'
       nodes: [{"address": "15.185.154.184","port": "80"}]
@@ -213,13 +111,4 @@ functional_inputs:
       expected_status: 400
       nodes:  [{"port": "80"}]
 
-  modify_variants:
-    - description: 'basic_modify'
-      #disabled: True
-
-
-  multiLB_variants:
-    - description: 'basic multi_loadbalancer test'
-      name2: 'multiLB_test_lb2'
-      nodes2: [{"address": "15.185.153.16","port": "443"}, {"address": "15.185.153.8","port": "443"}]
 
