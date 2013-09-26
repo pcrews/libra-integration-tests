@@ -265,8 +265,10 @@ class testLoadBalancerFuncs(unittest.TestCase):
         ##########################
         # delete the load balancer
         ##########################
+        if self.main_lb_id:
+            self.lb_id = self.main_lb_id
         self.logging.info("Deleting loadbalancer: %s" %self.lb_id)
-        result = self.driver.delete_lb(self.main_lb_id)
+        result = self.driver.delete_lb(self.lb_id)
 
 
 
