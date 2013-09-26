@@ -44,6 +44,7 @@ class testLoadBalancerFuncs(unittest.TestCase):
         else:
             self.lb_name = lb_name
         self.nodes = nodes
+        self.main_lb_id = None
         self.lb_id = lb_id
         self.expected_status = expected_status
         self.functional_inputs = functional_inputs
