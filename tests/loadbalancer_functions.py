@@ -226,6 +226,7 @@ class testLoadBalancerFuncs(unittest.TestCase):
         """
         if self.functional_inputs and 'multiLB_variants' in self.functional_inputs:
             self.logging.info("Testing multiple loadbalancers on one device...")
+            self.expected_status = '202'
             self.main_lb_id = copy.deepcopy(self.lb_id)
             for multi_variant in self.functional_inputs['multiLB_variants']: 
                 self.lb_name2 = multi_variant['name2']
