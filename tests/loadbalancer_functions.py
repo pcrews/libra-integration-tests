@@ -147,15 +147,12 @@ class testLoadBalancerFuncs(unittest.TestCase):
                     lbaas_utils.validate_loadBalancer(self, disabled_list)
                     # remove nodes / reset to original set up
                     current_nodes = self.driver.list_lb_nodes(self.lb_id)['nodes']
-                    print "CURRENT NODES:"
-                    print current_nodes
                     for orig_node in original_nodes:
                         current_nodes.remove(orig_node)
-                    print "CURRENT NODES2:"
-                    print current_nodes
                     for current_node in current_nodes:
                         node_id = current_node['id']
-                        print "Removing node id: %s" %node_id
+                        if self.args.verbose:
+                            self.logging.info("Removing node id: %s" %node_id)
                         result = self.driver.delete_lb_node(self.lb_id, node_id)
                         self.assertEqual(result, '202', msg="ERROR: Node id: %s deletion on loadbalancer id: %s failed" %(node_id, self.lb_id))
                     self.nodes = copy.deepcopy(self.original_nodes)
