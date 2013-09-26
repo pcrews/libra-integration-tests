@@ -184,20 +184,18 @@ class testLoadBalancerFuncs(unittest.TestCase):
             lbaas_utils.validate_loadBalancer(self)
 
             # modify ip / address
-            #self.logging.info("Testing update of node ip...")
-            #mod_node_data = {'address': '127.0.0.1'}
-            #expected_status = '400'
-            #self.actual_status = self.driver.modify_node(self.lb_id, mod_node_id, mod_node_data)
-            #print self.actual_status
-            #print '!'*80
-            #self.assertEqual(str(self.actual_status), expected_status, msg = "ERROR: Attempt to update node ip address succeeded with status: %s.  Expected status: %s" %(self.actual_status, expected_status))
+            self.logging.info("Testing update of node ip...")
+            mod_node_data = {'address': '127.0.0.1'}
+            expected_status = '400'
+            self.actual_status = self.driver.modify_node(self.lb_id, mod_node_id, mod_node_data)
+            self.assertEqual(str(self.actual_status), expected_status, msg = "ERROR: Attempt to update node ip address succeeded with status: %s.  Expected status: %s" %(self.actual_status, expected_status))
         
             # modify port
-            #self.logging.info("Testing update of node port...")
-            #mod_node_data = {'port': '443'}
-            #expected_status = '400'
-            #self.actual_status = self.driver.modify_node(self.lb_id, mod_node_id, mod_node_data)
-            #self.assertEqual(str(self.actual_status), expected_status, msg = "ERROR: Attempt to update node port succeeded with status: %s.  Expected status: %s" %(self.actual_status, expected_status))
+            self.logging.info("Testing update of node port...")
+            mod_node_data = {'port': '443'}
+            expected_status = '400'
+            self.actual_status = self.driver.modify_node(self.lb_id, mod_node_id, mod_node_data)
+            self.assertEqual(str(self.actual_status), expected_status, msg = "ERROR: Attempt to update node port succeeded with status: %s.  Expected status: %s" %(self.actual_status, expected_status))
 
             # update of non-existent node
             self.logging.info("Testing update of non-existent node...")
