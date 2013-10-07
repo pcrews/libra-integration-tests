@@ -162,7 +162,8 @@ class testLoadBalancerFuncs(unittest.TestCase):
         ###################	
         # test modify_nodes
         ###################
-        self.nodes = self.original_nodes
+        if self.original_nodes:
+            self.nodes = self.original_nodes
         if self.functional_inputs and 'modify_variants' in self.functional_inputs:
             self.logging.info("Testing modify nodes")
             # wait until our lb is ACTIVE before trying to update it
