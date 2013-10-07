@@ -193,7 +193,11 @@ class testLoadBalancerFuncs(unittest.TestCase):
             if self.args.badstatus:
                 expected_status = self.args.badstatus
             self.actual_status = self.driver.modify_node(self.lb_id, mod_node_id, mod_node_data)
-            self.assertEqual(str(self.actual_status), expected_status, msg = "ERROR: Attempt to update node ip address succeeded with status: %s.  Expected status: %s" %(self.actual_status, expected_status))
+            nodes = self.driver.list_lb_nodes(self.lb_id)
+            self.logging.info("NODES post-update...)
+            self.logging.info(nodes)
+            self.logging.info('^'*80)
+            #self.assertEqual(str(self.actual_status), expected_status, msg = "ERROR: Attempt to update node ip address succeeded with status: %s.  Expected status: %s" %(self.actual_status, expected_status))
         
             # modify port
             self.logging.info("Testing update of node port...")
