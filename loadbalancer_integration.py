@@ -135,7 +135,13 @@ parser.add_argument( '--success_status_code'
                    , action = 'store'
                    , dest = 'successstatuscode'
                    , default = 202
-                   , help = 'maximum number of backend nodes allowed per load balancer'
+                   , help = 'Status code we expect on success'
+                   )
+parser.add_argument( '--bad_status'
+                   , action = 'store'
+                   , dest = 'badstatus'
+                   , default =  None
+                   , help = 'hack to set an expected bad status - implemented due to bug returning 500s vs. expected bad statuses'
                    )
 parser.add_argument( '--active_wait_time'
                    , action = 'store'
