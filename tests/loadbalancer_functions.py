@@ -79,7 +79,6 @@ class testLoadBalancerFuncs(unittest.TestCase):
         self.create_result, self.actual_status, self.lb_id, self.lb_addr = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm, self.bad_statuses)
         self.logging.info('load balancer id: %s' %self.lb_id)
         self.logging.info('load balancer ip addr: %s' %self.lb_addr)
-        sys.exit(0)
         lbaas_utils.validate_loadBalancer(self)
 
         ##############
@@ -189,8 +188,8 @@ class testLoadBalancerFuncs(unittest.TestCase):
             self.logging.info("Testing update of node ip...")
             mod_node_data = {'address': '127.0.0.1'}
             expected_status = '400'
-            if self.args.bad_status:
-                expected_status = self.args.bad_status
+            if self.args.badstatus:
+                expected_status = self.args.badstatus
             self.actual_status = self.driver.modify_node(self.lb_id, mod_node_id, mod_node_data)
             self.assertEqual(str(self.actual_status), expected_status, msg = "ERROR: Attempt to update node ip address succeeded with status: %s.  Expected status: %s" %(self.actual_status, expected_status))
         
@@ -198,8 +197,8 @@ class testLoadBalancerFuncs(unittest.TestCase):
             self.logging.info("Testing update of node port...")
             mod_node_data = {'port': '443'}
             expected_status = '400'
-            if self.args.bad_status:
-                expected_status = self.args.bad_status
+            if self.args.badstatus:
+                expected_status = self.args.badstatus
             self.actual_status = self.driver.modify_node(self.lb_id, mod_node_id, mod_node_data)
             self.assertEqual(str(self.actual_status), expected_status, msg = "ERROR: Attempt to update node port succeeded with status: %s.  Expected status: %s" %(self.actual_status, expected_status))
 
@@ -207,15 +206,15 @@ class testLoadBalancerFuncs(unittest.TestCase):
             self.logging.info("Testing update of non-existent node...")
             mod_node_data = {'condition':"DISABLED"}
             expected_status = '404'
-            if self.args.bad_status:
-                expected_status = self.args.bad_status
+            if self.args.badstatus:
+                expected_status = self.args.badstatus
             self.actual_status = self.driver.modify_node(self.lb_id, '0', mod_node_data)
             self.assertEqual(str(self.actual_status), expected_status, msg = "ERROR: Attempt to update non-existent node succeeded with status: %s.  Expected status: %s" %(self.actual_status, expected_status))
 
             # lower-case condition
             expected_status='400'
-            if self.args.bad_status:
-                expected_status = self.args.bad_status
+            if self.args.badstatus:
+                expected_status = self.args.badstatus
             self.logging.info("Testing lowercase condition...")
             mod_node_data = {'condition':'disabled'}
             self.actual_status = self.driver.modify_node(self.lb_id, mod_node_id, mod_node_data)
@@ -279,8 +278,7 @@ class testLoadBalancerFuncs(unittest.TestCase):
         if self.main_lb_id:
             self.lb_id = self.main_lb_id
         self.logging.info("Deleting loadbalancer: %s" %self.lb_id)
-        #result = self.driver.delete_lb(self.lb_id)
-        self.logging.info("No deleting for you, lb: %s" %self.lb_id)
+        result = self.driver.delete_lb(self.lb_id)
 
 
 
