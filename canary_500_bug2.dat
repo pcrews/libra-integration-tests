@@ -1,0 +1,94 @@
+# Copyright 2012 Hewlett-Packard Development Company, L.P.
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+    
+######################################
+# variable inputs
+######################################
+default_values: 
+  default_name: 'Lbaas_test_node'
+  default_nodes: 
+    - address: "15.185.166.104"
+      port: "80"
+    - address: "15.185.175.196"
+      port: "80"
+    - address: "15.185.153.16"
+      port: "80"
+  nodes:
+    - address: "15.185.166.104"
+      port: "80"
+    - address: "15.185.154.247"
+      port: "80"
+    - address: "15.185.154.184"
+      port: "80"
+    - address: "15.185.190.38"
+      port: "80"
+    - address: "15.185.156.218"
+      port: "80"
+    - address: "15.185.152.245"
+      port: "80"
+    - address: "15.185.179.196"
+      port: "80"
+    - address: "15.185.153.8"
+      port: "80"
+    - address: "15.185.153.16"
+      port: "80"
+    - address: "15.185.175.196"
+      port: "80"
+
+full_func_variants:
+    - description: 'full_functional_test'
+      name: 'the quick, brown fox jumps over the lazy dog.'
+
+
+
+functional_inputs:
+  update_variants:
+    - description: 'positive_name_update'
+      update_data: {"name":"This_is_my_new_name"}
+
+    - description: 'negative_name_update'
+      update_data: {"name": 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'}
+      expected_status: 500
+    - description: 'positive_algorithm_RR'
+      update_data: {"algorithm": 'ROUND_ROBIN'}
+
+    - description: 'positive_algorithm_LC'
+      update_data: {"algorithm": 'LEAST_CONNECTIONS'}
+
+    - description: 'negative_algorithm'
+      update_data: {"algorithm": 'IDONTEXIST'}
+      expected_status: 500
+    - description: 'negative_algorithm_fuzz'
+      update_data: {"algorithm": 'ROUND_ROBIN1'}
+      expected_status: 500
+    - description: 'multi_attr_change_positive'
+      update_data: {"name": "This_is_a_good_new_name", "algorithm": "LEAST_CONNECTIONS"}
+
+    - description: 'multi_attr_change_neg_name'
+      update_data: {"name": 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', "algorithm": "LEAST_CONNECTIONS"}
+      expected_status: 500
+    - description: 'multi_attr_change_neg_algo'
+      update_data: {"name": "good_new_name", "algorithm": "iWillKeelYou"}
+      expected_status: 500
+
+
+  modify_variants:
+    - description: 'basic_modify'
+      #disabled: True
+
+
+  multiLB_variants:
+    - description: 'basic multi_loadbalancer test'
+      name2: 'multiLB_test_lb2'
+      nodes2: [{"address": "15.185.153.16","port": "443"}, {"address": "15.185.153.8","port": "443"}]
