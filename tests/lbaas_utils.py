@@ -66,7 +66,7 @@ def wait_for_active_status(lb_test_case, lb_id=None, active_wait_time=None, desi
             result_data = lb_test_case.driver.list_lb_detail(lb_id)
         else:
             status_pass = True
-            #time.sleep(10)
+            time.sleep(60)
     lb_test_case.assertEqual(result_data['status'], desired_status, msg = 'loadbalancer: %s not in %s status after %d seconds' %(lb_id, desired_status, active_wait_time))
 
 def validate_loadBalancer( lb_test_case
