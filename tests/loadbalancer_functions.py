@@ -153,7 +153,8 @@ class testLoadBalancerFuncs(unittest.TestCase):
                     # remove nodes / reset to original set up
                     current_nodes = self.driver.list_lb_nodes(self.lb_id)['nodes']
                     for orig_node in original_nodes:
-                        current_nodes.remove(orig_node)
+                        if orig_node in current_nodes:
+                            current_nodes.remove(orig_node)
                     for current_node in current_nodes:
                         node_id = current_node['id']
                         if self.args.verbose:
