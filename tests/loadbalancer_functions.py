@@ -146,6 +146,9 @@ class testLoadBalancerFuncs(unittest.TestCase):
                         if 'condition' in node and node['condition'] == 'DISABLED':
                             if 'address' in node:
                                 disabled_list.append(node['address'])
+                    self.logging.info("Current node list:")
+                    nodes = self.driver.list_lb_nodes(self.lb_id)
+                    self.logging.info(nodes)
                     lbaas_utils.validate_loadBalancer(self, disabled_list)
                     # remove nodes / reset to original set up
                     current_nodes = self.driver.list_lb_nodes(self.lb_id)['nodes']
