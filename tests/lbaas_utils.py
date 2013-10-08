@@ -55,8 +55,6 @@ def wait_for_active_status(lb_test_case, lb_id=None, active_wait_time=None, desi
         lb_id = lb_test_case.lb_id
     result_data = lb_test_case.driver.list_lb_detail(lb_id)
     while total_wait_time != active_wait_time and not status_pass:
-        lb_test_case.logging.info("Desired status: %s" %desired_status)
-        lb_test_case.logging.info("api status: %s" %result_data['status'])
         if 'status' not in result_data:
             lb_test_case.logging.info('WARNING: no status in result data...')
             lb_test_case.logging.info('result_data:')
@@ -68,7 +66,7 @@ def wait_for_active_status(lb_test_case, lb_id=None, active_wait_time=None, desi
             result_data = lb_test_case.driver.list_lb_detail(lb_id)
         else:
             status_pass = True
-            time.sleep(10)
+            #time.sleep(10)
     lb_test_case.assertEqual(result_data['status'], desired_status, msg = 'loadbalancer: %s not in %s status after %d seconds' %(lb_id, desired_status, active_wait_time))
 
 def validate_loadBalancer( lb_test_case
