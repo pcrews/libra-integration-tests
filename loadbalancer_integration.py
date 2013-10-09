@@ -470,8 +470,8 @@ for test_name in testnames:
                 expected_status = args.successstatuscode 
             suite.addTest(testLoadBalancerSiege( test_variant['description'], args, logging, driver
                                                 , test_name
-                                                , nodes = test_inputs['default_values']['nodes']
                                                 , test_variant['name']
+                                                , nodes = test_inputs['default_values']['nodes']
                                                 , test_inputs['default_values']['default_nodes']
                                                 , expected_status = expected_status))
 
