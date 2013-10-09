@@ -86,6 +86,8 @@ class testLoadBalancerSiege(unittest.TestCase):
 
         # iterate through backend node sets and run siege
         for node_count in [1,3,5,10]:
+            self.logging.info("Testing with %s nodes" %node_count)
+            self.logging.info("*"*80)
             if node_count != 1:
                 # we have nodes[0] already, we add subsequent nodes to it
                 add_nodes = self.node_pool[len(self.nodes):node_count+1]
