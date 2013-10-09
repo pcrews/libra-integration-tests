@@ -24,6 +24,7 @@ import copy
 import time
 import unittest
 import requests
+import commands
 import lbaas_utils
 
 class testLoadBalancerSiege(unittest.TestCase):
