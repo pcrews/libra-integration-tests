@@ -36,6 +36,7 @@ from tests.modify_nodes import testModifyNode
 from tests.multi_loadbalancer import testMultiLoadBalancer
 from tests.loadbalancer_logs import testLoadBalancerLogs
 from tests.monitor_stage1 import testMonitorStage1
+from tests.loadbalancer_siege import testLoadBalancerSiege
 
 ##########
 # parser
