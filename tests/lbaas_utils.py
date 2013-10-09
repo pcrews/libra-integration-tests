@@ -67,7 +67,7 @@ def wait_for_active_status(lb_test_case, lb_id=None, active_wait_time=None, desi
         else:
             status_pass = True
             if lb_test_case.args.activepause:
-                lb_test_case.logging.info("Waiting %d seconds from %s status..." %(lb_test_case.args.activepause, desired_status)
+                lb_test_case.logging.info("Waiting %d seconds from %s status..." %(lb_test_case.args.activepause, desired_status))
                 time.sleep(lb_test_case.args.activepause)
     lb_test_case.assertEqual(result_data['status'], desired_status, msg = 'loadbalancer: %s not in %s status after %d seconds' %(lb_id, desired_status, active_wait_time))
 
