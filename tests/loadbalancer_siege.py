@@ -107,7 +107,7 @@ class testLoadBalancerSiege(unittest.TestCase):
             pages = [ ('cgi-bin/1k-random.py','1k randomly generated text')
                     , ('1k-static','1k static data')
                     , ('starry-night-vincent-van-go1.jpg','jpeg file')
-                    , ('csj.mp4','mp4 video')
+                    #, ('csj.mp4','mp4 video')
                     ]
             for page_file, page_desc in pages:
                 page_path = os.path.join(self.lb_addr, page_file)
