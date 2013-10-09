@@ -28,8 +28,8 @@ class testLoadBalancerSiege(unittest.TestCase):
 
     def __init__( self, test_description, args, logging, driver
                 , testname, lb_name, nodes, lb_id=None
-                , algorithm = None, expected_status=202
-                , test_nodes = None):
+                , algorithm = None
+                , expected_status=202):
         super(testLoadBalancerSiege, self).__init__(testname)
         self.test_description = test_description
         self.args = args
@@ -47,7 +47,6 @@ class testLoadBalancerSiege(unittest.TestCase):
         self.original_nodes = None
         self.lb_id = lb_id
         self.expected_status = expected_status
-        self.test_nodes = test_nodes
         self.first_run_done = False
 
     def report_info(self):
