@@ -455,6 +455,25 @@ for test_name in testnames:
                                               , test_variant['nodes']
                                               , expected_status = expected_status))
 
+#########################
+# siege tests
+#########################
+testnames = testloader.getTestCaseNames(testLoadBalancerSiege)
+for test_name in testnames:
+    if 'siege_variants' in test_inputs:
+        for test_variant in test_inputs['siege_variants']:
+          if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
+            if 'expected_status' in test_variant:
+                expected_status = test_variant['expected_status']
+            else:
+                expected_status = args.successstatuscode 
+            suite.addTest(testLoadBalancerFuncs( test_variant['description'], args, logging, driver
+                                                , test_name
+                                                , test_variant['name']
+                                                , test_inputs['default_values']['default_nodes']
+                                                , expected_status = expected_status
+                                                , test_nodes = test_inputs['default_values']['nodes']))
+
 result = unittest.TextTestRunner(verbosity=2).run(suite)
 sys.exit(not result.wasSuccessful())
 
