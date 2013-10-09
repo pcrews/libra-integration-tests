@@ -76,6 +76,8 @@ class testLoadBalancerSiege(unittest.TestCase):
         """
         # Create our loadbalancer w/ one node to start
         self.current_nodes = self.nodes[0]
+        self.logging.info("Current nodes: %s" %self.current_nodes)
+        self.logging.info("Nodes: %s" %self.nodes)
         self.create_result, self.actual_status, self.lb_id, self.lb_addr = self.driver.create_lb(self.lb_name, self.current_nodes, self.algorithm, self.bad_statuses)
         self.logging.info('load balancer id: %s' %self.lb_id)
         self.logging.info('load balancer ip addr: %s' %self.lb_addr)
