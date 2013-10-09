@@ -90,7 +90,7 @@ class testLoadBalancerSiege(unittest.TestCase):
             self.logging.info("*"*80)
             if node_count != 1:
                 # we have nodes[0] already, we add subsequent nodes to it
-                add_nodes = self.node_pool[len(self.nodes):node_count+1]
+                add_nodes = self.node_pool[len(self.nodes):node_count]
                 # add nodes to our loadbalancer
                 self.add_node_result, self.actual_status = self.driver.add_nodes(self.lb_id, add_nodes)
                 if self.actual_status =='202': 
