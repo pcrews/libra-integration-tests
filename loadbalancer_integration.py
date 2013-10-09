@@ -468,12 +468,12 @@ for test_name in testnames:
                 expected_status = test_variant['expected_status']
             else:
                 expected_status = args.successstatuscode 
-            suite.addTest(testLoadBalancerFuncs( test_variant['description'], args, logging, driver
+            suite.addTest(testLoadBalancerSiege( test_variant['description'], args, logging, driver
                                                 , test_name
+                                                , nodes = test_inputs['default_values']['nodes']
                                                 , test_variant['name']
                                                 , test_inputs['default_values']['default_nodes']
-                                                , expected_status = expected_status
-                                                , test_nodes = test_inputs['default_values']['nodes']))
+                                                , expected_status = expected_status))
 
 result = unittest.TextTestRunner(verbosity=2).run(suite)
 sys.exit(not result.wasSuccessful())
