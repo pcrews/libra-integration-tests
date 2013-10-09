@@ -471,7 +471,7 @@ for test_name in testnames:
             suite.addTest(testLoadBalancerSiege( test_variant['description'], args, logging, driver
                                                , test_name
                                                , test_variant['name']
-                                               , nodes = test_inputs['default_values']['nodes']
+                                               , test_inputs['default_values']['nodes']
                                                , expected_status = expected_status))
 
 result = unittest.TextTestRunner(verbosity=2).run(suite)
