@@ -99,7 +99,7 @@ class testLoadBalancerSiege(unittest.TestCase):
                     self.logging.info("Current node list:")
                     nodes = self.driver.list_lb_nodes(self.lb_id)
                     self.logging.info(nodes)
-                    lbaas_utils.validate_loadBalancer(self, disabled_list)
+                    lbaas_utils.validate_loadBalancer(self)
                 else:
                     self.assertEqual(self.actual_status, '202', msg = "Adding nodes to loadbalancer %s failed with status: %s" %(self.lb_id, self.actual_status))
             # now we run siege!
