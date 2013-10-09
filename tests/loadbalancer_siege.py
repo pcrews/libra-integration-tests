@@ -16,6 +16,8 @@
     e2e tests for creating loadbalancers via atlas lbaas
 
 """
+
+import os
 import sys
 import ast
 import copy
