@@ -145,9 +145,17 @@ parser.add_argument( '--bad_status'
                    )
 parser.add_argument( '--active_wait_time'
                    , action = 'store'
+                   , type=int
                    , dest = 'activewaittime'
                    , default = 60
                    , help = 'seconds to wait for a loadbalancer to achieve ACTIVE status'
+                   )
+parser.add_argument( '--active_pause'
+                   , action = 'store'
+                   , type=int
+                   , dest = 'activepause'
+                   , default = 0
+                   , help = 'seconds to wait *after* a loadbalancer has achieved ACTIVE status before proceeding with testing'
                    )
 parser.add_argument( '--swift_user'
                    , action = 'store'
