@@ -97,7 +97,7 @@ class testLoadBalancerSiege(unittest.TestCase):
                     self.logging.info(nodes)
                     lbaas_utils.validate_loadBalancer(self, disabled_list)
                 else:
-                    self.assertEqual(self.actual_status, '202', msg = "Adding nodes to loadbalancer %s failed with status: %s" %(self.lb_id, self.actual_status)
+                    self.assertEqual(self.actual_status, '202', msg = "Adding nodes to loadbalancer %s failed with status: %s" %(self.lb_id, self.actual_status))
             # now we run siege!
             pages = [ ('cgi-bin/1k-random.py','1k randomly generated text')
                     , ('1k-static','1k static data')
