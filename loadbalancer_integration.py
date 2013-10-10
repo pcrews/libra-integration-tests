@@ -183,6 +183,12 @@ parser.add_argument( '--swift_basepath'
                    , default = 'libra_test_logs'
                    , help = 'username for object storage (for haproxy log archiving).  Defaults to lbaas_tenant_name'
                    )
+parser.add_argument( '--cleanup_off'
+                   , action = 'store_true'
+                   , dest = 'cleanupoff'
+                   , default = False
+                   , help = 'Turns off post-test cleanup (for some tests).  Used to automate workloads on vms we want to study afterwards'
+                   )
 
 #######
 # main
