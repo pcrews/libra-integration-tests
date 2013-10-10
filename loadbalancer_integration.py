@@ -37,6 +37,7 @@ from tests.multi_loadbalancer import testMultiLoadBalancer
 from tests.loadbalancer_logs import testLoadBalancerLogs
 from tests.monitor_stage1 import testMonitorStage1
 from tests.loadbalancer_siege import testLoadBalancerSiege
+from tests.loadbalancer_apache import testLoadBalancerApache
 
 ##########
 # parser
@@ -469,6 +470,24 @@ for test_name in testnames:
             else:
                 expected_status = args.successstatuscode 
             suite.addTest(testLoadBalancerSiege( test_variant['description'], args, logging, driver
+                                               , test_name
+                                               , test_variant['name']
+                                               , test_inputs['default_values']['nodes']
+                                               , expected_status = expected_status))
+
+#########################
+# apache tests
+#########################
+testnames = testloader.getTestCaseNames(testLoadBalancerApache)
+for test_name in testnames:
+    if 'apache_variants' in test_inputs:
+        for test_variant in test_inputs['apache_variants']:
+          if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
+            if 'expected_status' in test_variant:
+                expected_status = test_variant['expected_status']
+            else:
+                expected_status = args.successstatuscode 
+            suite.addTest(testLoadBalancerApache( test_variant['description'], args, logging, driver
                                                , test_name
                                                , test_variant['name']
                                                , test_inputs['default_values']['nodes']
