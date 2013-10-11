@@ -104,9 +104,17 @@ class testLoadBalancerApache(unittest.TestCase):
                     self.assertEqual(self.actual_status, '202', msg = "Adding nodes to loadbalancer %s failed with status: %s" %(self.lb_id, self.actual_status))
             # now we run apache-bench!
             self.logging.info("Beginning apache-bench tests...")
-            pages = [ ('cgi-bin/1k-random.py','1k randomly generated text')
-                    , ('1k-static','1k static data')
-                    , ('starry-night-vincent-van-go1.jpg','jpeg file')
+            #pages = [ ('cgi-bin/1k-random.py','1k randomly generated text')
+                     #, ('1k-static','1k static data')
+                     #, ('starry-night-vincent-van-go1.jpg','jpeg file')
+            pages = [ ('earth11k.jpg', '11k jpeg')
+                    , ('earth15kb.jpg', '15k jpeg')
+                    , ('earth1886kb.jpg', '1886k jpeg')
+                    , ('earth215kb.jpg', '215k jpeg')
+                    , ('earth2kb.jpg', '2k jpeg')
+                    , ('earth579kb.jpg', '579k jpeg')
+                    , ('earth5kb.jpg', '5k jpeg')
+                    , ('earth81kb.jpg', '81k jpeg')
                     #, ('csj.mp4','mp4 video')
                     ]
             for page_file, page_desc in pages:
