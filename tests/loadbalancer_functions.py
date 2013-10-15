@@ -156,10 +156,19 @@ class testLoadBalancerFuncs(unittest.TestCase):
                         if orig_node in current_nodes:
                             current_nodes.remove(orig_node)
                     for current_node in current_nodes:
+                        attempts_remain = 30
+                        time_wait = 1
+                        node_exists = True
                         node_id = current_node['id']
                         if self.args.verbose:
                             self.logging.info("Removing node id: %s" %node_id)
-                        result = self.driver.delete_lb_node(self.lb_id, node_id)
+                        while attempts_remain and node_exists:
+                            result = self.driver.delete_lb_node(self.lb_id, node_id)
+                            if result != '202':
+                                attempts_remain -= 1
+                                time.sleep(time_wait)
+                            else:
+                                node_exists = False
                         self.assertEqual(result, '202', msg="ERROR: Node id: %s deletion on loadbalancer id: %s failed" %(node_id, self.lb_id))
                     self.nodes = copy.deepcopy(self.original_nodes)
                 
