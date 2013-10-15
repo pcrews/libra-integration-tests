@@ -110,7 +110,7 @@ class testLoadBalancerSiege(unittest.TestCase):
             pages = [ ('', 'basic text page')
                     , ('earth11k.jpg', '11k jpeg')
                     , ('earth15kb.jpg', '15k jpeg')
-                    , ('earth1886kb.jpg', '1886k jpeg')
+                    #, ('earth1886kb.jpg', '1886k jpeg')
                     , ('earth215kb.jpg', '215k jpeg')
                     , ('earth2kb.jpg', '2k jpeg')
                     , ('earth579kb.jpg', '579k jpeg')
