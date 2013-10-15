@@ -156,7 +156,7 @@ class testLoadBalancerFuncs(unittest.TestCase):
                         if orig_node in current_nodes:
                             current_nodes.remove(orig_node)
                     for current_node in current_nodes:
-                        attempts_remain = 30
+                        attempts_remain = 60
                         time_wait = 1
                         node_exists = True
                         node_id = current_node['id']
