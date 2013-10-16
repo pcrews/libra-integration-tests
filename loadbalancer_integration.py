@@ -149,7 +149,7 @@ parser.add_argument( '--active_wait_time'
                    , action = 'store'
                    , type=int
                    , dest = 'activewaittime'
-                   , default = 60
+                   , default = 120
                    , help = 'seconds to wait for a loadbalancer to achieve ACTIVE status'
                    )
 parser.add_argument( '--active_pause'
