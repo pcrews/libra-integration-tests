@@ -137,10 +137,9 @@ class testLoadBalancerFuncs(unittest.TestCase):
                             if idx == len(node_pool):
                                 idx = 0
                 # add nodes to our loadbalancer
-                nodes = self.driver.list_lb_nodes(self.lb_id)
                 self.logging.info("Pre-add node list:")
-                    nodes = self.driver.list_lb_nodes(self.lb_id)
-                    self.logging.info(nodes)
+                nodes = self.driver.list_lb_nodes(self.lb_id)
+                self.logging.info(nodes)
                 self.add_node_result, self.actual_status = self.driver.add_nodes(self.lb_id, add_nodes)
                 disabled_list = []
                 if self.actual_status =='202': 
