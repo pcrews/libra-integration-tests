@@ -137,6 +137,10 @@ class testLoadBalancerFuncs(unittest.TestCase):
                             if idx == len(node_pool):
                                 idx = 0
                 # add nodes to our loadbalancer
+                nodes = self.driver.list_lb_nodes(self.lb_id)
+                self.logging.info("Pre-add node list:")
+                    nodes = self.driver.list_lb_nodes(self.lb_id)
+                    self.logging.info(nodes)
                 self.add_node_result, self.actual_status = self.driver.add_nodes(self.lb_id, add_nodes)
                 disabled_list = []
                 if self.actual_status =='202': 
@@ -146,9 +150,11 @@ class testLoadBalancerFuncs(unittest.TestCase):
                         if 'condition' in node and node['condition'] == 'DISABLED':
                             if 'address' in node:
                                 disabled_list.append(node['address'])
-                    self.logging.info("Current node list:")
+                    self.logging.info("Post-add node list:")
                     nodes = self.driver.list_lb_nodes(self.lb_id)
                     self.logging.info(nodes)
+                    # maybe delete this wait!
+                    lbaas_utils.wait_for_active_status(self)
                     lbaas_utils.validate_loadBalancer(self, disabled_list)
                     # remove nodes / reset to original set up
                     current_nodes = self.driver.list_lb_nodes(self.lb_id)['nodes']
