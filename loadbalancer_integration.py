@@ -29,7 +29,7 @@ import requests
 import argparse
 
 from tests.loadbalancer_functions import testLoadBalancerFuncs
-from tests.loadbalancer_functions import testLoadBalancerStats
+from tests.loadbalancer_stats import testLoadBalancerStats
 from tests.create_loadbalancer import testCreateLoadBalancer
 from tests.update_loadbalancer import testUpdateLoadBalancer
 from tests.add_nodes import testAddNodes
