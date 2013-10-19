@@ -29,6 +29,7 @@ import requests
 import argparse
 
 from tests.loadbalancer_functions import testLoadBalancerFuncs
+from tests.loadbalancer_functions import testLoadBalancerStats
 from tests.create_loadbalancer import testCreateLoadBalancer
 from tests.update_loadbalancer import testUpdateLoadBalancer
 from tests.add_nodes import testAddNodes
@@ -234,6 +235,24 @@ suite = unittest.TestSuite()
 inputs_file = open(args.variant_module,'r')
 test_inputs = yaml.load(inputs_file)
 inputs_file.close()
+
+#########################
+# stats / probe tests
+#########################
+testnames = testloader.getTestCaseNames(testLoadBalancerStats)
+for test_name in testnames:
+    if 'stat_variants' in test_inputs:
+        for test_variant in test_inputs['stat_variants']:
+          if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
+            if 'expected_status' in test_variant:
+                expected_status = test_variant['expected_status']
+            else:
+                expected_status = args.successstatuscode 
+            suite.addTest(testLoadBalancerStats( test_variant['description'], args, logging, driver
+                                                , test_name
+                                                , test_variant['name']
+                                                , test_inputs['default_values']['default_nodes']
+                                                , expected_status = expected_status))
 
 #########################
 # full functional tests
