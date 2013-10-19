@@ -91,6 +91,7 @@ class testLoadBalancerStats(unittest.TestCase):
                 except Exception, e:
                     if not suspected_bad:
                         self.logging.info("loadbalancer id: %s not yet ready.  Suspected bad haproxy device" %(self.lb_id))
+                        self.logging.info("Will wait up to: %d seconds for the loadbalancer to be functional, please be patient..." %(attempts_remain*time_wait))
                         suspected_bad = True
                         bad_count += 1
                     time.sleep(time_wait)
