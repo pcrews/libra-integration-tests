@@ -89,9 +89,10 @@ class testLoadBalancerStats(unittest.TestCase):
                     lb_url = 'https://%s' %(self.lb_addr)
                     result = requests.get(lb_url, verify= False)
                 except Exception, e:
-                    self.logging.info("loadbalancer id: %s not yet ready.  Suspected bad haproxy device" %(self.lb_id))
-                    suspected_bad = True
-                    bad_count += 1
+                    if not suspected_bad:
+                        self.logging.info("loadbalancer id: %s not yet ready.  Suspected bad haproxy device" %(self.lb_id))
+                        suspected_bad = True
+                        bad_count += 1
                     time.sleep(time_wait)
                     attempts_remain -= 1
             stop_time = time.time()
