@@ -105,7 +105,7 @@ class testLoadBalancerStats(unittest.TestCase):
             self.logging.info("Deleting loadbalancer: %s" %self.lb_id)
             result = self.driver.delete_lb(self.lb_id)
         self.logging.info('#'*80)
-        self.logging.info("Run stats:"
+        self.logging.info("Run stats:")
         self.logging.info("Iterations: %d" %len(iterations))
         self.logging.info(iterations)
         self.logging.info(bad_count)
