@@ -47,8 +47,8 @@ default_values:
       port: "80"
 
 stat_variants:
-    - description: 'full_functional_test'
-      name: 'the quick, brown fox jumps over the lazy dog.'
+    - description: 'stats / timing run'
+      name: 'lbaas_timing_stats_tester'
 
 
 
