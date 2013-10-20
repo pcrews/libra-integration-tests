@@ -90,7 +90,7 @@ class testLoadBalancerStats(unittest.TestCase):
                 try:
                     if attempts_remain%10 ==0:
                         self.logging.info("Attempts remaining: %d" %attempts_remain)
-                    lb_url = 'https://%s' %(self.lb_addr)
+                    lb_url = 'http://%s' %(self.lb_addr)
                     result = requests.get(lb_url, verify= False)
                     self.logging.info(result.text)
                     self.logging.info(result.status_code)
