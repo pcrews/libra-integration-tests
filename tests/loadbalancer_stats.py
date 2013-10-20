@@ -73,7 +73,7 @@ class testLoadBalancerStats(unittest.TestCase):
         bad_iterations = []
         bad_count = 0
         fail_count = 0
-        test_iterations=100
+        test_iterations=5
         for i in range(test_iterations):
             self.logging.info("Iteration: %d" %i)
             # Create our loadbalancer
@@ -122,8 +122,8 @@ class testLoadBalancerStats(unittest.TestCase):
         self.logging.info("Run stats:")
         self.logging.info(iterations)
         self.logging.info(bad_iterations)
-        self.logging.info("Bad loadbalancers: %s" %bad_count)
-        self.logging.info("Failed (bad) loadbalancers: %s" %fail_count)
+        self.logging.info("Bad loadbalancers: %d" %bad_count)
+        self.logging.info("Failed (bad) loadbalancers: %d" %fail_count)
 
         self.logging.info("Iterations: %d" %(len(iterations)))
         avg_value = None
