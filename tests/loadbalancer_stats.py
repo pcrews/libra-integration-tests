@@ -121,7 +121,14 @@ class testLoadBalancerStats(unittest.TestCase):
         self.logging.info(iterations)
         self.logging.info(bad_count)
         self.logging.info(fail_count)
-    
+        avg_value = None
+        for iteration in iterations:
+            avg_value += iteration
+        avg_value = float(avg_value)/float(len(iterations))
+        self.logging.info("Average: %d" %(avg_value))
+        self.logging.info("Max: %d" %(max(iterations)))
+        self.logging.info("Min: %d" %(min(iterations)))
+
     def tearDown(self):
         ##########################
         # delete the load balancer
