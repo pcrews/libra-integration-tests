@@ -72,7 +72,7 @@ class testLoadBalancerStats(unittest.TestCase):
         iterations = []
         bad_count = 0
         fail_count = 0
-        test_iterations=1
+        test_iterations=100
         for i in range(test_iterations):
             self.logging.info("Iteration: %d" %i)
             # Create our loadbalancer
@@ -92,8 +92,6 @@ class testLoadBalancerStats(unittest.TestCase):
                         self.logging.info("Attempts remaining: %d" %attempts_remain)
                     lb_url = 'http://%s' %(self.lb_addr)
                     result = requests.get(lb_url, verify= False)
-                    self.logging.info(result.text)
-                    self.logging.info(result.status_code)
                     if result:
                         lb_ready=True
                 except Exception, e:
@@ -116,6 +114,7 @@ class testLoadBalancerStats(unittest.TestCase):
                 fail_count += 1
             self.logging.info("Deleting loadbalancer: %s" %self.lb_id)
             result = self.driver.delete_lb(self.lb_id)
+            time.sleep(10)
         self.logging.info('#'*80)
         self.logging.info("Run stats:")
         self.logging.info("Iterations: %d" %len(iterations))
