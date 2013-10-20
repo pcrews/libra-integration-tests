@@ -72,7 +72,8 @@ class testLoadBalancerStats(unittest.TestCase):
         iterations = []
         bad_count = 0
         fail_count = 0
-        for i in range(10):
+        test_iterations=1
+        for i in range(test_iterations):
             self.logging.info("Iteration: %d" %i)
             # Create our loadbalancer
             lb_ready = False
@@ -88,6 +89,8 @@ class testLoadBalancerStats(unittest.TestCase):
                 try:
                     lb_url = 'https://%s' %(self.lb_addr)
                     result = requests.get(lb_url, verify= False)
+                    self.logging.info(result.text)
+                    self.logging.info(result.status_code)
                     if result:
                         lb_ready=True
                 except Exception, e:
