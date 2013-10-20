@@ -140,7 +140,8 @@ class testLoadBalancerStats(unittest.TestCase):
         self.logging.info("Bad iterations: %d" %(len(bad_iterations)))
         for iteration in bad_iterations:
             avg_value += iteration
-        avg_value = float(avg_value)/float(len(bad_iterations))
+        if avg_value:
+            avg_value = float(avg_value)/float(len(bad_iterations))
         self.logging.info("Bad iterations average: %f" %(avg_value))
         self.logging.info("Bad iterations max: %f" %(max(iterations)))
         self.logging.info("Bad iterations min: %f" %(min(iterations)))
