@@ -44,7 +44,7 @@ def get_auth_token_endpoint(auth_url, username, password, tenant_name, desired_s
     tenant_id = request_data['access']['token']['tenant']['id']
     return auth_token, endpoint, tenant_id
 
-def wait_for_active_status(lb_test_case, lb_id=None, active_wait_time=None, desired_status='ACTIVE'):
+def wait_for_active_status(lb_test_case, lb_id=None, active_wait_time=None, desired_status='ACTIVE',must_pass=True):
     total_wait_time = 0
     time_decrement = 3
     status_pass = False
@@ -69,7 +69,8 @@ def wait_for_active_status(lb_test_case, lb_id=None, active_wait_time=None, desi
             if lb_test_case.args.activepause:
                 lb_test_case.logging.info("Waiting %d seconds from %s status..." %(lb_test_case.args.activepause, desired_status))
                 time.sleep(lb_test_case.args.activepause)
-    lb_test_case.assertEqual(result_data['status'], desired_status, msg = 'loadbalancer: %s not in %s status after %d seconds' %(lb_id, desired_status, active_wait_time))
+    if must_pass:
+        lb_test_case.assertEqual(result_data['status'], desired_status, msg = 'loadbalancer: %s not in %s status after %d seconds' %(lb_id, desired_status, active_wait_time))
 
 def validate_loadBalancer( lb_test_case
                          , disabled_node_list=[]

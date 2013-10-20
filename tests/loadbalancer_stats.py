@@ -84,7 +84,7 @@ class testLoadBalancerStats(unittest.TestCase):
             self.create_result, self.actual_status, self.lb_id, self.lb_addr = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm, self.bad_statuses)
             self.logging.info('load balancer id: %s' %self.lb_id)
             self.logging.info('load balancer ip addr: %s' %self.lb_addr)
-            lbaas_utils.wait_for_active_status(self)
+            lbaas_utils.wait_for_active_status(self, must_pass=False)
             # make sure we can get traffic from our loadbalancer
             while not lb_ready and attempts_remain:
                 try:
@@ -119,8 +119,8 @@ class testLoadBalancerStats(unittest.TestCase):
         self.logging.info("Run stats:")
         self.logging.info("Iterations: %d" %len(iterations))
         self.logging.info(iterations)
-        self.logging.info(bad_count)
-        self.logging.info(fail_count)
+        self.logging.info("Bad loadbalancers: %s" %bad_count)
+        self.logging.info("Failed (bad) loadbalancers: %s" %fail_count)
         avg_value = None
         for iteration in iterations:
             avg_value += iteration
