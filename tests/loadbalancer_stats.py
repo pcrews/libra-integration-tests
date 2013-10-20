@@ -79,7 +79,7 @@ class testLoadBalancerStats(unittest.TestCase):
             lb_ready = False
             suspected_bad = False
             time_wait = 1
-            attempts_remain = 600
+            attempts_remain = 120
             start_time = time.time()
             self.create_result, self.actual_status, self.lb_id, self.lb_addr = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm, self.bad_statuses)
             self.logging.info('load balancer id: %s' %self.lb_id)
