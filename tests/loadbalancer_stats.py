@@ -70,6 +70,7 @@ class testLoadBalancerStats(unittest.TestCase):
         """ gathering time until we have a good loadbalancer and counting bad devices
         """
         iterations = []
+        bad_iterations = []
         bad_count = 0
         fail_count = 0
         test_iterations=100
@@ -107,6 +108,8 @@ class testLoadBalancerStats(unittest.TestCase):
             stop_time = time.time()
             self.logging.info("Time for loadbalancer: %s to be ready: %d" %(self.lb_id, stop_time - start_time))
             iterations.append(stop_time - start_time)
+            if suspected_bad:
+                bad_iterations.append(stop_time - start_time)
             if attempts_remain:
                 lbaas_utils.validate_loadBalancer(self)
             else:
@@ -117,17 +120,28 @@ class testLoadBalancerStats(unittest.TestCase):
             time.sleep(10)
         self.logging.info('#'*80)
         self.logging.info("Run stats:")
-        self.logging.info("Iterations: %d" %len(iterations))
         self.logging.info(iterations)
+        self.logging.info(bad_iterations)
         self.logging.info("Bad loadbalancers: %s" %bad_count)
         self.logging.info("Failed (bad) loadbalancers: %s" %fail_count)
+
+        self.logging.info("Iterations: %d" %(len(iterations)))
         avg_value = None
         for iteration in iterations:
             avg_value += iteration
         avg_value = float(avg_value)/float(len(iterations))
-        self.logging.info("Average: %d" %(avg_value))
-        self.logging.info("Max: %d" %(max(iterations)))
-        self.logging.info("Min: %d" %(min(iterations)))
+        self.logging.info("All iterations average: %f" %(avg_value))
+        self.logging.info("All iterations max: %f" %(max(iterations)))
+        self.logging.info("All iterations min: %f" %(min(iterations)))
+
+        avg_value = None
+        self.logging.info("Bad iterations: %d" %(len(bad_iterations)))
+        for iteration in bad_iterations:
+            avg_value += iteration
+        avg_value = float(avg_value)/float(len(bad_iterations))
+        self.logging.info("Bad iterations average: %f" %(avg_value))
+        self.logging.info("Bad iterations max: %f" %(max(iterations)))
+        self.logging.info("Bad iterations min: %f" %(min(iterations)))
 
     def tearDown(self):
         ##########################
