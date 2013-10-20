@@ -79,11 +79,12 @@ class testLoadBalancerStats(unittest.TestCase):
             lb_ready = False
             suspected_bad = False
             time_wait = 1
-            attempts_remain = 120
+            attempts_remain = 600
             start_time = time.time()
             self.create_result, self.actual_status, self.lb_id, self.lb_addr = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm, self.bad_statuses)
             self.logging.info('load balancer id: %s' %self.lb_id)
             self.logging.info('load balancer ip addr: %s' %self.lb_addr)
+            lbaas_utils.wait_for_active_status(self)
             # make sure we can get traffic from our loadbalancer
             while not lb_ready and attempts_remain:
                 try:
@@ -95,7 +96,8 @@ class testLoadBalancerStats(unittest.TestCase):
                         lb_ready=True
                 except Exception, e:
                     if not suspected_bad:
-                        self.logging.info(Exception, e)
+                        self.logging.info(Exception)
+                        self.logging.info(e)
                         self.logging.info("loadbalancer id: %s not yet ready.  Suspected bad haproxy device" %(self.lb_id))
                         self.logging.info("Will wait up to: %d seconds for the loadbalancer to be functional, please be patient..." %(attempts_remain*time_wait))
                         suspected_bad = True
