@@ -100,13 +100,13 @@ class testLoadBalancerStats(unittest.TestCase):
                         self.logging.info(Exception)
                         self.logging.info(e)
                         self.logging.info("loadbalancer id: %s not yet ready.  Suspected bad haproxy device" %(self.lb_id))
-                        self.logging.info("Will wait up to: %d seconds for the loadbalancer to be functional, please be patient..." %(attempts_remain*time_wait))
+                        self.logging.info("Will try up to: %d times for the loadbalancer to be functional (~10 minutes), please be patient..." %(attempts_remain*time_wait))
                         suspected_bad = True
                         bad_count += 1
                     time.sleep(time_wait)
                     attempts_remain -= 1
             stop_time = time.time()
-            self.logging.info("Time for loadbalancer: %s to be ready: %d" %(self.lb_id, stop_time - start_time))
+            self.logging.info("Time for loadbalancer: %s to be ready: %f" %(self.lb_id, stop_time - start_time))
             iterations.append(stop_time - start_time)
             if suspected_bad:
                 bad_iterations.append(stop_time - start_time)
