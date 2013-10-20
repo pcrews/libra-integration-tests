@@ -118,6 +118,8 @@ class testLoadBalancerStats(unittest.TestCase):
             self.logging.info("Deleting loadbalancer: %s" %self.lb_id)
             result = self.driver.delete_lb(self.lb_id)
             time.sleep(10)
+
+
         self.logging.info('#'*80)
         self.logging.info("Run stats:")
         self.logging.info(iterations)
@@ -126,7 +128,7 @@ class testLoadBalancerStats(unittest.TestCase):
         self.logging.info("Failed (bad) loadbalancers: %d" %fail_count)
 
         self.logging.info("Iterations: %d" %(len(iterations)))
-        avg_value = None
+        avg_value = 0
         for iteration in iterations:
             avg_value += iteration
         avg_value = float(avg_value)/float(len(iterations))
@@ -134,7 +136,7 @@ class testLoadBalancerStats(unittest.TestCase):
         self.logging.info("All iterations max: %f" %(max(iterations)))
         self.logging.info("All iterations min: %f" %(min(iterations)))
 
-        avg_value = None
+        avg_value = 0
         self.logging.info("Bad iterations: %d" %(len(bad_iterations)))
         for iteration in bad_iterations:
             avg_value += iteration
