@@ -88,6 +88,8 @@ class testLoadBalancerStats(unittest.TestCase):
             # make sure we can get traffic from our loadbalancer
             while not lb_ready and attempts_remain:
                 try:
+                    if attempts_remain%10 ==0:
+                        self.logging.info("Attempts remaining: %d" %attempts_remain)
                     lb_url = 'https://%s' %(self.lb_addr)
                     result = requests.get(lb_url, verify= False)
                     self.logging.info(result.text)
