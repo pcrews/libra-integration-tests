@@ -73,7 +73,7 @@ class testLoadBalancerStats(unittest.TestCase):
         bad_iterations = []
         bad_count = 0
         fail_count = 0
-        test_iterations=5
+        test_iterations=100
         for i in range(test_iterations):
             self.logging.info("Iteration: %d" %i)
             # Create our loadbalancer
@@ -143,8 +143,8 @@ class testLoadBalancerStats(unittest.TestCase):
         if avg_value:
             avg_value = float(avg_value)/float(len(bad_iterations))
         self.logging.info("Bad iterations average: %f" %(avg_value))
-        self.logging.info("Bad iterations max: %f" %(max(iterations)))
-        self.logging.info("Bad iterations min: %f" %(min(iterations)))
+        self.logging.info("Bad iterations max: %f" %(max(bad_iterations)))
+        self.logging.info("Bad iterations min: %f" %(min(bad_iterations)))
 
     def tearDown(self):
         ##########################
