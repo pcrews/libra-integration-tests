@@ -18,11 +18,11 @@
 default_values: 
   default_name: 'Lbaas_test_node'
   default_nodes: 
-    - address: "15.185.166.104"
+    - address: "15.185.153.8"
       port: "80"
-    - address: "15.185.175.196"
+    - address: "15.185.179.196"
       port: "80"
-    - address: "15.185.153.16"
+    - address: "15.185.190.38"
       port: "80"
   nodes:
     - address: "15.185.166.104"
