@@ -73,7 +73,7 @@ class testLoadBalancerStats(unittest.TestCase):
         bad_iterations = []
         bad_count = 0
         fail_count = 0
-        test_iterations=100
+        test_iterations=5
         for i in range(test_iterations):
             self.logging.info("Iteration: %d" %i)
             # Create our loadbalancer
@@ -88,6 +88,8 @@ class testLoadBalancerStats(unittest.TestCase):
             self.logging.info('load balancer ip addr: %s' %self.lb_addr)
             lbaas_utils.wait_for_active_status(self, must_pass=False)
             # make sure we can get traffic from our loadbalancer
+            self.logging.info(time.time()-start_time)
+            self.logging.info((time.time()-start_time) < max_time)
             while not lb_ready and attempts_remain and ((time.time()-start_time) <= max_time):
                 try:
                     if attempts_remain%10 ==0:
@@ -107,7 +109,7 @@ class testLoadBalancerStats(unittest.TestCase):
                     time.sleep(time_wait)
                     attempts_remain -= 1
             stop_time = time.time()
-            expended_time = stop_time = start_time
+            expended_time = stop_time - start_time
             self.logging.info("Time for loadbalancer: %s to be ready: %f" %(self.lb_id, expended_time))
             iterations.append(expended_time)
             if suspected_bad:
