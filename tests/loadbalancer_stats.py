@@ -73,7 +73,7 @@ class testLoadBalancerStats(unittest.TestCase):
         bad_iterations = []
         bad_count = 0
         fail_count = 0
-        test_iterations=5
+        test_iterations=100
         for i in range(test_iterations):
             self.logging.info("Iteration: %d" %i)
             # Create our loadbalancer
@@ -81,7 +81,7 @@ class testLoadBalancerStats(unittest.TestCase):
             suspected_bad = False
             time_wait = 1
             attempts_remain = 100
-            max_time = 600
+            max_time = 300
             start_time = time.time()
             self.create_result, self.actual_status, self.lb_id, self.lb_addr = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm, self.bad_statuses)
             self.logging.info('load balancer id: %s' %self.lb_id)
