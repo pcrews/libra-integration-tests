@@ -81,13 +81,14 @@ class testLoadBalancerStats(unittest.TestCase):
             suspected_bad = False
             time_wait = 1
             attempts_remain = 100
+            max_time = 600
             start_time = time.time()
             self.create_result, self.actual_status, self.lb_id, self.lb_addr = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm, self.bad_statuses)
             self.logging.info('load balancer id: %s' %self.lb_id)
             self.logging.info('load balancer ip addr: %s' %self.lb_addr)
             lbaas_utils.wait_for_active_status(self, must_pass=False)
             # make sure we can get traffic from our loadbalancer
-            while not lb_ready and attempts_remain:
+            while not lb_ready and attempts_remain and ((time.time()-start_time) <= max_time):
                 try:
                     if attempts_remain%10 ==0:
                         self.logging.info("Attempts remaining: %d" %attempts_remain)
@@ -106,14 +107,15 @@ class testLoadBalancerStats(unittest.TestCase):
                     time.sleep(time_wait)
                     attempts_remain -= 1
             stop_time = time.time()
-            self.logging.info("Time for loadbalancer: %s to be ready: %f" %(self.lb_id, stop_time - start_time))
-            iterations.append(stop_time - start_time)
+            expended_time = stop_time = start_time
+            self.logging.info("Time for loadbalancer: %s to be ready: %f" %(self.lb_id, expended_time))
+            iterations.append(expended_time)
             if suspected_bad:
-                bad_iterations.append(stop_time - start_time)
-            if attempts_remain:
+                bad_iterations.append(expended_time)
+            if attempts_remain and ((expended_time) <= max_time):
                 lbaas_utils.validate_loadBalancer(self)
             else:
-                self.logging.info("WARN: loadbalancer: %s suspected still not ready after %d seconds" %(self.lb_id, stop_time - start_time))
+                self.logging.info("WARN: loadbalancer: %s suspected still not ready after %d seconds" %(self.lb_id, expended_time))
                 fail_count += 1
             self.logging.info("Deleting loadbalancer: %s" %self.lb_id)
             result = self.driver.delete_lb(self.lb_id)
