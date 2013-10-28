@@ -525,7 +525,7 @@ for test_name in testnames:
 testnames = testloader.getTestCaseNames(testLoadBalancerCleanup)
 for test_name in testnames:
     if 'cleanup_variants' in test_inputs:
-        for test_variant in test_inputs['stat_variants']:
+        for test_variant in test_inputs['cleanup_variants']:
           if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
             if 'expected_status' in test_variant:
                 expected_status = test_variant['expected_status']
