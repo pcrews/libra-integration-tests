@@ -63,8 +63,12 @@ class testLoadBalancerCleanup(unittest.TestCase):
         self.lb_list = self.driver.list_lbs()
         # delete them all
         for lb in self.lb_list:
+            self.logging.info("-"*80)
             self.logging.info(lb)
-
+            lb_id = lb['id']
+            self.logging.info("Deleting loadbalancer: %s" %lb_id)
+            result = self.driver.delete_lb(lb_id)
+            self.logging.info("Result: %s" %result)
 
 
 
