@@ -525,8 +525,8 @@ for test_name in testnames:
 testnames = testloader.getTestCaseNames(testLoadBalancerCleanup)
 for test_name in testnames:
     if 'cleanup_variants' in test_inputs:
+        print 'woohoo, here I am"
         for test_variant in test_inputs['cleanup_variants']:
-          if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
             suite.addTest(testLoadBalancerCleanup( test_variant['description'], args, logging, driver
                                                 , test_name))
 
