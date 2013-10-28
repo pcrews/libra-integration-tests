@@ -49,7 +49,7 @@ class testLoadBalancerCleanup(unittest.TestCase):
         ###########################
         print ''
         self.logging.info("Setting up for testcase:")
-        report_values = ['test_description','lb_name', 'nodes', 'expected_status']
+        report_values = ['test_description']
         for report_value in report_values:
             self.logging.info("  - %s: %s" %(report_value, getattr(self,report_value)))
         if self.args.verbose:
