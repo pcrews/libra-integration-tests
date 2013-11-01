@@ -28,7 +28,7 @@ import logging
 import requests
 import argparse
 
-from lbaas_test_loader import load_lbaas_test_variants
+from lbaas_test_loader import load_lbaas_test_suite
 
 ##########
 # parser
