@@ -328,6 +328,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                                                    , test_inputs['default_values']['nodes']
                                                    , test_variant['concurrency']
                                                    , test_variant['requests']
+                                                   , test_variant['node_counts']
                                                    , expected_status = expected_status))
 
     #########################

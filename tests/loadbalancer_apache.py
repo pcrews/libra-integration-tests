@@ -39,6 +39,7 @@ class testLoadBalancerApache(unittest.TestCase):
                 , nodes
                 , concurrency=100
                 , requests=100000
+                , node_counts=[1,3,5,10]
                 , lb_id=None
                 , algorithm = None
                 , expected_status=202):
@@ -57,6 +58,7 @@ class testLoadBalancerApache(unittest.TestCase):
         self.node_pool = nodes
         self.concurrency = concurrency
         self.requests = requests
+        self.node_counts = node_counts
         self.main_lb_id = None
         # we have a pool of N nodes we can use, but set initial set to just 1 backend node
         self.nodes = [self.node_pool[0]]
@@ -96,7 +98,7 @@ class testLoadBalancerApache(unittest.TestCase):
         lbaas_utils.validate_loadBalancer(self)
 
         # iterate through backend node sets and run siege
-        for node_count in [1,3,5,10]:
+        for node_count in self.node_counts:
             self.logging.info("Testing with %s nodes" %node_count)
             self.logging.info("*"*80)
             if node_count != 1:
