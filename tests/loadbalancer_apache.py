@@ -29,8 +29,17 @@ import lbaas_utils
 
 class testLoadBalancerApache(unittest.TestCase):
 
-    def __init__( self, test_description, args, logging, driver
-                , testname, lb_name, nodes, lb_id=None
+    def __init__( self
+                , test_description
+                , args
+                , logging
+                , driver
+                , testname
+                , lb_name
+                , nodes
+                , concurrency=100
+                , requests=100000
+                , lb_id=None
                 , algorithm = None
                 , expected_status=202):
         super(testLoadBalancerApache, self).__init__(testname)
@@ -46,6 +55,8 @@ class testLoadBalancerApache(unittest.TestCase):
         else:
             self.lb_name = lb_name
         self.node_pool = nodes
+        self.concurrency = concurrency
+        self.requests = requests
         self.main_lb_id = None
         # we have a pool of N nodes we can use, but set initial set to just 1 backend node
         self.nodes = [self.node_pool[0]]
