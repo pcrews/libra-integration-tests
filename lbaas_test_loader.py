@@ -20,6 +20,7 @@
 """
 
 import yaml
+import unittest
 
 from tests.loadbalancer_functions import testLoadBalancerFuncs
 from tests.loadbalancer_stats import testLoadBalancerStats
@@ -35,7 +36,10 @@ from tests.loadbalancer_apache import testLoadBalancerApache
 from tests.loadbalancer_cleanup import testLoadBalancerCleanup
 
 def load_lbaas_test_variants(suite, variant_module):
-# get our test input variants (nodes, names, etc)
+    testloader = unittest.TestLoader()
+    suite = unittest.TestSuite()
+
+    # get our test input variants (nodes, names, etc)
     inputs_file = open(variant_module,'r')
     test_inputs = yaml.load(inputs_file)
     inputs_file.close()
