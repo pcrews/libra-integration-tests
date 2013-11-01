@@ -215,7 +215,7 @@ driver = driver_module.lbaasDriver( args, api_user_url)
 ##################################
 # test away!
 ##################################
-suite = load_lbaas_test_suite(args, args.variant_module)
+suite = load_lbaas_test_suite(args, args.variant_module, logging, driver)
 result = unittest.TextTestRunner(verbosity=2).run(suite)
 sys.exit(not result.wasSuccessful())
 

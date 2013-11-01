@@ -35,7 +35,7 @@ from tests.loadbalancer_siege import testLoadBalancerSiege
 from tests.loadbalancer_apache import testLoadBalancerApache
 from tests.loadbalancer_cleanup import testLoadBalancerCleanup
 
-def load_lbaas_test_suite(args, variant_module):
+def load_lbaas_test_suite(args, variant_module, logging, driver):
     testloader = unittest.TestLoader()
     suite = unittest.TestSuite()
 
