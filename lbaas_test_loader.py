@@ -19,6 +19,8 @@
 
 """
 
+import yaml
+
 from tests.loadbalancer_functions import testLoadBalancerFuncs
 from tests.loadbalancer_stats import testLoadBalancerStats
 from tests.create_loadbalancer import testCreateLoadBalancer
