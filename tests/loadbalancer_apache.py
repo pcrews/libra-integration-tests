@@ -133,7 +133,7 @@ class testLoadBalancerApache(unittest.TestCase):
                 page_path = os.path.join(self.lb_addr, page_file)
                 self.logging.info("Testing page: %s, %s" %(page_path, page_desc))
                 self.logging.info("Testing with %s nodes" %node_count)
-                cmd = 'ab -q -r -c100 -n50000 http://%s' %(page_path)
+                cmd = 'ab -q -r -c%s -n%s http://%s' %(self.concurrency, self.requests, page_path)
                 self.logging.info("test command: %s" %cmd)
                 status, output = commands.getstatusoutput(cmd)
                 self.logging.info("status: %s" %status)
