@@ -49,7 +49,7 @@ parser.add_argument( '--driver'
 parser.add_argument( '--variants_module'
                    , dest = 'variant_module'
                    , default = 'combined_inputs.dat'
-                   , help = 'Module containing test inputs'
+                   , help = 'Module containing test inputs.  Assumed to be in the variants directory'
                    )
 parser.add_argument( '--os_username'
                    , action = 'store'

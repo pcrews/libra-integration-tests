@@ -18,7 +18,7 @@
     Probably a better way exists...I should find it :/
 
 """
-
+import os
 import yaml
 import unittest
 
@@ -40,6 +40,8 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
     suite = unittest.TestSuite()
 
     # get our test input variants (nodes, names, etc)
+    if 'variants' not in os.path.dirname(variant_module):
+        variant_module = os.path.join('variants', variant_module)
     inputs_file = open(variant_module,'r')
     test_inputs = yaml.load(inputs_file)
     inputs_file.close()
