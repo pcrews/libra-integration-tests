@@ -40,6 +40,7 @@ class testLoadBalancerApache(unittest.TestCase):
                 , concurrency=100
                 , requests=100000
                 , node_counts=[1,3,5,10]
+                , pages
                 , lb_id=None
                 , algorithm = None
                 , expected_status=202):
@@ -59,6 +60,7 @@ class testLoadBalancerApache(unittest.TestCase):
         self.concurrency = concurrency
         self.requests = requests
         self.node_counts = node_counts
+        self.pages = pages
         self.main_lb_id = None
         # we have a pool of N nodes we can use, but set initial set to just 1 backend node
         self.nodes = [self.node_pool[0]]
@@ -81,7 +83,7 @@ class testLoadBalancerApache(unittest.TestCase):
         ###########################
         print ''
         self.logging.info("Setting up for testcase:")
-        report_values = ['test_description','lb_name', 'nodes', 'expected_status', 'node_counts']
+        report_values = ['test_description','lb_name', 'nodes', 'expected_status', 'node_counts', 'pages']
         for report_value in report_values:
             self.logging.info("  - %s: %s" %(report_value, getattr(self,report_value)))
         if self.args.verbose:
@@ -117,21 +119,9 @@ class testLoadBalancerApache(unittest.TestCase):
                     self.assertEqual(self.actual_status, '202', msg = "Adding nodes to loadbalancer %s failed with status: %s" %(self.lb_id, self.actual_status))
             # now we run apache-bench!
             self.logging.info("Beginning apache-bench tests...")
-            #pages = [ ('cgi-bin/1k-random.py','1k randomly generated text')
-                     #, ('1k-static','1k static data')
-                     #, ('starry-night-vincent-van-go1.jpg','jpeg file')
-            pages = [ ('', 'basic text page')
-                    , ('earth11k.jpg', '11k jpeg')
-                    , ('earth15kb.jpg', '15k jpeg')
-                    #, ('earth1886kb.jpg', '1886k jpeg')
-                    #, ('earth215kb.jpg', '215k jpeg')
-                    , ('earth2kb.jpg', '2k jpeg')
-                    #, ('earth579kb.jpg', '579k jpeg')
-                    , ('earth5kb.jpg', '5k jpeg')
-                    , ('earth81kb.jpg', '81k jpeg')
-                    #, ('csj.mp4','mp4 video')
-                    ]
-            for page_file, page_desc in pages:
+            for page_set in self.pages:
+                page_file = page_set['path']
+                page_desc = page_set['description']
                 page_path = os.path.join(self.lb_addr, page_file)
                 self.logging.info("Testing page: %s, %s" %(page_path, page_desc))
                 self.logging.info("Testing with %s nodes" %node_count)

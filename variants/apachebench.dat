@@ -49,7 +49,7 @@ default_values:
 apache_variants:
     - description: 'stress / perf testing with apache-bench!'
       name: 'imma_stressed_out_test_loadbalancer'
-      concurrency: 500
+      concurrency: 1024
       requests:  50000000
       node_counts:
         #- 1
@@ -57,4 +57,32 @@ apache_variants:
         #- 3
         #- 5
         #- 10
+      pages:
+        - descrption: 'basic text page'
+          path: ''
+        - description: '11k jpeg'
+          path: 'earth11k.jpg'
+        #- description: '15k jpeg'
+        #  path: 'earth15kb.jpg'
+        #- description: '1886k jpeg'
+        #  path: 'earth1886kb.jpg'
+        #- description: '215k jpeg'
+        #  path: 'earth215kb.jpg'
+        #- description: '2k jpeg'
+        #  path: 'earth2kb.jpg'
+        #- description: '579k jpeg'
+        #  path: 'earth579kb.jpg'
+        #- description: '5k jpeg'
+        #  path: 'earth5kb.jpg'
+        #- description: '81k jpeg'
+        #  path: 'earth81kb.jpg'
+        #- description: '1k randomly generated text'
+        #  path: 'cgi-bin/1k-random.py'
+        - description: '1k static data'
+          path: 1k-static
+        #- description: 'jpeg file'
+        #  path: 'starry-night-vincent-van-go1.jpg'
+        #- description: 'mp4 video'
+        #  path: 'csj.mp4'
+        
 
