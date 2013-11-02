@@ -40,7 +40,7 @@ class testLoadBalancerApache(unittest.TestCase):
                 , concurrency=100
                 , requests=100000
                 , node_counts=[1,3,5,10]
-                , pages
+                , pages = None
                 , lb_id=None
                 , algorithm = None
                 , expected_status=202):
