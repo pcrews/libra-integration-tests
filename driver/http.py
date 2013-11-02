@@ -69,6 +69,8 @@ class lbaasDriver:
         for service_data in request_data['access']['serviceCatalog']:
             if service_data['name'] == 'Load Balancer':
                 lbaas_endpoint = service_data['endpoints'][0]['publicURL'].replace('\\','')
+                if self.verbose:
+                    print "LBAAS_ENDPOINT: %s" %lbaas_endpoint
             if service_data['name'] == 'Object Storage':
                 swift_endpoint = service_data['endpoints'][0]['publicURL'].replace('\\','')
         auth_token = request_data['access']['token']['id']
