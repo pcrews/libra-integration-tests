@@ -37,6 +37,7 @@ class lbaasDriver:
         self.user_name = args.osusername
         self.auth_url = args.osauthurl
         self.tenant_name = args.ostenantname
+        self.region_name = args.osregionname
         self.password = args.ospassword
         self.verbose = args.verbose
         self.auth_token, self.api_user_url, self.swift_endpoint, self.tenant_id = self.get_auth_token()
@@ -70,7 +71,7 @@ class lbaasDriver:
             if service_data['name'] == 'Load Balancer':
                 if args.osregionname:
                     for endpoint in service_data['endpoints']:
-                        if endpoint['region'] == args.osregionname:
+                        if endpoint['region'] == self.region_name:
                             lbaas_endpoint = endpoint['publicURL']
                 else:
                     lbaas_endpoint = service_data['endpoints'][0]['publicURL'].replace('\\','')
