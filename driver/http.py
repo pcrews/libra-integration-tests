@@ -68,7 +68,12 @@ class lbaasDriver:
         request_data = ast.literal_eval(request_result.text)
         for service_data in request_data['access']['serviceCatalog']:
             if service_data['name'] == 'Load Balancer':
-                lbaas_endpoint = service_data['endpoints'][0]['publicURL'].replace('\\','')
+                if args.osregionname:
+                    for endpoint in service_data['endpoints']:
+                        if endpoint['region'] == args.osregionname:
+                            lbaas_endpoint = endpoint['publicURL']
+                else:
+                    lbaas_endpoint = service_data['endpoints'][0]['publicURL'].replace('\\','')
                 if self.verbose:
                     print "LBAAS_ENDPOINT: %s" %lbaas_endpoint
             if service_data['name'] == 'Object Storage':
