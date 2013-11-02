@@ -72,7 +72,7 @@ class lbaasDriver:
                 if self.region_name:
                     for endpoint in service_data['endpoints']:
                         if endpoint['region'] == self.region_name:
-                            lbaas_endpoint = endpoint['publicURL']
+                            lbaas_endpoint = endpoint['publicURL'].replace('\\','')
                 else:
                     lbaas_endpoint = service_data['endpoints'][0]['publicURL'].replace('\\','')
                 if self.verbose:
