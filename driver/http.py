@@ -132,7 +132,11 @@ class lbaasDriver:
                 result_data = self.list_lb_detail(lb_id)
                 if 'virtualIps' in result_data:
                     lb_addr = result_data['virtualIps'][0]['address']
-                    attempts_remain = 0
+                    if lb_addr:
+                        attempts_remain = 0
+                    else:
+                        attempts_remain -= 1
+                        time.sleep(time_wait)
                 else:
                     attempts_remain -= 1
                     time.sleep(time_wait)
