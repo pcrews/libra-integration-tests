@@ -50,10 +50,10 @@ apache_variants:
     - description: 'stress / perf testing with apache-bench!'
       name: 'imma_stressed_out_test_loadbalancer'
       concurrency: 3000
-      requests:  50000000
+      requests:  500000
       node_counts:
-        #- 1
-        - 2
+        - 1
+        # - 2
         #- 3
         #- 5
         #- 10
@@ -66,16 +66,16 @@ apache_variants:
         #  path: 'earth15kb.jpg'
         #- description: '1886k jpeg'
         #  path: 'earth1886kb.jpg'
-        #- description: '215k jpeg'
-        #  path: 'earth215kb.jpg'
+        - description: '215k jpeg'
+          path: 'earth215kb.jpg'
         #- description: '2k jpeg'
         #  path: 'earth2kb.jpg'
         #- description: '579k jpeg'
         #  path: 'earth579kb.jpg'
         #- description: '5k jpeg'
         #  path: 'earth5kb.jpg'
-        #- description: '81k jpeg'
-        #  path: 'earth81kb.jpg'
+        - description: '81k jpeg'
+          path: 'earth81kb.jpg'
         #- description: '1k randomly generated text'
         #  path: 'cgi-bin/1k-random.py'
         - description: '1k static data'
