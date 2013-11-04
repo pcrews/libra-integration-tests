@@ -130,9 +130,8 @@ class lbaasDriver:
             time_wait = 1
             while not lb_addr and attempts_remain:
                 result_data = self.list_lb_detail(lb_id)
-                print result_data
-                print '<'*80
-                lb_addr = result_data['virtualIps'][0]['address']
+                
+                lb_addr = result_data['ip']
                 if lb_addr:
                     attempts_remain = 0
                 else:
