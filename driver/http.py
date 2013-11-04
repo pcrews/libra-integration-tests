@@ -126,6 +126,12 @@ class lbaasDriver:
         if request_status not in bad_statuses:
             lb_id = result_data['id']
             lb_addr = result_data['virtualIps'][0]['address']
+        print '#'*80
+        print "url: %s" %url
+        print "status: %s" %request_status
+        print "request_data: %s" %request_data
+        print "request result: %s" %result_data
+        print '#'*80
         return request_result, request_status, lb_id, lb_addr
 
     def delete_lb(self, lb_id):
