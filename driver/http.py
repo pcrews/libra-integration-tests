@@ -116,13 +116,7 @@ class lbaasDriver:
             request_data['virtualIps'] = [{"id":vip}]
         request_data = json.dumps(request_data)
         request_result = requests.post(url, data=request_data, headers=self.api_headers, verify= False)
-        print '#'*80
-        print "url: %s" %url
-        print "status: %s" %request_result.status_code
-        print "request_data: %s" %request_data
-        print "request result: %s" %request_result.text
-        print '#'*80
-        result_data = ast.literal_eval(request_result.text)
+        result_data = json.loads(request_result.text)
         request_status = str(request_result.status_code)
         if self.verbose:
             print "url: %s" %url
@@ -132,6 +126,16 @@ class lbaasDriver:
         if request_status not in bad_statuses:
             lb_id = result_data['id']
             lb_addr = result_data['virtualIps'][0]['address']
+            attempts_remain = 120
+            time_wait = 1
+            while not lb_addr and attempts_remain:
+                result_data = self.list_lb_detail(lb_id)
+                lb_addr = result_data['virtualIps'][0]['address']
+                if lb_addr:
+                    attempts_remain = 0
+                else:
+                    attempts_remain -= 1
+                    time.sleep(time_wait)
         return request_result, request_status, lb_id, lb_addr
 
     def delete_lb(self, lb_id):
@@ -155,7 +159,7 @@ class lbaasDriver:
 
         url = "%s/loadbalancers/%s" %(self.api_user_url, lb_id)
         request_result = self.__get(url, headers=self.api_headers, verify=False)
-        return ast.literal_eval(request_result.text)
+        return json.loads(request_result.text)
 
     def list_lb_nodes(self, lb_id):
         """ Get list of nodes for the specified lb_id """
