@@ -66,23 +66,26 @@ apache_variants:
         #  path: 'earth15kb.jpg'
         #- description: '1886k jpeg'
         #  path: 'earth1886kb.jpg'
-        - description: '215k jpeg'
-          path: 'earth215kb.jpg'
+        #- description: '215k jpeg'
+        #  path: 'earth215kb.jpg'
         #- description: '2k jpeg'
         #  path: 'earth2kb.jpg'
         #- description: '579k jpeg'
         #  path: 'earth579kb.jpg'
         #- description: '5k jpeg'
         #  path: 'earth5kb.jpg'
-        - description: '81k jpeg'
-          path: 'earth81kb.jpg'
+        #- description: '81k jpeg'
+        #  path: 'earth81kb.jpg'
         #- description: '1k randomly generated text'
         #  path: 'cgi-bin/1k-random.py'
-        - description: '1k static data'
-          path: 1k-static
+        #- description: '1k static data'
+        #  path: 1k-static
         #- description: 'jpeg file'
         #  path: 'starry-night-vincent-van-go1.jpg'
         #- description: 'mp4 video'
         #  path: 'csj.mp4'
+        - description: 'waiting page'
+          path: 'cgi-bin/wait_wait.py'
+
         
 
