@@ -106,14 +106,6 @@ class testLoadBalancerApache(unittest.TestCase):
         self.logging.info('load balancer ip addr: %s' %self.lb_addr)
         lbaas_utils.validate_loadBalancer(self)
 
-        # block the loadbalancer (crazy, yes..)
-        block_cmd = "iptables -A INPUT -s %s -j DROP" %self.lb_addr
-        status, output = commands.getstatusoutput(block_cmd)
-        self.logging.info("Blocking ip addr: %s" %self.lb_addr)
-        self.logging.info("cmd: %s" %block_cmd)
-        self.logging.info("status: %s" %status)
-        self.logging.info("output: %s" %output)
-
         # iterate through backend node sets and run apachebench
         for node_count in self.node_counts:
             self.logging.info("Testing with %s nodes" %node_count)
@@ -157,20 +149,6 @@ class testLoadBalancerApache(unittest.TestCase):
         else:
             self.logging.info("Deleting loadbalancer: %s" %self.lb_id)
             result = self.driver.delete_lb(self.lb_id)
-
-        # unblock the loadbalancer (crazy, yes..)
-        unblock_cmd = "iptables -D INPUT -s %s -j DROP" %self.lb_addr
-        status, output = commands.getstatusoutput(unblock_cmd)
-        self.logging.info("Unblocking ip addr: %s" %self.lb_addr)
-        self.logging.info("cmd: %s" %unblock_cmd)
-        self.logging.info("status: %s" %status)
-        self.logging.info("output: %s" %output)
-        save_cmd = "service iptables save"
-        status, output = commands.getstatusoutput(save_cmd)
-        self.logging.info("Saving ip tables...")
-        self.logging.info("cmd: %s" %save_cmd)
-        self.logging.info("status: %s" %status)
-        self.logging.info("output: %s" %output)
 
 
 
