@@ -155,8 +155,6 @@ class lbaasDriver:
             lb_id = lb_data[1].strip()
             lb_stats = ast.literal_eval(lb_data[9].strip())
             lb_addr = lb_stats[0]['address']
-            print lb_addr
-            print '#'*80
             status = self.args.successstatuscode
             attempts_remain = 120
             time_wait = 1
