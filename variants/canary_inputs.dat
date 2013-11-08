@@ -52,11 +52,6 @@ lb_name_variants:
       name: 'lbaas-canary1'
     - description: 'test_iter3'
       name: 'lbaas-canary1'
-    - description: 'test_iter4'
-      name: 'lbaas-canary1'
-    - description: 'test_iter5'
-      name: 'lbaas-canary1'
-
 
 
 
