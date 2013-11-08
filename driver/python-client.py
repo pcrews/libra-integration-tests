@@ -192,10 +192,8 @@ class lbaasDriver:
         """ Remove specified node_id from lb_id """
         cmd = self.base_cmd + " node-delete --id=%s --nodeid=%s" %(lb_id, node_id)
         status, output = self.execute_cmd(cmd)
-        print cmd
-        print status
-        print output
-        print '@'*80
+        if status == 0:
+            return '202'
         return status
 
     def list_lbs(self):
