@@ -368,7 +368,6 @@ class lbaasDriver:
                     match = 1
             if not match:
                 error_list.append("ERROR: Node: %s has no match from api server" %(node))
-                error_list.append("ERROR: %s" %vars(result))
                 error = 1                
         return error, error_list
 
