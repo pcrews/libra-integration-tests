@@ -153,15 +153,29 @@ class lbaasDriver:
             lb_data = data.split('|')
             lb_id = lb_data[1].strip()
             lb_stats = ast.literal_eval(lb_data[9].strip())
-            ip_addr = lb_stats[0]['address']
-            status = self.args.successstatuscode 
+            lb_addr = lb_stats[0]['address']
+            status = self.args.successstatuscode
+            attempts_remain = 120
+            time_wait = 1
+            while not lb_addr and attempts_remain:
+                result_data = self.list_lb_detail(lb_id)
+                if 'virtualIps' in result_data:
+                    lb_addr = result_data['virtualIps'][0]['address']
+                    if lb_addr:
+                        attempts_remain = 0
+                    else:
+                        attempts_remain -= 1
+                        time.sleep(time_wait)
+                else:
+                    attempts_remain -= 1
+                    time.sleep(time_wait)
         elif str(status) == '512':
             status = self.handle_client_side_errors(data, 'create', algorithm)
         else:
             data = data[0]
             if 'HTTP' in data:
                 status = data.split('(HTTP')[1].strip().replace(')','')
-        return output, status, lb_id, ip_addr # TODO detect error statuses!!!!!
+        return output, status, lb_id, lb_addr # TODO detect error statuses!!!!!
 
     def delete_lb(self, lb_id):
         """ Delete the loadbalancer identified by 'lb_id' """
