@@ -359,7 +359,7 @@ class lbaasDriver:
         error = 0
         error_list = []
         if len(expected_nodes) != len(system_nodes):
-            error_list.append("ERROR: Node mismatch between request and api server detail: %s || %s" %(nodes, system_nodes))
+            error_list.append("ERROR: Node mismatch between request and api server detail: %s || %s" %(expected_nodes, system_nodes))
             error = 1
         for node in expected_nodes:
             match = 0
