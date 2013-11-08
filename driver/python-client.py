@@ -149,9 +149,6 @@ class lbaasDriver:
             cmd += ' --vip=%s' %vip
         status, output = self.execute_cmd(cmd)
         data = output.split('\n')
-        print output
-        print data
-        print '@'*80
         if len(data) >= 3 and algorithm in self.supported_algorithms:
             data = data[3]
             lb_data = data.split('|')
@@ -190,6 +187,12 @@ class lbaasDriver:
             cmd = self.base_cmd + ' delete --id=%s' %lb_id
             status, output = self.execute_cmd(cmd)
             return output
+
+    def delete_lb_node(self, lb_id, node_id):
+        """ Remove specified node_id from lb_id """
+        cmd = self.base_cmd + ' node-delete --id=%s --nodeid=%s" %(lb_id, node_id)
+        status, output = self.execute_cmd(cmd)
+        return status
 
     def list_lbs(self):
         """ List all loadbalancers for the given auth token / tenant id """
