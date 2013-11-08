@@ -34,6 +34,7 @@ from tests.monitor_stage1 import testMonitorStage1
 from tests.loadbalancer_siege import testLoadBalancerSiege
 from tests.loadbalancer_apache import testLoadBalancerApache
 from tests.loadbalancer_cleanup import testLoadBalancerCleanup
+from tests.selfheal import testRecreateLoadBalancer
 
 def load_lbaas_test_suite(args, variant_module, logging, driver):
     testloader = unittest.TestLoader()
@@ -331,6 +332,25 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                                                    , test_variant['node_counts']
                                                    , test_variant['pages']
                                                    , expected_status = expected_status))
+
+    #####################
+    # selfheal variants
+    #####################
+
+    testnames = testloader.getTestCaseNames(testRecreateLoadBalancer)
+    for test_name in testnames:
+        if 'selfheal_variants' in test_inputs:
+            for test_variant in test_inputs['selfheal_variants']:
+              if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
+                if 'expected_status' in test_variant:
+                    expected_status = test_variant['expected_status']
+                else:
+                    expected_status = args.successstatuscode 
+                suite.addTest(testRecreateLoadBalancer( test_variant['description'], args, logging, driver
+                                                    , test_name
+                                                    , test_variant['name']
+                                                    , test_inputs['default_values']['default_nodes']
+                                                    , expected_status = expected_status))
 
 
     #########################

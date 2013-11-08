@@ -45,8 +45,8 @@ default_values:
     - address: "15.185.175.196"
       port: "80"
 
-lb_name_variants: 
+selfheal_variants: 
     - description: 'test_iter1'
-      name: 'lbaas-canary1'
+      name: 'lbaas-healer1'
 
 
