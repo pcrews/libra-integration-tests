@@ -126,7 +126,7 @@ class lbaasDriver:
         """
 
         lb_id = None
-        ip_addr = None
+        lb_addr = None
         tcp_https_flag = False
         cmd = self.base_cmd + ' create --name="%s"' %name
         for node in nodes:
@@ -148,6 +148,9 @@ class lbaasDriver:
             cmd += ' --vip=%s' %vip
         status, output = self.execute_cmd(cmd)
         data = output.split('\n')
+        print output
+        print data
+        print '@'*80
         if len(data) >= 3 and algorithm in self.supported_algorithms:
             data = data[3]
             lb_data = data.split('|')
