@@ -84,7 +84,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         self.logging.info("Status: %s" %status)
         self.logging.info("Output: %s" %output)
         data = ast.literal_eval(output)
-        nova_name = data[self.args.lbaasdbserver]['results'][0].strip()
+        nova_name = data[self.args.lbaasdbserver]['results'][0][0].strip()
         self.logging.info("Loadbalancer: %s nova name: %s" %(self.lb_id, nova_name))
 
 
