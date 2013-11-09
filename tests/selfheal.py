@@ -111,7 +111,9 @@ class testRecreateLoadBalancer(unittest.TestCase):
         self.logging.info("Command: %s" %cmd)
         self.logging.info("Status: %s" %status)
         self.logging.info("Output: %s" %output)
-        self.logging.info("Sleeping 30 seconds...")
+        self.logging.info("Sleeping 30 seconds for nova delete to take effect...")
+        # TODO: add in nova list verification of no node (?)
+        # TODO: test the database for the device?
         time.sleep(30)
         time_wait = 1
         attempts_remain = 100
