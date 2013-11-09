@@ -174,6 +174,12 @@ parser.add_argument( '--swift_basepath'
                    , default = 'libra_test_logs'
                    , help = 'username for object storage (for haproxy log archiving).  Defaults to lbaas_tenant_name'
                    )
+parser.add_argument( '--lbaas_db'
+                   , action = 'store'
+                   , dest = 'lbaasdbserver'
+                   , default = None
+                   , help = 'The server name for the lbaas database (used in higher-level testing)'
+                   )
 parser.add_argument( '--cleanup_off'
                    , action = 'store_true'
                    , dest = 'cleanupoff'

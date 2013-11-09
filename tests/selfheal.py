@@ -74,6 +74,13 @@ class testRecreateLoadBalancer(unittest.TestCase):
         self.logging.info('load balancer id: %s' %self.lb_id)
         self.logging.info('load balancer ip addr: %s' %self.lb_addr)
         lbaas_utils.validate_loadBalancer(self)
+
+        # get the device id for our loadbalancer
+        cmd = 'salt \%s mysql.query lbaas "SELECT devices.name from devices JOIN loadbalancer_devices on devices.id = loadbalancer_devices.device WHERE loadbalancers_devices.loadbalancer=%s"' %(self.args.lbaasdbserver, self.lb_id)
+        status, output = commands.getstatusoutput(cmd)
+        self.logging.info("Command: %s" %cmd)
+        self.logging.info("Status: %s" %status)
+        self.logging.info("Output: %s" %output)
         
     def tearDown(self):
         ##########################
