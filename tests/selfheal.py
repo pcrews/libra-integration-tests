@@ -107,7 +107,37 @@ class testRecreateLoadBalancer(unittest.TestCase):
         self.logging.info("Nova id for lb: %s: %s" %(self.lb_id, nova_id))
         self.logging.info("Deleting nova node for lb: %s..." %(self.lb_id))
         cmd ='nova --insecure --os-username=%s --os-tenant-id=%s --os-region-name=%s --os-password=%s --os-auth-url=%s delete %s' %(self.args.nodesusername, self.args.nodestenantid, self.args.nodesregionname, self.args.nodespassword, self.args.nodesauthurl, nova_id)
-        self.logging.info(cmd)
+        status, output = commands.getstatusoutput(cmd)
+        self.logging.info("Command: %s" %cmd)
+        self.logging.info("Status: %s" %status)
+        self.logging.info("Output: %s" %output)
+
+        time_wait = 1
+        attempts_remain = 100
+        max_time = 300
+        lb_ready = False
+        start_time = time.time()
+        while not lb_ready and attempts_remain and ((time.time()-start_time) <= max_time):
+                try:
+                    if attempts_remain%10 ==0:
+                        self.logging.info("Attempts remaining: %d" %attempts_remain)
+                    lb_url = 'http://%s' %(self.lb_addr)
+                    result = requests.get(lb_url, verify= False)
+                    if result:
+                        lb_ready=True
+                except Exception, e:
+                    if not suspected_bad:
+                        self.logging.info(Exception)
+                        self.logging.info(e)
+                        self.logging.info("loadbalancer id: %s not yet ready.  Suspected bad haproxy device" %(self.lb_id))
+                        self.logging.info("Will try up to: %d times for the loadbalancer to be functional (~10 minutes), please be patient..." %(attempts_remain*time_wait))
+                        suspected_bad = True
+                        bad_count += 1
+                    time.sleep(time_wait)
+                    attempts_remain -= 1
+            stop_time = time.time()
+            expended_time = stop_time - start_time
+            self.logging.info("Time for loadbalancer: %s to be ready: %f" %(self.lb_id, expended_time)
 
 
     def tearDown(self):
