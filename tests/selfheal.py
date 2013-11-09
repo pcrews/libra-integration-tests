@@ -91,7 +91,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         status, output = commands.getstatusoutput(cmd)
         self.logging.info("Command: %s" %cmd)
         self.logging.info("Status: %s" %status)
-        self.logging.info("Output: %s" %output)
+        #self.logging.info("Output: %s" %output)
         node_list = output.split('\n')[3:-1]
         for node_line in node_list:
             node_data = node_line.split('|')
@@ -100,10 +100,14 @@ class testRecreateLoadBalancer(unittest.TestCase):
             status =  node_data[3].strip()
             task_state = node_data[4].strip()
             if name == nova_name:
+                self.logging.info(node_line)
                 nova_id = id
                 break
 
         self.logging.info("Nova id for lb: %s: %s" %(self.lb_id, nova_id))
+        self.logging.info("Deleting nova node for lb: %s..." %(self.lb_id))
+        cmd ='nova --insecure --os-username=%s --os-tenant-id=%s --os-region-name=%s --os-password=%s --os-auth-url=%s delete %s' %(self.args.nodesusername, self.args.nodestenantid, self.args.nodesregionname, self.args.nodespassword, self.args.nodesauthurl, nova_id)
+        self.logging.info(cmd)
 
 
     def tearDown(self):
