@@ -142,6 +142,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         stop_time = time.time()
         expended_time = stop_time - start_time
         self.logging.info("Time for loadbalancer: %s to be ready: %f" %(self.lb_id, expended_time))
+        self.assertTrue(lb_ready, msg = "WARNING: loadbalancer %s not ready in %f seconds" %(self.lb_id, expended_time))
 
 
     def tearDown(self):
