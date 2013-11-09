@@ -129,6 +129,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
                         self.logging.info("Time waited: %f" %(time.time() - start_time))
                     lb_url = 'http://%s' %(self.lb_addr)
                     result = requests.get(lb_url, verify= False)
+                    result.connection.close()
                     if result:
                         lb_ready=True
                 except Exception, e:
