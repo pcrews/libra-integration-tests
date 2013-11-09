@@ -133,7 +133,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
                         suspected_bad = True
                         self.logging.info(Exception)
                         self.logging.info(e)
-                        self.logging.info("Will try up to: %d times for the loadbalancer to be functional (~10 minutes), please be patient..." %(attempts_remain*time_wait))
+                        self.logging.info("Will try up to: %d times for the loadbalancer to be functional (~%d minutes), please be patient..." %(attempts_remain*time_wait, (max_time/60)))
                     time.sleep(time_wait)
                     attempts_remain -= 1
         stop_time = time.time()
