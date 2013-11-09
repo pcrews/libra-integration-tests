@@ -180,6 +180,36 @@ parser.add_argument( '--lbaas_db'
                    , default = None
                    , help = 'The server name for the lbaas database (used in higher-level testing)'
                    )
+parser.add_argument( '--nodes_username'
+                   , action = 'store'
+                   , dest ='nodesusername'
+                   , default = None
+                   , help = 'Username owning the haproxy devices (for advanced testing)'
+                   )
+parser.add_argument( '--nodes_password'
+                   , action = 'store'
+                   , dest = 'nodespassword'
+                   , default = None
+                   , help = 'Password for account owning the haproxy devices (for advanced testing)'
+                   )
+parser.add_argument( '--nodes_tenant_id'
+                   , action = 'store'
+                   , dest = 'nodestenantid'
+                   , default = None
+                   , help = 'tenant_id owning the haproxy devices (for advanced testing)'
+                   )
+parser.add_argument( '--nodes_region_name'
+                   , action = 'store'
+                   , dest = 'nodesregionname'
+                   , default = None
+                   , help = 'region for the haproxy devices (for advanced testing)'
+                   )
+parser.add_argument( '--nodes_auth_url'
+                   , action = 'store'
+                   , dest = 'nodesauthurl'
+                   , default = 'https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/tokens'
+                   , help = 'account auth url (keystone endpoint) for the haproxy devices (for advanced testing)'
+                   )
 parser.add_argument( '--cleanup_off'
                    , action = 'store_true'
                    , dest = 'cleanupoff'
