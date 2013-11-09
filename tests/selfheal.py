@@ -124,6 +124,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
                 try:
                     if attempts_remain%10 ==0:
                         self.logging.info("Attempts remaining: %d" %attempts_remain)
+                        self.logging.info("Time waited: %f" %(time.time() - start_time))
                     lb_url = 'http://%s' %(self.lb_addr)
                     result = requests.get(lb_url, verify= False)
                     if result:
