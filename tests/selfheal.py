@@ -117,6 +117,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         attempts_remain = 100
         max_time = 300
         lb_ready = False
+        suspected_bad = False
         start_time = time.time()
         while not lb_ready and attempts_remain and ((time.time()-start_time) <= max_time):
                 try:
@@ -128,12 +129,10 @@ class testRecreateLoadBalancer(unittest.TestCase):
                         lb_ready=True
                 except Exception, e:
                     if not suspected_bad:
+                        suspected_bad = True
                         self.logging.info(Exception)
                         self.logging.info(e)
-                        self.logging.info("loadbalancer id: %s not yet ready.  Suspected bad haproxy device" %(self.lb_id))
                         self.logging.info("Will try up to: %d times for the loadbalancer to be functional (~10 minutes), please be patient..." %(attempts_remain*time_wait))
-                        suspected_bad = True
-                        bad_count += 1
                     time.sleep(time_wait)
                     attempts_remain -= 1
         stop_time = time.time()
