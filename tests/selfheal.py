@@ -135,9 +135,9 @@ class testRecreateLoadBalancer(unittest.TestCase):
                         bad_count += 1
                     time.sleep(time_wait)
                     attempts_remain -= 1
-            stop_time = time.time()
-            expended_time = stop_time - start_time
-            self.logging.info("Time for loadbalancer: %s to be ready: %f" %(self.lb_id, expended_time)
+        stop_time = time.time()
+        expended_time = stop_time - start_time
+        self.logging.info("Time for loadbalancer: %s to be ready: %f" %(self.lb_id, expended_time)
 
 
     def tearDown(self):
