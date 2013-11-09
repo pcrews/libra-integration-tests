@@ -19,8 +19,10 @@
 
 import ast
 import time
+import commands
 import unittest
 import requests
+
 import lbaas_utils
 
 class testRecreateLoadBalancer(unittest.TestCase):
