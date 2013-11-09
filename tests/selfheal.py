@@ -111,7 +111,8 @@ class testRecreateLoadBalancer(unittest.TestCase):
         self.logging.info("Command: %s" %cmd)
         self.logging.info("Status: %s" %status)
         self.logging.info("Output: %s" %output)
-
+        self.logging.info("Sleeping 30 seconds...")
+        time.sleep(30)
         time_wait = 1
         attempts_remain = 100
         max_time = 300
