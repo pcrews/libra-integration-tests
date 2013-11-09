@@ -119,6 +119,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         lb_ready = False
         suspected_bad = False
         start_time = time.time()
+        self.logging.info("Testing loadbalancer, expecting no results / will wait for repair...")
         while not lb_ready and attempts_remain and ((time.time()-start_time) <= max_time):
                 try:
                     if attempts_remain%10 ==0:
