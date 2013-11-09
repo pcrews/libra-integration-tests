@@ -78,7 +78,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         lbaas_utils.validate_loadBalancer(self)
 
         # get the device id for our loadbalancer
-        cmd = 'salt \%s mysql.query lbaas "SELECT devices.name from devices JOIN loadbalancer_devices on devices.id = loadbalancer_devices.device WHERE loadbalancers_devices.loadbalancer=%s"' %(self.args.lbaasdbserver, self.lb_id)
+        cmd = 'salt \%s mysql.query lbaas "SELECT devices.name from devices JOIN loadbalancers_devices on devices.id = loadbalancers_devices.device WHERE loadbalancers_devices.loadbalancer=%s"' %(self.args.lbaasdbserver, self.lb_id)
         status, output = commands.getstatusoutput(cmd)
         self.logging.info("Command: %s" %cmd)
         self.logging.info("Status: %s" %status)
