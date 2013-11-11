@@ -90,7 +90,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
                 self.logging.info(node_line)
                 nova_id = id
                 break
-        return nova_name
+        return nova_id
 
     def setUp(self):
         ###########################
