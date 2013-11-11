@@ -98,6 +98,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         status, output = commands.getstatusoutput(cmd)
         self.logging.info("Command: %s" %cmd)
         self.logging.info("Status: %s" %status)
+        self.logging.info("Output: %s" %output)
 
     def setUp(self):
         ###########################
