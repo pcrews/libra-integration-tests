@@ -55,29 +55,12 @@ class testRecreateLoadBalancer(unittest.TestCase):
         msg_data.append('')
         return '\n'.join(msg_data)
 
-    def setUp(self):
-        ###########################
-        # test create load balancer
-        ###########################
-        print ''
-        self.logging.info("Setting up for testcase:")
-        report_values = ['test_description','lb_name', 'nodes', 'expected_status']
-        for report_value in report_values:
-            self.logging.info("  - %s: %s" %(report_value, getattr(self,report_value)))
-        if self.args.verbose:
-            self.logging.info("name: %s" %self.lb_name)
-            self.logging.info("nodes: %s" %self.nodes)    
+    def grep_for_info(self, lb_id=None, device_name=None):
+        cmd = 'sudo salt \%s cmd.run "cat /var/log/libra/admin*log | grep %s"'
+        cmd = 'sudo salt \%s cmd.run "cat /var/log/libra/pool*log | grep %s"'
+        return
 
-    def test_createLoadBalancer(self):
-        """ test creation of loadbalancers for libra
-        """
-        # Create our loadbalancer
-        self.create_result, self.actual_status, self.lb_id, self.lb_addr = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm, self.bad_statuses)
-        self.logging.info('load balancer id: %s' %self.lb_id)
-        self.logging.info('load balancer ip addr: %s' %self.lb_addr)
-        lbaas_utils.validate_loadBalancer(self)
-
-        # get the device id for our loadbalancer
+    def get_nova_name(self):
         cmd = 'salt --output=pprint \%s mysql.query lbaas "SELECT devices.name from devices JOIN loadbalancers_devices on devices.id = loadbalancers_devices.device WHERE loadbalancers_devices.loadbalancer=%s"' %(self.args.lbaasdbserver, self.lb_id)
         status, output = commands.getstatusoutput(cmd)
         self.logging.info("Command: %s" %cmd)
@@ -86,7 +69,9 @@ class testRecreateLoadBalancer(unittest.TestCase):
         data = ast.literal_eval(output)
         nova_name = data[self.args.lbaasdbserver]['results'][0][0].strip()
         self.logging.info("Loadbalancer: %s nova name: %s" %(self.lb_id, nova_name))
+        return nova_name
 
+    def get_nova_id(self):
         cmd ='nova --insecure --os-username=%s --os-tenant-id=%s --os-region-name=%s --os-password=%s --os-auth-url=%s list' %(self.args.nodesusername, self.args.nodestenantid, self.args.nodesregionname, self.args.nodespassword, self.args.nodesauthurl)
         status, output = commands.getstatusoutput(cmd)
         self.logging.info("Command: %s" %cmd)
@@ -103,6 +88,35 @@ class testRecreateLoadBalancer(unittest.TestCase):
                 self.logging.info(node_line)
                 nova_id = id
                 break
+        return nova_name
+
+    def setUp(self):
+        ###########################
+        # test healing a load balancer
+        ###########################
+        print ''
+        self.logging.info("Setting up for testcase:")
+        report_values = ['test_description','lb_name', 'nodes', 'expected_status']
+        for report_value in report_values:
+            self.logging.info("  - %s: %s" %(report_value, getattr(self,report_value)))
+        if self.args.verbose:
+            self.logging.info("name: %s" %self.lb_name)
+            self.logging.info("nodes: %s" %self.nodes)    
+
+    def test_healLoadBalancer(self):
+        """ test creation of loadbalancers for libra
+        """
+        # Create our loadbalancer
+        self.create_result, self.actual_status, self.lb_id, self.lb_addr = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm, self.bad_statuses)
+        self.logging.info('load balancer id: %s' %self.lb_id)
+        self.logging.info('load balancer ip addr: %s' %self.lb_addr)
+        lbaas_utils.validate_loadBalancer(self)
+
+        # get the nova name for our loadbalancer
+        nova_name = self.get_nova_name()
+
+        # get nova id
+        nova_id = self.get_nova_id(nova_name)
 
         self.logging.info("Nova id for lb: %s: %s" %(self.lb_id, nova_id))
         self.logging.info("Deleting nova node for lb: %s..." %(self.lb_id))
@@ -127,6 +141,11 @@ class testRecreateLoadBalancer(unittest.TestCase):
                     if attempts_remain%10 ==0:
                         self.logging.info("Attempts remaining: %d" %attempts_remain)
                         self.logging.info("Time waited: %f" %(time.time() - start_time))
+                        # list new nova name
+                        new_nova_name = self.get_nova_name()
+                        # get new nova id / check floating ip
+                        new_nova_id = self.get_nova_id(new_nova_name)
+                        # check floating ip
                     lb_url = 'http://%s' %(self.lb_addr)
                     result = requests.get(lb_url, verify= False)
                     result.connection.close()
