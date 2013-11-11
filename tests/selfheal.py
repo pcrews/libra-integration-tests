@@ -92,6 +92,13 @@ class testRecreateLoadBalancer(unittest.TestCase):
                 break
         return nova_id
 
+    def check_floating_ip(self):
+        self.logging.info("Nova info for floating ip: %s, lb_id: %s..." %(self.lb_addr, self.lb_id))
+        cmd ='nova --insecure --os-username=%s --os-tenant-id=%s --os-region-name=%s --os-password=%s --os-auth-url=%s floating-ip-list | grep %s' %(self.args.nodesusername, self.args.nodestenantid, self.args.nodesregionname, self.args.nodespassword, self.args.nodesauthurl, self.lb_addr)
+        status, output = commands.getstatusoutput(cmd)
+        self.logging.info("Command: %s" %cmd)
+        self.logging.info("Status: %s" %status)
+
     def setUp(self):
         ###########################
         # test healing a load balancer
@@ -119,6 +126,9 @@ class testRecreateLoadBalancer(unittest.TestCase):
 
         # get nova id
         nova_id = self.get_nova_id(nova_name)
+
+        # check floating_ip
+        self.check_floating_ip()
 
         self.logging.info("Nova id for lb: %s: %s" %(self.lb_id, nova_id))
         self.logging.info("Deleting nova node for lb: %s..." %(self.lb_id))
@@ -148,6 +158,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
                         # get new nova id / check floating ip
                         new_nova_id = self.get_nova_id(new_nova_name)
                         # check floating ip
+                        self.check_floating_ip()
                     lb_url = 'http://%s' %(self.lb_addr)
                     result = requests.get(lb_url, verify= False)
                     result.connection.close()
@@ -165,7 +176,6 @@ class testRecreateLoadBalancer(unittest.TestCase):
         expended_time = stop_time - start_time
         self.logging.info("Time for loadbalancer: %s to be ready: %f" %(self.lb_id, expended_time))
         self.assertTrue(lb_ready, msg = "WARNING: loadbalancer %s not ready in %f seconds" %(self.lb_id, expended_time))
-
 
     def tearDown(self):
         ##########################
