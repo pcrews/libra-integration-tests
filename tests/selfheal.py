@@ -152,6 +152,8 @@ class testRecreateLoadBalancer(unittest.TestCase):
         while not lb_ready and attempts_remain and ((time.time()-start_time) <= max_time):
                 try:
                     if attempts_remain%5 ==0:
+                        self.logging.info("-"*80)
+                        self.logging.info("Status check:")
                         self.logging.info("Attempts remaining: %d" %attempts_remain)
                         self.logging.info("Time waited: %f" %(time.time() - start_time))
                         # list new nova name
@@ -160,6 +162,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
                         new_nova_id = self.get_nova_id(new_nova_name)
                         # check floating ip
                         self.check_floating_ip()
+                        self.logging.info("-"*80)
                     lb_url = 'http://%s' %(self.lb_addr)
                     result = requests.get(lb_url, verify= False)
                     result.connection.close()
