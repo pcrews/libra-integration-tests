@@ -147,7 +147,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         time.sleep(30)
         time_wait = 1
         attempts_remain = 100
-        max_time = 3000
+        max_time = 300
         lb_ready = False
         suspected_bad = False
         start_time = time.time()
