@@ -61,6 +61,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         return
 
     def get_nova_name(self):
+        self.logging.info("Getting nova id for loadbalancer: %s..." %(self.lb_id))
         cmd = 'salt --output=pprint \%s mysql.query lbaas "SELECT devices.name from devices JOIN loadbalancers_devices on devices.id = loadbalancers_devices.device WHERE loadbalancers_devices.loadbalancer=%s"' %(self.args.lbaasdbserver, self.lb_id)
         status, output = commands.getstatusoutput(cmd)
         self.logging.info("Command: %s" %cmd)
@@ -71,7 +72,8 @@ class testRecreateLoadBalancer(unittest.TestCase):
         self.logging.info("Loadbalancer: %s nova name: %s" %(self.lb_id, nova_name))
         return nova_name
 
-    def get_nova_id(self):
+    def get_nova_id(self, nova_name):
+        self.logging.info("Getting nova id for nova node: %s..." %(nova_name))
         cmd ='nova --insecure --os-username=%s --os-tenant-id=%s --os-region-name=%s --os-password=%s --os-auth-url=%s list' %(self.args.nodesusername, self.args.nodestenantid, self.args.nodesregionname, self.args.nodespassword, self.args.nodesauthurl)
         status, output = commands.getstatusoutput(cmd)
         self.logging.info("Command: %s" %cmd)
