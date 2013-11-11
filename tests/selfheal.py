@@ -167,6 +167,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
                         # check floating ip
                         self.check_floating_ip()
                         self.logging.info("-"*80)
+                        self.logging.info(" ")
                     lb_url = 'http://%s' %(self.lb_addr)
                     result = requests.get(lb_url, verify= False)
                     result.connection.close()
