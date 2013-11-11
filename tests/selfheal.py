@@ -140,7 +140,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         self.logging.info("Testing loadbalancer, expecting no results / will wait for repair...")
         while not lb_ready and attempts_remain and ((time.time()-start_time) <= max_time):
                 try:
-                    if attempts_remain%10 ==0:
+                    if attempts_remain%5 ==0:
                         self.logging.info("Attempts remaining: %d" %attempts_remain)
                         self.logging.info("Time waited: %f" %(time.time() - start_time))
                         # list new nova name
