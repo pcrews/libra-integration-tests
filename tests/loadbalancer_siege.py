@@ -126,7 +126,9 @@ class testLoadBalancerSiege(unittest.TestCase):
                     self.assertEqual(self.actual_status, '202', msg = "Adding nodes to loadbalancer %s failed with status: %s" %(self.lb_id, self.actual_status))
             # now we run siege!
             self.logging.info("Beginning siege tests...")
-            for page_file, page_desc in self.pages:
+            for page_set in self.pages:
+                page_file = page_set['path']
+                page_desc = page_set['description']
                 page_path = os.path.join(self.lb_addr, page_file)
                 self.logging.info("Testing page: %s, %s" %(page_path, page_desc))
                 self.logging.info("Testing with %s nodes" %node_count)
