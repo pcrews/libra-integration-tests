@@ -130,7 +130,7 @@ class testLoadBalancerSiege(unittest.TestCase):
                 page_path = os.path.join(self.lb_addr, page_file)
                 self.logging.info("Testing page: %s, %s" %(page_path, page_desc))
                 self.logging.info("Testing with %s nodes" %node_count)
-                cmd = 'siege http://%s -d1 -%s -c%s -q' %(page_path, self.requests, self.concurrency)
+                cmd = 'siege http://%s -d1 -r%s -c%s -q -b' %(page_path, self.requests, self.concurrency)
                 self.logging.info("test command: %s" %cmd)
                 status, output = commands.getstatusoutput(cmd)
                 self.logging.info("status: %s" %status)
