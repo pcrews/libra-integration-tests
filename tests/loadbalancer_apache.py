@@ -98,7 +98,7 @@ class testLoadBalancerApache(unittest.TestCase):
             self.logging.info("nodes: %s" %self.nodes)    
 
     def test_loadBalancerFuncs(self):
-        """ test libra loadbalancers via siege
+        """ test libra loadbalancers via apachebench
         """
         # Create our loadbalancer w/ one node to start
         self.create_result, self.actual_status, self.lb_id, self.lb_addr = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm, self.bad_statuses)

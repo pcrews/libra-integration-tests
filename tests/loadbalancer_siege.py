@@ -29,8 +29,19 @@ import lbaas_utils
 
 class testLoadBalancerSiege(unittest.TestCase):
 
-    def __init__( self, test_description, args, logging, driver
-                , testname, lb_name, nodes, lb_id=None
+    def __init__( self
+                , test_description
+                , args
+                , logging
+                , driver
+                , testname
+                , lb_name
+                , nodes
+                , concurrency=100
+                , requests=100000
+                , node_counts=[1,3,5,10]
+                , pages = None
+                , lb_id=None
                 , algorithm = None
                 , expected_status=202):
         super(testLoadBalancerSiege, self).__init__(testname)
@@ -46,6 +57,10 @@ class testLoadBalancerSiege(unittest.TestCase):
         else:
             self.lb_name = lb_name
         self.node_pool = nodes
+        self.concurrency = concurrency
+        self.requests = requests
+        self.node_counts = node_counts
+        self.pages = pages
         self.main_lb_id = None
         # we have a pool of N nodes we can use, but set initial set to just 1 backend node
         self.nodes = [self.node_pool[0]]
@@ -55,7 +70,14 @@ class testLoadBalancerSiege(unittest.TestCase):
 
     def report_info(self):
         """ function for dumping info on test failures """
-        report_values = ['test_description','lb_name', 'nodes', 'expected_status']
+        report_values = [ 'test_description'
+                        , 'lb_name'
+                        , 'nodes'
+                        , 'expected_status'
+                        , 'node_counts'
+                        , 'pages'
+                        , 'concurrency'
+                        , 'requests']
         msg_data = ['']
         for report_value in report_values:
             msg_data.append("%s: %s" %(report_value, getattr(self,report_value)))
@@ -85,7 +107,7 @@ class testLoadBalancerSiege(unittest.TestCase):
         lbaas_utils.validate_loadBalancer(self)
 
         # iterate through backend node sets and run siege
-        for node_count in [1,3,5,10]:
+        for node_count in self.node_counts:
             self.logging.info("Testing with %s nodes" %node_count)
             self.logging.info("*"*80)
             if node_count != 1:
@@ -104,25 +126,11 @@ class testLoadBalancerSiege(unittest.TestCase):
                     self.assertEqual(self.actual_status, '202', msg = "Adding nodes to loadbalancer %s failed with status: %s" %(self.lb_id, self.actual_status))
             # now we run siege!
             self.logging.info("Beginning siege tests...")
-            #pages = [ ('cgi-bin/1k-random.py','1k randomly generated text')
-                     #, ('1k-static','1k static data')
-                     #, ('starry-night-vincent-van-go1.jpg','jpeg file')
-            pages = [ ('', 'basic text page')
-                    , ('earth11k.jpg', '11k jpeg')
-                    , ('earth15kb.jpg', '15k jpeg')
-                    #, ('earth1886kb.jpg', '1886k jpeg')
-                    #, ('earth215kb.jpg', '215k jpeg')
-                    , ('earth2kb.jpg', '2k jpeg')
-                    #, ('earth579kb.jpg', '579k jpeg')
-                    , ('earth5kb.jpg', '5k jpeg')
-                    , ('earth81kb.jpg', '81k jpeg')
-                    #, ('csj.mp4','mp4 video')
-                    ]
-            for page_file, page_desc in pages:
+            for page_file, page_desc in self.pages:
                 page_path = os.path.join(self.lb_addr, page_file)
                 self.logging.info("Testing page: %s, %s" %(page_path, page_desc))
                 self.logging.info("Testing with %s nodes" %node_count)
-                cmd = 'siege http://%s -d1 -r100 -c100 -q' %(page_path)
+                cmd = 'siege http://%s -d1 -%s -c%s -q' %(page_path, self.requests, self.concurrency)
                 self.logging.info("test command: %s" %cmd)
                 status, output = commands.getstatusoutput(cmd)
                 self.logging.info("status: %s" %status)
