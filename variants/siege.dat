@@ -49,7 +49,7 @@ default_values:
 siege_variants:
     - description: 'stress / perf testing with siege!'
       name: 'imma_stressed_out_test_loadbalancer'
-      concurrency: 300
+      concurrency: 512
       requests:  50000
       node_counts:
         - 1
@@ -68,12 +68,12 @@ siege_variants:
         #  path: 'earth1886kb.jpg'
         #- description: '215k jpeg'
         #  path: 'earth215kb.jpg'
-        #- description: '2k jpeg'
-        #  path: 'earth2kb.jpg'
+        - description: '2k jpeg'
+          path: 'earth2kb.jpg'
         #- description: '579k jpeg'
         #  path: 'earth579kb.jpg'
-        #- description: '5k jpeg'
-        #  path: 'earth5kb.jpg'
+        - description: '5k jpeg'
+          path: 'earth5kb.jpg'
         #- description: '81k jpeg'
         #  path: 'earth81kb.jpg'
         #- description: '1k randomly generated text'
