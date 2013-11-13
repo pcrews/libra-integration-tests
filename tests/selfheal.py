@@ -72,6 +72,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         nova_name = data[self.args.lbaasdbserver]['results'][0][0].strip()
         self.logging.info("Loadbalancer: %s nova name: %s" %(self.lb_id, nova_name))
         self.logging.info("")
+        self.logging.info("")
         return nova_name
 
     def get_nova_id(self, nova_name):
@@ -94,6 +95,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
                 nova_id = id
                 break
         self.logging.info("")
+        self.logging.info("")
         return nova_id
 
     def check_floating_ip(self):
@@ -104,6 +106,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         self.logging.info("Command: %s" %cmd)
         self.logging.info("Status: %s" %status)
         self.logging.info("Output: %s" %output)
+        self.logging.info("")
         self.logging.info("")
 
     def setUp(self):
