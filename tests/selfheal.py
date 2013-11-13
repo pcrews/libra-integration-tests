@@ -132,17 +132,17 @@ class testRecreateLoadBalancer(unittest.TestCase):
         lbaas_utils.validate_loadBalancer(self)
 
         # get the nova name for our loadbalancer
-        nova_name = self.get_nova_name()
+        orig_nova_name = self.get_nova_name()
 
         # get nova id
-        nova_id = self.get_nova_id(nova_name)
+        orig_nova_id = self.get_nova_id(orig_nova_name)
 
         # check floating_ip
         self.check_floating_ip()
 
-        self.logging.info("Nova id for lb: %s: %s" %(self.lb_id, nova_id))
+        self.logging.info("Nova id for lb: %s: %s" %(self.lb_id, orig_nova_id))
         self.logging.info("Deleting nova node for lb: %s..." %(self.lb_id))
-        cmd ='nova --insecure --os-username=%s --os-tenant-id=%s --os-region-name=%s --os-password=%s --os-auth-url=%s delete %s' %(self.args.nodesusername, self.args.nodestenantid, self.args.nodesregionname, self.args.nodespassword, self.args.nodesauthurl, nova_id)
+        cmd ='nova --insecure --os-username=%s --os-tenant-id=%s --os-region-name=%s --os-password=%s --os-auth-url=%s delete %s' %(self.args.nodesusername, self.args.nodestenantid, self.args.nodesregionname, self.args.nodespassword, self.args.nodesauthurl, orig_nova_id)
         status, output = commands.getstatusoutput(cmd)
         self.logging.info("Command: %s" %cmd)
         self.logging.info("Status: %s" %status)
@@ -180,7 +180,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
                     if result:
                         self.logging.info("Successful http request!")
                         self.logging.info(result.status_code)
-                        self.logging.info(result.text)
+                        #self.logging.info(result.text)
                         lb_ready=True
                 except Exception, e:
                     if not suspected_bad:
@@ -198,8 +198,10 @@ class testRecreateLoadBalancer(unittest.TestCase):
         self.logging.info("New nova attributes:")
         # list new nova name
         new_nova_name = self.get_nova_name()
+        self.logging.info("Original nova name: %s" %orig_nova_name)
         # get new nova id / check floating ip
         new_nova_id = self.get_nova_id(new_nova_name)
+        self.logging.info("Original nova id: %s" %orig_nova_id)
         # check floating ip
         self.check_floating_ip()
         self.logging.info("-"*80)
