@@ -134,7 +134,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
 
         # wait a bit if we want to show off
         if self.args.demowaittime:
-            self.logging.info("Sleeping %s seconds for demo / manual testing")
+            self.logging.info("Sleeping %s seconds for demo / manual testing" %self.args.demowaittime)
             time.sleep(self.args.demowaittime)
 
         # get the nova name for our loadbalancer
