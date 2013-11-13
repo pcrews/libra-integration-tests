@@ -71,6 +71,7 @@ class testLoadBalancerStats(unittest.TestCase):
         """
         iterations = []
         bad_iterations = []
+        failed_iterations = []
         bad_count = 0
         fail_count = 0
         test_iterations=100
@@ -112,9 +113,13 @@ class testLoadBalancerStats(unittest.TestCase):
             stop_time = time.time()
             expended_time = stop_time - start_time
             self.logging.info("Time for loadbalancer: %s to be ready: %f" %(self.lb_id, expended_time))
-            iterations.append(expended_time)
             if suspected_bad:
-                bad_iterations.append(expended_time)
+                if ((expended_time) <= max_time):
+                    bad_iterations.append(expended_time)
+                else:
+                    failed_iterations.append(expended_time)
+            else:
+                iterations.append(expended_time)
             if attempts_remain and ((expended_time) <= max_time):
                 lbaas_utils.validate_loadBalancer(self)
             else:
@@ -150,6 +155,16 @@ class testLoadBalancerStats(unittest.TestCase):
         self.logging.info("Bad iterations average: %f" %(avg_value))
         self.logging.info("Bad iterations max: %f" %(max(bad_iterations)))
         self.logging.info("Bad iterations min: %f" %(min(bad_iterations)))
+
+        avg_value = 0
+        self.logging.info("Failed iterations: %d" %(len(failed_iterations)))
+        for iteration in failed_iterations:
+            avg_value += iteration
+        if avg_value:
+            avg_value = float(avg_value)/float(len(failed_iterations))
+        self.logging.info("Failed iterations average: %f" %(avg_value))
+        self.logging.info("Failed iterations max: %f" %(max(failed_iterations)))
+        self.logging.info("Failed iterations min: %f" %(min(failed_iterations)))
 
     def tearDown(self):
         ##########################
