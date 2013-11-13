@@ -143,6 +143,13 @@ parser.add_argument( '--active_wait_time'
                    , default = 120
                    , help = 'seconds to wait for a loadbalancer to achieve ACTIVE status'
                    )
+parser.add_argument( '--demo_wait_time'
+                   , action = 'store'
+                   , type=int
+                   , dest = 'demowaittime'
+                   , default = None
+                   , help = 'seconds to wait during certain tests for manual testing, validation, etc'
+                   )
 parser.add_argument( '--active_pause'
                    , action = 'store'
                    , type=int

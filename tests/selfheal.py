@@ -125,11 +125,17 @@ class testRecreateLoadBalancer(unittest.TestCase):
     def test_healLoadBalancer(self):
         """ test creation of loadbalancers for libra
         """
+        
         # Create our loadbalancer
         self.create_result, self.actual_status, self.lb_id, self.lb_addr = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm, self.bad_statuses)
         self.logging.info('load balancer id: %s' %self.lb_id)
         self.logging.info('load balancer ip addr: %s' %self.lb_addr)
         lbaas_utils.validate_loadBalancer(self)
+
+        # wait a bit if we want to show off
+        if self.args.demowaittime:
+            self.logging.info("Sleeping %s seconds for demo / manual testing")
+            time.sleep(self.args.demowaittime)
 
         # get the nova name for our loadbalancer
         orig_nova_name = self.get_nova_name()
@@ -207,6 +213,10 @@ class testRecreateLoadBalancer(unittest.TestCase):
         self.logging.info("-"*80)
         self.assertTrue(lb_ready, msg = "WARNING: loadbalancer %s not ready in %f seconds" %(self.lb_id, expended_time))
         lbaas_utils.validate_loadBalancer(self)
+        # wait a bit if we want to show off
+        if self.args.demowaittime:
+            self.logging.info("Sleeping %s seconds for demo / manual testing")
+            time.sleep(self.args.demowaittime)
 
     def tearDown(self):
         ##########################
