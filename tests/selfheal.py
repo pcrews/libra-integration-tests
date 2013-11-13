@@ -178,6 +178,9 @@ class testRecreateLoadBalancer(unittest.TestCase):
                     result = requests.get(lb_url, verify= False)
                     result.connection.close()
                     if result:
+                        self.logging.info("Successful http request!")
+                        self.logging.info(result.status_code)
+                        self.logging.info(result.text)
                         lb_ready=True
                 except Exception, e:
                     if not suspected_bad:
