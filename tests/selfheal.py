@@ -146,6 +146,8 @@ class testRecreateLoadBalancer(unittest.TestCase):
         # check floating_ip
         self.check_floating_ip()
 
+        # use our nova info and delete the haproxy vm
+        nova_sleep = 15
         self.logging.info("Nova id for lb: %s: %s" %(self.lb_id, orig_nova_id))
         self.logging.info("Deleting nova node for lb: %s..." %(self.lb_id))
         cmd ='nova --insecure --os-username=%s --os-tenant-id=%s --os-region-name=%s --os-password=%s --os-auth-url=%s delete %s' %(self.args.nodesusername, self.args.nodestenantid, self.args.nodesregionname, self.args.nodespassword, self.args.nodesauthurl, orig_nova_id)
@@ -153,10 +155,10 @@ class testRecreateLoadBalancer(unittest.TestCase):
         self.logging.info("Command: %s" %cmd)
         self.logging.info("Status: %s" %status)
         self.logging.info("Output: %s" %output)
-        self.logging.info("Sleeping 30 seconds for nova delete to take effect...")
+        self.logging.info("Sleeping %s seconds for nova delete to take effect..." %nova_sleep)
         # TODO: add in nova list verification of no node (?)
         # TODO: test the database for the device?
-        time.sleep(30)
+        time.sleep(nova_sleep)
         time_wait = 1
         attempts_remain = 100
         max_time = 600
@@ -215,7 +217,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         lbaas_utils.validate_loadBalancer(self)
         # wait a bit if we want to show off
         if self.args.demowaittime:
-            self.logging.info("Sleeping %s seconds for demo / manual testing")
+            self.logging.info("Sleeping %s seconds for demo / manual testing" %self.args.demowaittime)
             time.sleep(self.args.demowaittime)
 
     def tearDown(self):
