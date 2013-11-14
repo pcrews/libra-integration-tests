@@ -173,30 +173,29 @@ class testRecreateLoadBalancer(unittest.TestCase):
         start_time = time.time()
         self.logging.info("Testing loadbalancer, expecting no results / will wait for repair...")
         while not lb_ready and attempts_remain and ((time.time()-start_time) <= max_time):
-                try:
-                    if attempts_remain%5 ==0 and not first_run:
-                        self.logging.info("-"*80)
-                        self.logging.info("Status check:")
-                        self.logging.info("Attempts remaining: %d" %attempts_remain)
-                        self.logging.info("Time waited: %f" %(time.time() - start_time))
-                        # list new nova name
-                        new_nova_name = self.get_nova_name()
-                        # get new nova id / check floating ip
-                        new_nova_id = self.get_nova_id(new_nova_name)
-                        # check floating ip
-                        floating_ip_output = self.check_floating_ip()
-                        self.logging.info("-"*80)
-                        self.logging.info(" ")
-                    if new_nova_name != orig_nova_name and new_nova_name in floating_ip_output:
-                        self.logging.info("New nova node has been assigned loadbalancer: %s's floating ip" %(self.lb_id))
-                        lb_ready = True
-                    else:
-                        suspected_bad = True
-                        if first_run:
-                            self.logging.info("Will try up to: %d times for the loadbalancer to be functional (~%d minutes), please be patient..." %(attempts_remain*time_wait, (max_time/60)))
-                            first_run = False
-                    time.sleep(time_wait)
-                    attempts_remain -= 1
+            if attempts_remain%5 ==0 and not first_run:
+                self.logging.info("-"*80)
+                self.logging.info("Status check:")
+                self.logging.info("Attempts remaining: %d" %attempts_remain)
+                self.logging.info("Time waited: %f" %(time.time() - start_time))
+                # list new nova name
+                new_nova_name = self.get_nova_name()
+                # get new nova id / check floating ip
+                new_nova_id = self.get_nova_id(new_nova_name)
+                # check floating ip
+                floating_ip_output = self.check_floating_ip()
+                self.logging.info("-"*80)
+                self.logging.info(" ")
+            if new_nova_name != orig_nova_name and new_nova_name in floating_ip_output:
+                self.logging.info("New nova node has been assigned loadbalancer: %s's floating ip" %(self.lb_id))
+                lb_ready = True
+            else:
+                suspected_bad = True
+                if first_run:
+                    self.logging.info("Will try up to: %d times for the loadbalancer to be functional (~%d minutes), please be patient..." %(attempts_remain*time_wait, (max_time/60)))
+                    first_run = False
+            time.sleep(time_wait)
+            attempts_remain -= 1
         stop_time = time.time()
         expended_time = stop_time - start_time
         self.logging.info("Time for loadbalancer: %s to be ready: %f" %(self.lb_id, expended_time))
