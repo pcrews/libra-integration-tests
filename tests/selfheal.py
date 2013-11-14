@@ -173,6 +173,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         first_run = True
         start_time = time.time()
         new_nova_name = orig_nova_name
+        new_nova_id = orig_nova_id
         self.logging.info("Testing loadbalancer, expecting no results / will wait for repair...")
         while not lb_ready and attempts_remain and ((time.time()-start_time) <= max_time):
             if attempts_remain%5 ==0 and not first_run:
@@ -188,7 +189,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
                 floating_ip_output = self.check_floating_ip()
                 self.logging.info("-"*80)
                 self.logging.info(" ")
-            if new_nova_name != orig_nova_name and new_nova_name in floating_ip_output:
+            if new_nova_name != orig_nova_name and new_nova_id in floating_ip_output:
                 self.logging.info("New nova node has been assigned loadbalancer: %s's floating ip" %(self.lb_id))
                 lb_ready = True
             else:
