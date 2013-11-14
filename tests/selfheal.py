@@ -118,11 +118,11 @@ class testRecreateLoadBalancer(unittest.TestCase):
 
     def get_floating_ip(self, lb_id, quiet=False):
         ip_addr = None
-        cmd = 'salt --output=pprint \%s mysql.query lbaas "select inet_ntoa(ip), vips.device from loadbalancers_devices JOIN vips ON loadbalancers_devices.device = vips.device WHERE loadbalancer=%s"' %(self.args.lbaasdbserver, self.lb_id)
+        cmd = 'salt --output=pprint \%s mysql.query lbaas "select inet_ntoa(ip) from loadbalancers_devices JOIN vips ON loadbalancers_devices.device = vips.device WHERE loadbalancer=%s"' %(self.args.lbaasdbserver, self.lb_id)
         status, output = commands.getstatusoutput(cmd)
         if not quiet:
             self.logging.info("#"*80)
-            self.logging.info("Getting nova id for loadbalancer: %s..." %(self.lb_id))
+            self.logging.info("Getting floating ip for loadbalancer: %s..." %(self.lb_id))
             self.logging.info("Command: %s" %cmd)
             self.logging.info("Status: %s" %status)
             self.logging.info("Output: %s" %output)
