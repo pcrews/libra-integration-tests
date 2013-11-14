@@ -170,7 +170,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         orig_nova_id = self.get_nova_id(orig_nova_name)
 
         # check floating_ip
-        floating_ip_output = self.check_floating_ip()
+        orig_floating_ip_output = self.check_floating_ip()
 
         # use our nova info and delete the haproxy vm
         nova_sleep = 15
@@ -178,7 +178,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         self.logging.info("Nova info for loadbalancer: %s, ip_addr: %s" %(self.lb_id, self.lb_addr))
         self.logging.info("Nova name: %s" %orig_nova_name)
         self.logging.info("Nova id: %s" %orig_nova_id)
-        self.logging.info("Floating ip data: %s" %floating_ip_output)
+        self.logging.info("Floating ip data: %s" %orig_floating_ip_output)
         self.logging.info("-"*80)
         self.logging.info("")
         self.logging.info("Deleting nova node for lb: %s..." %(self.lb_id))
@@ -234,16 +234,22 @@ class testRecreateLoadBalancer(unittest.TestCase):
         stop_time = time.time()
         expended_time = stop_time - start_time
         self.logging.info("Time for loadbalancer: %s to be ready: %f" %(self.lb_id, expended_time))
-        self.logging.info("-")*80
-        self.logging.info("New nova attributes:")
+        self.logging.info("Gathering new nova attributes:" %(self.lb_id, self.lb_addr))
         # list new nova name
         new_nova_name = self.get_nova_name()
-        self.logging.info("Original nova name: %s" %orig_nova_name)
         # get new nova id / check floating ip
         new_nova_id = self.get_nova_id(new_nova_name)
-        self.logging.info("Original nova id: %s" %orig_nova_id)
         # check floating ip
-        self.check_floating_ip()
+        new_floating_ip_output = self.check_floating_ip()
+        self.logging.info("-")*80
+        self.logging.info("New nova attributes for loadbalancer: %s ip_addr: %s:" %(self.lb_id, self.lb_addr))
+        self.logging.info("New nova name: %s" %new_nova_name)
+        self.logging.info("Original nova name: %s" %orig_nova_name)
+        self.logging.info("New nova id: %s" %new_nova_id)
+        self.logging.info("Original nova id: %s" %orig_nova_id)
+        self.logging.info("New floating ip info: %s" %new_floating_ip_output)
+        self.logging.info("Original floating ip info: %s" %orig_floating_ip_output)
+        
         self.logging.info("-")*80
         self.logging.info("")
         self.logging.info("")
