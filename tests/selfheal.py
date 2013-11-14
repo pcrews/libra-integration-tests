@@ -237,15 +237,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         stop_time = time.time()
         expended_time = stop_time - start_time
         self.logging.info("Time for loadbalancer: %s to be ready: %f" %(self.lb_id, expended_time))
-        self.logging.info("New nova attributes:")
-        # list new nova name
-        new_nova_name = self.get_nova_name()
-        self.logging.info("Original nova name: %s" %orig_nova_name)
-        # get new nova id / check floating ip
-        new_nova_id = self.get_nova_id(new_nova_name)
-        self.logging.info("Original nova id: %s" %orig_nova_id)
-        # check floating ip
-        self.check_floating_ip()
+        
         self.logging.info("")
         self.assertTrue(lb_ready, msg = "WARNING: loadbalancer %s not ready in %f seconds" %(self.lb_id, expended_time))
         if not self.args.lbid:
