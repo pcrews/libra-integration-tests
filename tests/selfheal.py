@@ -114,6 +114,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
             self.logging.info("Status: %s" %status)
             self.logging.info("Output: %s" %output)
             self.logging.info("")
+        self.logging.info("="*80)
         return output
 
     def get_floating_ip(self, lb_id, quiet=False):
@@ -173,11 +174,15 @@ class testRecreateLoadBalancer(unittest.TestCase):
         orig_nova_id = self.get_nova_id(orig_nova_name)
 
         # check floating_ip
-        self.check_floating_ip()
+        floating_ip_output = self.check_floating_ip()
 
         # use our nova info and delete the haproxy vm
         nova_sleep = 15
-        self.logging.info("Nova id for lb: %s: %s" %(self.lb_id, orig_nova_id))
+        self.logging.info("Nova info for loadbalancer: %s, ip_addr: %s" %(self.lb_id, self.lb_addr))
+        self.logging.info("Nova name: %s" %orig_nova_name)
+        self.logging.info("Nova id: %s" %orig_nova_id)
+        self.logging.info("Floating ip data: %s" %floating_ip_output)
+        self.logging.info("")
         self.logging.info("Deleting nova node for lb: %s..." %(self.lb_id))
         cmd ='nova --insecure --os-username=%s --os-tenant-id=%s --os-region-name=%s --os-password=%s --os-auth-url=%s delete %s' %(self.args.nodesusername, self.args.nodestenantid, self.args.nodesregionname, self.args.nodespassword, self.args.nodesauthurl, orig_nova_id)
         status, output = commands.getstatusoutput(cmd)
