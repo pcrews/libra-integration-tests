@@ -171,6 +171,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         suspected_bad = False
         first_run = True
         start_time = time.time()
+        new_nova_name = orig_nova_name
         self.logging.info("Testing loadbalancer, expecting no results / will wait for repair...")
         while not lb_ready and attempts_remain and ((time.time()-start_time) <= max_time):
             if attempts_remain%5 ==0 and not first_run:
