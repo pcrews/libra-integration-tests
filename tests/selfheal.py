@@ -64,7 +64,6 @@ class testRecreateLoadBalancer(unittest.TestCase):
         cmd = 'salt --output=pprint \%s mysql.query lbaas "SELECT devices.name from devices JOIN loadbalancers_devices on devices.id = loadbalancers_devices.device WHERE loadbalancers_devices.loadbalancer=%s"' %(self.args.lbaasdbserver, self.lb_id)
         status, output = commands.getstatusoutput(cmd)
         if not quiet:
-            self.logging.info("="*80)
             self.logging.info("")
             self.logging.info("Getting nova id for loadbalancer: %s..." %(self.lb_id))
             self.logging.info("Command: %s" %cmd)
@@ -82,7 +81,6 @@ class testRecreateLoadBalancer(unittest.TestCase):
         cmd ='nova --insecure --os-username=%s --os-tenant-id=%s --os-region-name=%s --os-password=%s --os-auth-url=%s list' %(self.args.nodesusername, self.args.nodestenantid, self.args.nodesregionname, self.args.nodespassword, self.args.nodesauthurl)
         status, output = commands.getstatusoutput(cmd)
         if not quiet:
-            self.logging.info("="*80)
             self.logging.info("")
             self.logging.info("Getting nova id for nova node: %s..." %(nova_name))
             self.logging.info("Command: %s" %cmd)
@@ -107,14 +105,12 @@ class testRecreateLoadBalancer(unittest.TestCase):
         cmd ='nova --insecure --os-username=%s --os-tenant-id=%s --os-region-name=%s --os-password=%s --os-auth-url=%s floating-ip-list | grep %s' %(self.args.nodesusername, self.args.nodestenantid, self.args.nodesregionname, self.args.nodespassword, self.args.nodesauthurl, self.lb_addr)
         status, output = commands.getstatusoutput(cmd)
         if not quiet:
-            self.logging.info("="*80)
             self.logging.info("")
             self.logging.info("Nova info for floating ip: %s, lb_id: %s..." %(self.lb_addr, self.lb_id))
             self.logging.info("Command: %s" %cmd)
             self.logging.info("Status: %s" %status)
             self.logging.info("Output: %s" %output)
             self.logging.info("")
-        self.logging.info("="*80)
         return output
 
     def get_floating_ip(self, lb_id, quiet=False):
