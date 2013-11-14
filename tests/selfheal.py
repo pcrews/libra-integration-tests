@@ -108,6 +108,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         self.logging.info("Output: %s" %output)
         self.logging.info("")
         self.logging.info("")
+        return output
 
     def setUp(self):
         ###########################
@@ -127,10 +128,14 @@ class testRecreateLoadBalancer(unittest.TestCase):
         """
         
         # Create our loadbalancer
-        self.create_result, self.actual_status, self.lb_id, self.lb_addr = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm, self.bad_statuses)
-        self.logging.info('load balancer id: %s' %self.lb_id)
-        self.logging.info('load balancer ip addr: %s' %self.lb_addr)
-        lbaas_utils.validate_loadBalancer(self)
+        if not self.args.lbid:
+            self.create_result, self.actual_status, self.lb_id, self.lb_addr = self.driver.create_lb(self.lb_name, self.nodes, self.algorithm, self.bad_statuses)
+            self.logging.info('load balancer id: %s' %self.lb_id)
+            self.logging.info('load balancer ip addr: %s' %self.lb_addr)
+            lbaas_utils.validate_loadBalancer(self)
+        else:
+            self.logging.info("Using user-supplied loadbalancer: %s" %self.args.lbid)
+            self.lb_id = self.args.lbid
 
         # wait a bit if we want to show off
         if self.args.demowaittime:
@@ -179,23 +184,16 @@ class testRecreateLoadBalancer(unittest.TestCase):
                         # get new nova id / check floating ip
                         new_nova_id = self.get_nova_id(new_nova_name)
                         # check floating ip
-                        self.check_floating_ip()
+                        floating_ip_output = self.check_floating_ip()
                         self.logging.info("-"*80)
                         self.logging.info(" ")
-                    lb_url = 'http://%s' %(self.lb_addr)
-                    result = requests.get(lb_url, verify= False)
-                    result.connection.close()
-                    if result:
-                        self.logging.info("Successful http request!")
-                        self.logging.info(result.status_code)
-                        #self.logging.info(result.text)
-                        lb_ready=True
-                except Exception, e:
-                    if not suspected_bad:
+                    if new_nova_name != orig_nova_name and new_nova_name in floating_ip_output:
+                        self.logging.info("New nova node has been assigned loadbalancer: %s's floating ip" %(self.lb_id))
+                        lb_ready = True
+                    else:
                         suspected_bad = True
-                        self.logging.info(Exception)
-                        self.logging.info(e)
-                        self.logging.info("Will try up to: %d times for the loadbalancer to be functional (~%d minutes), please be patient..." %(attempts_remain*time_wait, (max_time/60)))
+                        if first_run:
+                            self.logging.info("Will try up to: %d times for the loadbalancer to be functional (~%d minutes), please be patient..." %(attempts_remain*time_wait, (max_time/60)))
                     time.sleep(time_wait)
                     attempts_remain -= 1
                 if first_run:
@@ -224,8 +222,11 @@ class testRecreateLoadBalancer(unittest.TestCase):
         ##########################
         # delete the load balancer
         ##########################
-        self.logging.info("Deleting loadbalancer: %s" %self.lb_id)
-        result = self.driver.delete_lb(self.lb_id)
+        if not self.args.lbid:
+            self.logging.info("Deleting loadbalancer: %s" %self.lb_id)
+            result = self.driver.delete_lb(self.lb_id)
+        else:
+            self.logging.info("Used user-specified loadbalancer: %s, not attempting to cleanup..." %self.lb_id)
 
 
 

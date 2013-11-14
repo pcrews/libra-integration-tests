@@ -157,6 +157,12 @@ parser.add_argument( '--active_pause'
                    , default = 0
                    , help = 'seconds to wait *after* a loadbalancer has achieved ACTIVE status before proceeding with testing'
                    )
+parser.add_argument( '--lb_id'
+                   , action = 'store'
+                   , dest = 'lbid'
+                   , default = None
+                   , help = 'specify an existing loadbalancer id for use in certain specialized test cases'
+                   )
 parser.add_argument( '--swift_user'
                    , action = 'store'
                    , dest = 'swiftuser'
