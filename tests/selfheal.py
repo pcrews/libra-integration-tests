@@ -221,9 +221,6 @@ class testRecreateLoadBalancer(unittest.TestCase):
             if new_nova_name != orig_nova_name and new_nova_id and new_nova_id in floating_ip_output:
                 self.logging.info("-"*80)
                 self.logging.info("New nova node has been assigned loadbalancer: %s's floating ip" %(self.lb_id))
-                self.logging.info("Nova name: %s" %new_nova_name)
-                self.logging.info("Nova id: %s" %new_nova_id)
-                self.logging.info("Floating ip data: %s" %floating_ip_output)
                 self.logging.info("-"*80)
                 self.logging.info("")
                 lb_ready = True
@@ -237,7 +234,18 @@ class testRecreateLoadBalancer(unittest.TestCase):
         stop_time = time.time()
         expended_time = stop_time - start_time
         self.logging.info("Time for loadbalancer: %s to be ready: %f" %(self.lb_id, expended_time))
-        
+        self.logging.info("-")*80
+        self.logging.info("New nova attributes:")
+        # list new nova name
+        new_nova_name = self.get_nova_name()
+        self.logging.info("Original nova name: %s" %orig_nova_name)
+        # get new nova id / check floating ip
+        new_nova_id = self.get_nova_id(new_nova_name)
+        self.logging.info("Original nova id: %s" %orig_nova_id)
+        # check floating ip
+        self.check_floating_ip()
+        self.logging.info("-")*80
+        self.logging.info("")
         self.logging.info("")
         self.assertTrue(lb_ready, msg = "WARNING: loadbalancer %s not ready in %f seconds" %(self.lb_id, expended_time))
         if not self.args.lbid:
