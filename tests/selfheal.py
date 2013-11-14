@@ -176,7 +176,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         new_nova_id = orig_nova_id
         self.logging.info("Testing loadbalancer, expecting no results / will wait for repair...")
         while not lb_ready and attempts_remain and ((time.time()-start_time) <= max_time):
-            if attempts_remain%5 ==0 and not first_run:
+            if attempts_remain%10 ==0 and not first_run:
                 self.logging.info("-"*80)
                 self.logging.info("Status check:")
                 self.logging.info("Attempts remaining: %d" %attempts_remain)
