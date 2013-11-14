@@ -174,10 +174,12 @@ class testRecreateLoadBalancer(unittest.TestCase):
 
         # use our nova info and delete the haproxy vm
         nova_sleep = 15
+        self.logging.info("-"*80)
         self.logging.info("Nova info for loadbalancer: %s, ip_addr: %s" %(self.lb_id, self.lb_addr))
         self.logging.info("Nova name: %s" %orig_nova_name)
         self.logging.info("Nova id: %s" %orig_nova_id)
         self.logging.info("Floating ip data: %s" %floating_ip_output)
+        self.logging.info("-"*80)
         self.logging.info("")
         self.logging.info("Deleting nova node for lb: %s..." %(self.lb_id))
         cmd ='nova --insecure --os-username=%s --os-tenant-id=%s --os-region-name=%s --os-password=%s --os-auth-url=%s delete %s' %(self.args.nodesusername, self.args.nodestenantid, self.args.nodesregionname, self.args.nodespassword, self.args.nodesauthurl, orig_nova_id)
@@ -207,17 +209,23 @@ class testRecreateLoadBalancer(unittest.TestCase):
             # check floating ip
             floating_ip_output = self.check_floating_ip(quiet=True)
             if attempts_remain%10 ==0 and not first_run:
+                self.logging.info("-"*80)
                 self.logging.info("Status check:")
                 self.logging.info("Attempts remaining: %d" %attempts_remain)
                 self.logging.info("Time waited: %f" %(time.time() - start_time))
                 self.logging.info("Nova name: %s" %new_nova_name)
                 self.logging.info("Nova id: %s" %new_nova_id)
                 self.logging.info("Floating ip data: %s" %floating_ip_output)
+                self.logging.info("-"*80)
+                self.logging.info("")
             if new_nova_name != orig_nova_name and new_nova_id and new_nova_id in floating_ip_output:
+                self.logging.info("-"*80)
                 self.logging.info("New nova node has been assigned loadbalancer: %s's floating ip" %(self.lb_id))
                 self.logging.info("Nova name: %s" %new_nova_name)
                 self.logging.info("Nova id: %s" %new_nova_id)
                 self.logging.info("Floating ip data: %s" %floating_ip_output)
+                self.logging.info("-"*80)
+                self.logging.info("")
                 lb_ready = True
             else:
                 suspected_bad = True
