@@ -76,6 +76,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         return nova_name
 
     def get_nova_id(self, nova_name):
+        nova_id = None
         self.logging.info("#"*80)
         self.logging.info("Getting nova id for nova node: %s..." %(nova_name))
         cmd ='nova --insecure --os-username=%s --os-tenant-id=%s --os-region-name=%s --os-password=%s --os-auth-url=%s list' %(self.args.nodesusername, self.args.nodestenantid, self.args.nodesregionname, self.args.nodespassword, self.args.nodesauthurl)
