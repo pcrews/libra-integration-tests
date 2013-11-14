@@ -64,7 +64,8 @@ class testRecreateLoadBalancer(unittest.TestCase):
         cmd = 'salt --output=pprint \%s mysql.query lbaas "SELECT devices.name from devices JOIN loadbalancers_devices on devices.id = loadbalancers_devices.device WHERE loadbalancers_devices.loadbalancer=%s"' %(self.args.lbaasdbserver, self.lb_id)
         status, output = commands.getstatusoutput(cmd)
         if not quiet:
-            self.logging.info("#"*80)
+            self.logging.info("="*80)
+            self.logging.info("")
             self.logging.info("Getting nova id for loadbalancer: %s..." %(self.lb_id))
             self.logging.info("Command: %s" %cmd)
             self.logging.info("Status: %s" %status)
@@ -74,7 +75,6 @@ class testRecreateLoadBalancer(unittest.TestCase):
         if not quiet:
             self.logging.info("Loadbalancer: %s nova name: %s" %(self.lb_id, nova_name))
             self.logging.info("")
-            self.logging.info("")
         return nova_name
 
     def get_nova_id(self, nova_name, quiet=False):
@@ -82,7 +82,8 @@ class testRecreateLoadBalancer(unittest.TestCase):
         cmd ='nova --insecure --os-username=%s --os-tenant-id=%s --os-region-name=%s --os-password=%s --os-auth-url=%s list' %(self.args.nodesusername, self.args.nodestenantid, self.args.nodesregionname, self.args.nodespassword, self.args.nodesauthurl)
         status, output = commands.getstatusoutput(cmd)
         if not quiet:
-            self.logging.info("#"*80)
+            self.logging.info("="*80)
+            self.logging.info("")
             self.logging.info("Getting nova id for nova node: %s..." %(nova_name))
             self.logging.info("Command: %s" %cmd)
             self.logging.info("Status: %s" %status)
@@ -98,7 +99,6 @@ class testRecreateLoadBalancer(unittest.TestCase):
                 if not quiet:
                     self.logging.info(node_line)
                     self.logging.info("")
-                    self.logging.info("")
                 nova_id = id
                 break
         return nova_id
@@ -107,12 +107,12 @@ class testRecreateLoadBalancer(unittest.TestCase):
         cmd ='nova --insecure --os-username=%s --os-tenant-id=%s --os-region-name=%s --os-password=%s --os-auth-url=%s floating-ip-list | grep %s' %(self.args.nodesusername, self.args.nodestenantid, self.args.nodesregionname, self.args.nodespassword, self.args.nodesauthurl, self.lb_addr)
         status, output = commands.getstatusoutput(cmd)
         if not quiet:
-            self.logging.info("#"*80)
+            self.logging.info("="*80)
+            self.logging.info("")
             self.logging.info("Nova info for floating ip: %s, lb_id: %s..." %(self.lb_addr, self.lb_id))
             self.logging.info("Command: %s" %cmd)
             self.logging.info("Status: %s" %status)
             self.logging.info("Output: %s" %output)
-            self.logging.info("")
             self.logging.info("")
         return output
 
@@ -121,7 +121,8 @@ class testRecreateLoadBalancer(unittest.TestCase):
         cmd = 'salt --output=pprint \%s mysql.query lbaas "select inet_ntoa(ip) from loadbalancers_devices JOIN vips ON loadbalancers_devices.device = vips.device WHERE loadbalancer=%s"' %(self.args.lbaasdbserver, self.lb_id)
         status, output = commands.getstatusoutput(cmd)
         if not quiet:
-            self.logging.info("#"*80)
+            self.logging.info("="*80)
+            self.logging.info("")
             self.logging.info("Getting floating ip for loadbalancer: %s..." %(self.lb_id))
             self.logging.info("Command: %s" %cmd)
             self.logging.info("Status: %s" %status)
@@ -129,6 +130,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         data = ast.literal_eval(output)
         ip_addr = data[self.args.lbaasdbserver]['results'][0][0].strip()
         self.logging.info("Floating ip for loadbalancer: %s: %s" %(lb_id, ip_addr))
+        self.logging.info("="*80)
         return ip_addr
 
     def setUp(self):
@@ -195,7 +197,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         start_time = time.time()
         new_nova_name = orig_nova_name
         new_nova_id = orig_nova_id
-        self.logging.info("Testing loadbalancer, expecting no results / will wait for repair...")
+        self.logging.info("Scanning nova and libra database for vm / loadbalancer status...")
         while not lb_ready and attempts_remain and ((time.time()-start_time) <= max_time):
             # get new nova name
             new_nova_name = self.get_nova_name(quiet=True)
@@ -235,7 +237,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         self.logging.info("Original nova id: %s" %orig_nova_id)
         # check floating ip
         self.check_floating_ip()
-        self.logging.info("-"*80)
+        self.logging.info("")
         self.assertTrue(lb_ready, msg = "WARNING: loadbalancer %s not ready in %f seconds" %(self.lb_id, expended_time))
         if not self.args.lbid:
             lbaas_utils.validate_loadBalancer(self)
