@@ -103,7 +103,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
                 break
         return nova_id
 
-    def check_floating_ip(self, quiet=True):
+    def check_floating_ip(self, quiet=False):
         cmd ='nova --insecure --os-username=%s --os-tenant-id=%s --os-region-name=%s --os-password=%s --os-auth-url=%s floating-ip-list | grep %s' %(self.args.nodesusername, self.args.nodestenantid, self.args.nodesregionname, self.args.nodespassword, self.args.nodesauthurl, self.lb_addr)
         status, output = commands.getstatusoutput(cmd)
         if not quiet:
@@ -115,6 +115,21 @@ class testRecreateLoadBalancer(unittest.TestCase):
             self.logging.info("")
             self.logging.info("")
         return output
+
+    def get_floating_ip(self, lb_id, quiet=False):
+        ip_addr = None
+        cmd = 'salt --output=pprint \%s mysql.query lbaas "select inet_ntoa(ip), vips.device from loadbalancers_devices JOIN vips ON loadbalancers_devices.device = vips.device WHERE loadbalancer=%s"' %(self.args.lbaasdbserver, self.lb_id)
+        status, output = commands.getstatusoutput(cmd)
+        if not quiet:
+            self.logging.info("#"*80)
+            self.logging.info("Getting nova id for loadbalancer: %s..." %(self.lb_id))
+            self.logging.info("Command: %s" %cmd)
+            self.logging.info("Status: %s" %status)
+            self.logging.info("Output: %s" %output)
+        data = ast.literal_eval(output)
+        ip_addr = data[self.args.lbaasdbserver]['results'][0][0].strip()
+        self.logging.info("Floating ip for loadbalancer: %s: %s" %(lb_id, ip_addr))
+        return ip_addr
 
     def setUp(self):
         ###########################
@@ -142,6 +157,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         else:
             self.logging.info("Using user-supplied loadbalancer: %s" %self.args.lbid)
             self.lb_id = self.args.lbid
+            self.lb_addr = self.get_floating_ip(self.lb_id)
 
         # wait a bit if we want to show off
         if self.args.demowaittime:
@@ -221,7 +237,8 @@ class testRecreateLoadBalancer(unittest.TestCase):
         self.check_floating_ip()
         self.logging.info("-"*80)
         self.assertTrue(lb_ready, msg = "WARNING: loadbalancer %s not ready in %f seconds" %(self.lb_id, expended_time))
-        lbaas_utils.validate_loadBalancer(self)
+        if not self.args.lbid:
+            lbaas_utils.validate_loadBalancer(self)
         # wait a bit if we want to show off
         if self.args.demowaittime:
             self.logging.info("Sleeping %s seconds for demo / manual testing" %self.args.demowaittime)
