@@ -194,8 +194,11 @@ class testRecreateLoadBalancer(unittest.TestCase):
                 self.logging.info("Nova name: %s" %new_nova_name)
                 self.logging.info("Nova id: %s" %new_nova_id)
                 self.logging.info("Floating ip data: %s" %floating_ip_output)
-            if new_nova_name != orig_nova_name and new_nova_id in floating_ip_output:
+            if new_nova_name != orig_nova_name and new_nova_id and new_nova_id in floating_ip_output:
                 self.logging.info("New nova node has been assigned loadbalancer: %s's floating ip" %(self.lb_id))
+                self.logging.info("Nova name: %s" %new_nova_name)
+                self.logging.info("Nova id: %s" %new_nova_id)
+                self.logging.info("Floating ip data: %s" %floating_ip_output)
                 lb_ready = True
             else:
                 suspected_bad = True
