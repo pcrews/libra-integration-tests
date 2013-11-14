@@ -234,7 +234,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         stop_time = time.time()
         expended_time = stop_time - start_time
         self.logging.info("Time for loadbalancer: %s to be ready: %f" %(self.lb_id, expended_time))
-        self.logging.info("Gathering new nova attributes:" %(self.lb_id, self.lb_addr))
+        self.logging.info("Gathering new nova attributes...")
         # list new nova name
         new_nova_name = self.get_nova_name()
         # get new nova id / check floating ip
