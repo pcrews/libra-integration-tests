@@ -60,30 +60,33 @@ class testRecreateLoadBalancer(unittest.TestCase):
         cmd = 'sudo salt \%s cmd.run "cat /var/log/libra/pool*log | grep %s"'
         return
 
-    def get_nova_name(self):
-        self.logging.info("#"*80)
-        self.logging.info("Getting nova id for loadbalancer: %s..." %(self.lb_id))
+    def get_nova_name(self, quiet=False):
         cmd = 'salt --output=pprint \%s mysql.query lbaas "SELECT devices.name from devices JOIN loadbalancers_devices on devices.id = loadbalancers_devices.device WHERE loadbalancers_devices.loadbalancer=%s"' %(self.args.lbaasdbserver, self.lb_id)
         status, output = commands.getstatusoutput(cmd)
-        self.logging.info("Command: %s" %cmd)
-        self.logging.info("Status: %s" %status)
-        self.logging.info("Output: %s" %output)
+        if not quiet:
+            self.logging.info("#"*80)
+            self.logging.info("Getting nova id for loadbalancer: %s..." %(self.lb_id))
+            self.logging.info("Command: %s" %cmd)
+            self.logging.info("Status: %s" %status)
+            self.logging.info("Output: %s" %output)
         data = ast.literal_eval(output)
         nova_name = data[self.args.lbaasdbserver]['results'][0][0].strip()
-        self.logging.info("Loadbalancer: %s nova name: %s" %(self.lb_id, nova_name))
-        self.logging.info("")
-        self.logging.info("")
+        if not quiet:
+            self.logging.info("Loadbalancer: %s nova name: %s" %(self.lb_id, nova_name))
+            self.logging.info("")
+            self.logging.info("")
         return nova_name
 
-    def get_nova_id(self, nova_name):
+    def get_nova_id(self, nova_name, quiet=False):
         nova_id = None
-        self.logging.info("#"*80)
-        self.logging.info("Getting nova id for nova node: %s..." %(nova_name))
         cmd ='nova --insecure --os-username=%s --os-tenant-id=%s --os-region-name=%s --os-password=%s --os-auth-url=%s list' %(self.args.nodesusername, self.args.nodestenantid, self.args.nodesregionname, self.args.nodespassword, self.args.nodesauthurl)
         status, output = commands.getstatusoutput(cmd)
-        self.logging.info("Command: %s" %cmd)
-        self.logging.info("Status: %s" %status)
-        #self.logging.info("Output: %s" %output)
+        if not quiet:
+            self.logging.info("#"*80)
+            self.logging.info("Getting nova id for nova node: %s..." %(nova_name))
+            self.logging.info("Command: %s" %cmd)
+            self.logging.info("Status: %s" %status)
+            #self.logging.info("Output: %s" %output)
         node_list = output.split('\n')[3:-1]
         for node_line in node_list:
             node_data = node_line.split('|')
@@ -92,23 +95,25 @@ class testRecreateLoadBalancer(unittest.TestCase):
             status =  node_data[3].strip()
             task_state = node_data[4].strip()
             if name == nova_name:
-                self.logging.info(node_line)
+                if not quiet:
+                    self.logging.info(node_line)
+                    self.logging.info("")
+                    self.logging.info("")
                 nova_id = id
                 break
-        self.logging.info("")
-        self.logging.info("")
         return nova_id
 
-    def check_floating_ip(self):
-        self.logging.info("#"*80)
-        self.logging.info("Nova info for floating ip: %s, lb_id: %s..." %(self.lb_addr, self.lb_id))
+    def check_floating_ip(self, quiet=True):
         cmd ='nova --insecure --os-username=%s --os-tenant-id=%s --os-region-name=%s --os-password=%s --os-auth-url=%s floating-ip-list | grep %s' %(self.args.nodesusername, self.args.nodestenantid, self.args.nodesregionname, self.args.nodespassword, self.args.nodesauthurl, self.lb_addr)
         status, output = commands.getstatusoutput(cmd)
-        self.logging.info("Command: %s" %cmd)
-        self.logging.info("Status: %s" %status)
-        self.logging.info("Output: %s" %output)
-        self.logging.info("")
-        self.logging.info("")
+        if not quiet:
+            self.logging.info("#"*80)
+            self.logging.info("Nova info for floating ip: %s, lb_id: %s..." %(self.lb_addr, self.lb_id))
+            self.logging.info("Command: %s" %cmd)
+            self.logging.info("Status: %s" %status)
+            self.logging.info("Output: %s" %output)
+            self.logging.info("")
+            self.logging.info("")
         return output
 
     def setUp(self):
@@ -176,19 +181,19 @@ class testRecreateLoadBalancer(unittest.TestCase):
         new_nova_id = orig_nova_id
         self.logging.info("Testing loadbalancer, expecting no results / will wait for repair...")
         while not lb_ready and attempts_remain and ((time.time()-start_time) <= max_time):
+            # get new nova name
+            new_nova_name = self.get_nova_name(quiet=True)
+            # get new nova id / check floating ip
+            new_nova_id = self.get_nova_id(new_nova_name, quiet=True)
+            # check floating ip
+            floating_ip_output = self.check_floating_ip(quiet=True)
             if attempts_remain%10 ==0 and not first_run:
-                self.logging.info("-"*80)
                 self.logging.info("Status check:")
                 self.logging.info("Attempts remaining: %d" %attempts_remain)
                 self.logging.info("Time waited: %f" %(time.time() - start_time))
-                # list new nova name
-                new_nova_name = self.get_nova_name()
-                # get new nova id / check floating ip
-                new_nova_id = self.get_nova_id(new_nova_name)
-                # check floating ip
-                floating_ip_output = self.check_floating_ip()
-                self.logging.info("-"*80)
-                self.logging.info(" ")
+                self.logging.info("Nova name: %s" %new_nova_name)
+                self.logging.info("Nova id: %s" %new_nova_id)
+                self.logging.info("Floating ip data: %s" %floating_ip_output)
             if new_nova_name != orig_nova_name and new_nova_id in floating_ip_output:
                 self.logging.info("New nova node has been assigned loadbalancer: %s's floating ip" %(self.lb_id))
                 lb_ready = True
