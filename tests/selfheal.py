@@ -241,7 +241,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         new_nova_id = self.get_nova_id(new_nova_name)
         # check floating ip
         new_floating_ip_output = self.check_floating_ip()
-        self.logging.info("-")*80
+        self.logging.info("-"*80)
         self.logging.info("New nova attributes for loadbalancer: %s ip_addr: %s:" %(self.lb_id, self.lb_addr))
         self.logging.info("New nova name: %s" %new_nova_name)
         self.logging.info("Original nova name: %s" %orig_nova_name)
@@ -249,8 +249,7 @@ class testRecreateLoadBalancer(unittest.TestCase):
         self.logging.info("Original nova id: %s" %orig_nova_id)
         self.logging.info("New floating ip info: %s" %new_floating_ip_output)
         self.logging.info("Original floating ip info: %s" %orig_floating_ip_output)
-        
-        self.logging.info("-")*80
+        self.logging.info("-"*80)
         self.logging.info("")
         self.logging.info("")
         self.assertTrue(lb_ready, msg = "WARNING: loadbalancer %s not ready in %f seconds" %(self.lb_id, expended_time))
