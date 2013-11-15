@@ -104,7 +104,7 @@ class testBetaRayBill(unittest.TestCase):
         self.logging.info("Beginning test runs on minions...")
        
         test_url = 'https://%s/cgi-bin/wait_wait.py' %(self.lb_addr)
-        cmd = 'salt *lbaas-hellraiser* cmd.run "python hellraiser.py %s"' %(test_url)
+        cmd = 'salt *lbaas-hellraiser* cmd.run cwd=/home/ubuntu "python hellraiser.py %s"' %(test_url)
         status, output = commands.getstatusoutput(cmd)
         self.logging.info("Command: %s" %cmd)
         self.logging.info("Status: %s" %status)
