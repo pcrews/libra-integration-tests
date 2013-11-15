@@ -215,3 +215,5 @@ def get_parser():
                        , default = False
                        , help = 'Turns off post-test cleanup (for some tests).  Used to automate workloads on vms we want to study afterwards'
                        )
+
+    return parser
