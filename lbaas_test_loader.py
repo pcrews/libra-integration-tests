@@ -369,7 +369,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                     expected_status = test_variant['expected_status']
                 else:
                     expected_status = args.successstatuscode 
-                suite.addTest(testRecreateLoadBalancer( test_variant['description']
+                suite.addTest(testBetaRayBill( test_variant['description']
                                                       , args
                                                       , logging
                                                       , driver
