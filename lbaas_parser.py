@@ -209,6 +209,18 @@ def get_parser():
                        , default = 'https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/tokens'
                        , help = 'account auth url (keystone endpoint) for the haproxy devices (for advanced testing)'
                        )
+    parser.add_argument( '--cloud_config'
+                       , action = 'store'
+                       , dest = 'cloudconfig'
+                       , default = None
+                       , help = 'path on the test machine where the cloud config lurks / lives'
+                       )
+    parser.add_argument( '--cloud_map'
+                       , action = 'store'
+                       , dest = 'cloudmap'
+                       , default = None
+                       , help = 'path to the cloud map file to be used in a test'
+                       )
     parser.add_argument( '--cleanup_off'
                        , action = 'store_true'
                        , dest = 'cleanupoff'
