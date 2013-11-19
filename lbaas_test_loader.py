@@ -36,6 +36,7 @@ from tests.loadbalancer_apache import testLoadBalancerApache
 from tests.loadbalancer_cleanup import testLoadBalancerCleanup
 from tests.selfheal import testRecreateLoadBalancer
 from tests.multiple_client_stress import testBetaRayBill
+from tests.loadbalancer_monitoring import testMonitoring
 
 def load_lbaas_test_suite(args, variant_module, logging, driver):
     testloader = unittest.TestLoader()
@@ -378,6 +379,26 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                                                       , test_inputs['default_values']['default_nodes']
                                                       , expected_status = expected_status))
 
+    ##############################
+    # monitor variants
+    ##############################
+    testnames = testloader.getTestCaseNames(testMonitoring)
+    for test_name in testnames:
+        if 'monitor_variants' in test_inputs:
+            for test_variant in test_inputs['monitor_variants']:
+              if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
+                if 'expected_status' in test_variant:
+                    expected_status = test_variant['expected_status']
+                else:
+                    expected_status = args.successstatuscode 
+                suite.addTest(testMonitoring( test_variant['description']
+                                                      , args
+                                                      , logging
+                                                      , driver
+                                                      , test_name
+                                                      , test_variant['name']
+                                                      , test_inputs['default_values']['default_nodes']
+                                                      , expected_status = expected_status))
 
     #########################
     # cleanup tests
