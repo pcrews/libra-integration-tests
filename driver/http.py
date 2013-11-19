@@ -219,6 +219,13 @@ class lbaasDriver:
         request_result = requests.get(url, headers=self.api_headers, verify=False)
         return ast.literal_eval(request_result.text), str(request_result.status_code)
 
+    def update_monitor(self, lb_id, monitor_data):
+        """ Get health monitor information """
+        url = "%s/loadbalancers/%s/healthmonitor" %(self.api_user_url, lb_id)
+        node_data = json.dumps(monitor_data)
+        request_result = requests.put(url, data=monitor_data, headers=self.api_headers, verify=False)
+        return ast.literal_eval(request_result.text), str(request_result.status_code)
+
     def get_logs(self, lb_id, auth_token=None, obj_endpoint=None, obj_basepath=None):
         """ Get the logs / archive them for the listed lb_id """
         
