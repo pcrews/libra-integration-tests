@@ -117,11 +117,48 @@ class testMonitoring(unittest.TestCase):
         self.logging.info(status)
         self.logging.info(output)
 
-        # large values
+        # overlarge values
         monitor = {'delay': 1000000000000, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 1000000000000}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
         self.logging.info(status)
         self.logging.info(output)
+
+        # large values
+        monitor = {'delay': 100000, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 100000}
+        output, status = self.driver.update_monitor(self.lb_id, monitor)
+        self.logging.info(status)
+        self.logging.info(output)
+
+        # nonnumeric timeout
+        monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 'a'}
+        output, status = self.driver.update_monitor(self.lb_id, monitor)
+        self.logging.info(status)
+        self.logging.info(output)
+
+        # oversmall timeout
+        monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 0}
+        output, status = self.driver.update_monitor(self.lb_id, monitor)
+        self.logging.info(status)
+        self.logging.info(output)
+
+        # negative timeout
+        monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': -1}
+        output, status = self.driver.update_monitor(self.lb_id, monitor)
+        self.logging.info(status)
+        self.logging.info(output)
+
+        # NULL timeout
+        monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': None}
+        output, status = self.driver.update_monitor(self.lb_id, monitor)
+        self.logging.info(status)
+        self.logging.info(output)
+
+        # No timeout value
+        monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT'}
+        output, status = self.driver.update_monitor(self.lb_id, monitor)
+        self.logging.info(status)
+        self.logging.info(output)
+
 
         # overlarge attempts count
         monitor = {'delay': 60, 'attemptsBeforeDeactivation': 11, 'type': 'CONNECT', 'timeout': 60}
