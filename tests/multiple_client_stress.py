@@ -45,6 +45,19 @@ class testBetaRayBill(unittest.TestCase):
         self.nodes = nodes
         self.lb_id = lb_id
         self.expected_status = expected_status
+        self.swift_user = self.args.osusername
+        self.swift_tenant_name = self.args.ostenantname
+        self.swift_pass = self.args.ospassword
+        self.auth_url = self.args.osauthurl
+        # we override defaults if command line options given.
+        if self.args.swiftuser:
+            self.swift_user = self.args.swiftuser
+        if self.args.swiftpw:
+            self.swift_pass = self.args.swiftpw
+        if self.args.swifttenantname:
+            self.swift_tenant_name = self.args.swifttenantname
+        self.swift_auth_token, self.swift_endpoint, self.swift_tenant_id = lbaas_utils.get_auth_token_endpoint(self.auth_url, self.swift_user, self.swift_pass, self.swift_tenant_name, verbose = args.verbose)
+
 
     def report_info(self):
         """ function for dumping info on test failures """
@@ -109,6 +122,9 @@ class testBetaRayBill(unittest.TestCase):
         self.logging.info("Command: %s" %cmd)
         self.logging.info("Status: %s" %status)
         self.logging.info("Output: %s" %output)
+
+        # get lbaas logs
+        log_status = self.driver.get_logs(self.lb_id, auth_token = self.swift_auth_token, obj_endpoint = self.swift_endpoint, obj_basepath = self.args.swiftbasepath)
 
         # validate the loadbalancer
         lbaas_utils.validate_loadBalancer(self)
