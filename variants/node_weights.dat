@@ -1,0 +1,55 @@
+# Copyright 2012 Hewlett-Packard Development Company, L.P.
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+
+    
+######################################
+# variable inputs
+######################################
+default_values: 
+  default_name: 'Lbaas_test_node'
+  default_nodes: 
+    - address: "15.185.166.104"
+      port: "80"
+    - address: "15.185.175.196"
+      port: "80"
+  nodes:
+    - address: "15.185.166.104"
+      port: "80"
+    - address: "15.185.154.247"
+      port: "80"
+    - address: "15.185.154.184"
+      port: "80"
+    - address: "15.185.190.38"
+      port: "80"
+    - address: "15.185.156.218"
+      port: "80"
+    - address: "15.185.152.245"
+      port: "80"
+    - address: "15.185.179.196"
+      port: "80"
+    - address: "15.185.153.8"
+      port: "80"
+    - address: "15.185.153.16"
+      port: "80"
+    - address: "15.185.175.196"
+      port: "80"
+
+node_variants: 
+    - description: 'testing node weights, because entropy'
+      name: 'lbaas-node-weight1'
+      nodes: [{"address": "15.185.153.16","port": "80", "weight":"2"}, {"address": "15.185.153.8","port": "80", "weight":"1"}]
+
+
+
+
