@@ -101,7 +101,7 @@ class testMonitoring(unittest.TestCase):
 
         output, status = self.driver.get_monitor(self.lb_id)
         self.assertEqual(status,'200',msg="ERROR: problem w/ loadbalancer: %s monitor.  Received status: %s: %s" %(self.lb_id, status, output))
-        default_monitor = "{'delay': 30, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 30}"
+        default_monitor = {'delay': 30, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 30}
         self.assertEqual(output, default_monitor, msg="ERROR: problem with default monitor.  Expected: %s, Actual: %s" %(default_monitor, output))
 
     def tearDown(self):
