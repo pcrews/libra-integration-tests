@@ -105,37 +105,53 @@ class testMonitoring(unittest.TestCase):
         self.assertEqual(output, default_monitor, msg="ERROR: problem with default monitor.  Expected: %s, Actual: %s" %(default_monitor, output))
 
         # updating the monitor...
+        # bad delay + timeout > delay
         monitor = {'delay': 0, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 30}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status, output)
+        self.logging.info(status)
+        self.logging.info(output)
 
+        # timeout > delay
         monitor = {'delay': 10, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 30}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status, output)
+        self.logging.info(status)
+        self.logging.info(output)
 
+        # large values
         monitor = {'delay': 1000000000000, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 1000000000000}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status, output)
+        self.logging.info(status)
+        self.logging.info(output)
 
+        # overlarge attempts count
         monitor = {'delay': 60, 'attemptsBeforeDeactivation': 11, 'type': 'CONNECT', 'timeout': 60}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status, output)
+        self.logging.info(status)
+        self.logging.info(output)
 
+        # oversmall attempts count
         monitor = {'delay': 60, 'attemptsBeforeDeactivation': 0, 'type': 'CONNECT', 'timeout': 60}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status, output)
+        self.logging.info(status)
+        self.logging.info(output)
 
+        # negative attempts count
         monitor = {'delay': 60, 'attemptsBeforeDeactivation': -1, 'type': 'CONNECT', 'timeout': 60}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status, output)
+        self.logging.info(status)
+        self.logging.info(output)
 
+        # nonnumeric attempts count
         monitor = {'delay': 60, 'attemptsBeforeDeactivation': "a", 'type': 'CONNECT', 'timeout': 60}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status, output)
+        self.logging.info(status)
+        self.logging.info(output)
 
+        # NULL attempts count
         monitor = {'delay': 60, 'attemptsBeforeDeactivation': None, 'type': 'CONNECT', 'timeout': 60}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status, output)
+        self.logging.info(status)
+        self.logging.info(output)
         
 
     def tearDown(self):
