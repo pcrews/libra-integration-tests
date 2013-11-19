@@ -119,6 +119,35 @@ class testMonitoring(unittest.TestCase):
         self.logging.info(output)
         lbaas_utils.wait_for_active_status(self)
 
+        self.logging.info("negative delay")
+        monitor = {'delay': -1, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': -1}
+        output, status = self.driver.update_monitor(self.lb_id, monitor)
+        self.logging.info(status)
+        self.logging.info(output)
+        lbaas_utils.wait_for_active_status(self)
+
+        self.logging.info("zero delay")
+        monitor = {'delay': 0, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': -1}
+        output, status = self.driver.update_monitor(self.lb_id, monitor)
+        self.logging.info(status)
+        self.logging.info(output)
+        lbaas_utils.wait_for_active_status(self)
+
+
+        self.logging.info("fractional delay")
+        monitor = {'delay': .5, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': -1}
+        output, status = self.driver.update_monitor(self.lb_id, monitor)
+        self.logging.info(status)
+        self.logging.info(output)
+        lbaas_utils.wait_for_active_status(self)
+
+        self.logging.info("nonnumeric delay")
+        monitor = {'delay': 'abbazabba', 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': -1}
+        output, status = self.driver.update_monitor(self.lb_id, monitor)
+        self.logging.info(status)
+        self.logging.info(output)
+        lbaas_utils.wait_for_active_status(self)
+
         self.logging.info("overlarge values")
         monitor = {'delay': 1000000000000, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 1000000000000}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
