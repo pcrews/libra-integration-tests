@@ -74,6 +74,7 @@ class testCreateLoadBalancer(unittest.TestCase):
         self.logging.info('load balancer id: %s' %self.lb_id)
         self.logging.info('load balancer ip addr: %s' %self.lb_addr)
         lbaas_utils.validate_loadBalancer(self)
+        self.logging.info(self.driver.list_lb_nodes(self.lb_id))
 
         # test updates
 
