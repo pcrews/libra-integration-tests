@@ -107,35 +107,35 @@ class testMonitoring(unittest.TestCase):
         # updating the monitor...
         monitor = {'delay': 0, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 30}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
-        print status, output
+        self.logging.info(status, output)
 
         monitor = {'delay': 10, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 30}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
-        print status, output
+        self.logging.info(status, output)
 
         monitor = {'delay': 1000000000000, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 1000000000000}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
-        print status, output
+        self.logging.info(status, output)
 
         monitor = {'delay': 60, 'attemptsBeforeDeactivation': 11, 'type': 'CONNECT', 'timeout': 60}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
-        print status, output
+        self.logging.info(status, output)
 
         monitor = {'delay': 60, 'attemptsBeforeDeactivation': 0, 'type': 'CONNECT', 'timeout': 60}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
-        print status, output
+        self.logging.info(status, output)
 
         monitor = {'delay': 60, 'attemptsBeforeDeactivation': -1, 'type': 'CONNECT', 'timeout': 60}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
-        print status, output
+        self.logging.info(status, output)
 
         monitor = {'delay': 60, 'attemptsBeforeDeactivation': "a", 'type': 'CONNECT', 'timeout': 60}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
-        print status, output
+        self.logging.info(status, output)
 
         monitor = {'delay': 60, 'attemptsBeforeDeactivation': None, 'type': 'CONNECT', 'timeout': 60}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
-        print status, output
+        self.logging.info(status, output)
         
 
     def tearDown(self):
