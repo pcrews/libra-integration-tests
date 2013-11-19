@@ -176,12 +176,12 @@ class testMonitoring(unittest.TestCase):
         self.logging.info(output)
         lbaas_utils.wait_for_active_status(self)
 
-        self.logging.info("negative timeout")
-        monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': -1}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
+        #self.logging.info("negative timeout")
+        #monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': -1}
+        #output, status = self.driver.update_monitor(self.lb_id, monitor)
+        #self.logging.info(status)
+        #self.logging.info(output)
+        #lbaas_utils.wait_for_active_status(self)
 
         self.logging.info("NULL timeout")
         monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': None}
