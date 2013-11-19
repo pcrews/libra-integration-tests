@@ -215,7 +215,7 @@ class lbaasDriver:
 
     def get_monitor(self, lb_id):
         """ Get health monitor information """
-        url = "%s/loadbalancers/%s/healthmonitor"
+        url = "%s/loadbalancers/%s/healthmonitor" %(self.api_user_url, lb_id)
         request_result = requests.get(url, headers=self.api_headers, verify=False)
         return ast.literal_eval(request_result.text), str(request_result.status_code)
 
