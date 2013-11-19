@@ -182,7 +182,7 @@ class testMonitoring(unittest.TestCase):
         self.logging.info(output)
         lbaas_utils.wait_for_active_status(self)
 
-        self.logging.info("negative attempts count
+        self.logging.info("negative attempts count")
         monitor = {'delay': 60, 'attemptsBeforeDeactivation': -1, 'type': 'CONNECT', 'timeout': 60}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
         self.logging.info(status)
@@ -196,7 +196,7 @@ class testMonitoring(unittest.TestCase):
         self.logging.info(output)
         lbaas_utils.wait_for_active_status(self)
 
-        self.logging.info("NULL attempts count
+        self.logging.info("NULL attempts count")
         monitor = {'delay': 60, 'attemptsBeforeDeactivation': None, 'type': 'CONNECT', 'timeout': 60}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
         self.logging.info(status)
