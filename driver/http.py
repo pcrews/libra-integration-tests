@@ -222,8 +222,7 @@ class lbaasDriver:
     def update_monitor(self, lb_id, monitor_data):
         """ Get health monitor information """
         url = "%s/loadbalancers/%s/healthmonitor" %(self.api_user_url, lb_id)
-        print monitor_data
-        node_data = json.dumps(monitor_data)
+        monitor_data = json.dumps(monitor_data)
         request_result = requests.put(url, data=monitor_data, headers=self.api_headers, verify=False)
         return ast.literal_eval(request_result.text), str(request_result.status_code)
 
