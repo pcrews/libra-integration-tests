@@ -385,13 +385,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
     testnames = testloader.getTestCaseNames(testMonitoring)
     for test_name in testnames:
         if 'monitor_variants' in test_inputs:
-              print test_inputs
               test_variant = test_inputs['monitor_variants']
-              print '!'*80
-              print test_variant
-              for key, item in test_variant.items():
-                  print key, item
-              print '!'*80
               if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
                 if 'expected_status' in test_variant:
                     expected_status = test_variant['expected_status']
