@@ -122,7 +122,7 @@ class testMonitoring(unittest.TestCase):
             current_monitor, current_status = self.driver.get_monitor(self.lb_id)
             self.assertEqual(status,'200',msg="ERROR: problem w/ loadbalancer: %s monitor.  Received status: %s: %s" %(self.lb_id, current_status, current_monitor))
             self.assertEqual(current_monitor, monitor, msg= "Loadbalancer: %s monitor not matching expected value:  Expected: %s || Actual %s" %(self.lb_id, monitor, current_monitor)
-        lbaas_utils.wait_for_active_status(self)
+            lbaas_utils.wait_for_active_status(self)
         
     def tearDown(self):
         ##########################
