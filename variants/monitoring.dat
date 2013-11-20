@@ -139,7 +139,8 @@ monitor_variants:
            type: 'CONNECT'
 
     - description: "No delay value"
-      monitor = {'attemptsBeforeDeactivation': 2
+      monitor:
+           attemptsBeforeDeactivation: 2
            type: 'CONNECT'
            timeout: 30
 
