@@ -133,7 +133,6 @@ class testMonitoring(unittest.TestCase):
         #self.logging.info(output)
         #lbaas_utils.wait_for_active_status(self)
 
-
         self.logging.info("fractional delay")
         monitor = {'delay': .5, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 0}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
@@ -156,7 +155,7 @@ class testMonitoring(unittest.TestCase):
         lbaas_utils.wait_for_active_status(self)
 
         self.logging.info("large values")
-        monitor = {'delay': 10000000, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 10000000}
+        monitor = {'delay': 100000000, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 100000000}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
         self.logging.info(status)
         self.logging.info(output)
@@ -196,6 +195,41 @@ class testMonitoring(unittest.TestCase):
 
         self.logging.info("No timeout value")
         monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT'}
+        output, status = self.driver.update_monitor(self.lb_id, monitor)
+        self.logging.info(status)
+        self.logging.info(output)
+        lbaas_utils.wait_for_active_status(self)
+
+        self.logging.info("No delay value")
+        monitor = {'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 30}
+        output, status = self.driver.update_monitor(self.lb_id, monitor)
+        self.logging.info(status)
+        self.logging.info(output)
+        lbaas_utils.wait_for_active_status(self)
+
+        self.logging.info("No type")
+        monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'timeout': 30}
+        output, status = self.driver.update_monitor(self.lb_id, monitor)
+        self.logging.info(status)
+        self.logging.info(output)
+        lbaas_utils.wait_for_active_status(self)
+
+        self.logging.info("Bad type")
+        monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'type': 'SUPERMONITOR', 'timeout': 30}
+        output, status = self.driver.update_monitor(self.lb_id, monitor)
+        self.logging.info(status)
+        self.logging.info(output)
+        lbaas_utils.wait_for_active_status(self)
+
+        self.logging.info("fuzzy type")
+        monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT1', 'timeout': 30}
+        output, status = self.driver.update_monitor(self.lb_id, monitor)
+        self.logging.info(status)
+        self.logging.info(output)
+        lbaas_utils.wait_for_active_status(self)
+
+        self.logging.info("overlarge attempts count")
+        monitor = {'delay': 60, 'attemptsBeforeDeactivation': 11, 'type': 'CONNECT', 'timeout': 60}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
         self.logging.info(status)
         self.logging.info(output)
