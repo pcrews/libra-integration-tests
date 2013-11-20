@@ -55,10 +55,10 @@ monitor_variants:
 
     - description: "timeout > delay"
       monitor:
-       - delay: 10
-         attemptsBeforeDeactivation: 2
-         type: 'CONNECT'
-         timeout: 30
+        - delay: 10
+          attemptsBeforeDeactivation: 2
+          type: 'CONNECT'
+          timeout: 30
 
     #- description: "negative delay"
     #  monitor:
