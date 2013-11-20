@@ -178,22 +178,22 @@ monitor_variants:
            type: 'CONNECT'
            timeout: 60
 
-     - description: "negative attempts count"
-       monitor:
+    - description: "negative attempts count"
+      monitor:
          - delay: 60
            attemptsBeforeDeactivation: -1
            type: 'CONNECT'
            timeout: 60
 
-     - description: "nonnumeric attempts count"
-       monitor:
+    - description: "nonnumeric attempts count"
+      monitor:
          - delay: 60
            attemptsBeforeDeactivation: "a"
            type: 'CONNECT'
            timeout: 60
 
-     - description: "NULL attempts count"
-       monitor:
+    - description: "NULL attempts count"
+      monitor:
          - delay: 60
            attemptsBeforeDeactivation: None
            type: 'CONNECT'
