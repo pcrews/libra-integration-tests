@@ -53,23 +53,23 @@ apache_variants:
       requests:  500000
       node_counts:
         - 1
-        # - 2
+         - 2
         #- 3
         #- 5
         #- 10
       pages:
-        #- description: 'basic text page'
-        #  path: ''
-        #- description: '11k jpeg'
-        #  path: 'earth11k.jpg'
+        - description: 'basic text page'
+          path: ''
+        - description: '11k jpeg'
+          path: 'earth11k.jpg'
         #- description: '15k jpeg'
         #  path: 'earth15kb.jpg'
         #- description: '1886k jpeg'
         #  path: 'earth1886kb.jpg'
         #- description: '215k jpeg'
         #  path: 'earth215kb.jpg'
-        #- description: '2k jpeg'
-        #  path: 'earth2kb.jpg'
+        - description: '2k jpeg'
+          path: 'earth2kb.jpg'
         #- description: '579k jpeg'
         #  path: 'earth579kb.jpg'
         #- description: '5k jpeg'
@@ -84,8 +84,8 @@ apache_variants:
         #  path: 'starry-night-vincent-van-go1.jpg'
         #- description: 'mp4 video'
         #  path: 'csj.mp4'
-        - description: 'waiting page'
-          path: 'cgi-bin/wait_wait.py'
+        #- description: 'waiting page'
+        #  path: 'cgi-bin/wait_wait.py'
 
         
 
