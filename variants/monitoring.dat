@@ -229,14 +229,14 @@ monitor_variants:
            timeout: 60
            path: '/'
 
-  - description: "HTTP - no timeout"
+    - description: "HTTP - no timeout"
       monitor:
            delay: 60
            attemptsBeforeDeactivation: 1
            type: 'HTTP'
            path: '/'
 
-  - description: "HTTP bad path 1"
+    - description: "HTTP bad path 1"
       monitor:
            delay: 60
            attemptsBeforeDeactivation: 1
@@ -244,7 +244,7 @@ monitor_variants:
            timeout: 60
            path: 'cgi-bin/ident-cgi.py'
 
-  - description: "HTTP bad path 2"
+    - description: "HTTP bad path 2"
       monitor:
            delay: 60
            attemptsBeforeDeactivation: 1
