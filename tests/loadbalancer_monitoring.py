@@ -155,7 +155,7 @@ class testMonitoring(unittest.TestCase):
         lbaas_utils.wait_for_active_status(self)
 
         self.logging.info("large values")
-        monitor = {'delay': 100000000000, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 100000000000}
+        monitor = {'delay': 10000000000, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 10000000000}
         output, status = self.driver.update_monitor(self.lb_id, monitor)
         self.logging.info(status)
         self.logging.info(output)
