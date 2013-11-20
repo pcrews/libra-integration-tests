@@ -199,4 +199,59 @@ monitor_variants:
            type: 'CONNECT'
            timeout: 60
 
+    - description: "HTTP positive"
+      monitor:
+           delay: 60
+           attemptsBeforeDeactivation: 1
+           type: 'HTTP'
+           timeout: 60
+           path: '/'
+ 
+    - description: "HTTP - no path"
+      monitor:
+           delay: 60
+           attemptsBeforeDeactivation: 1
+           type: 'HTTP'
+           timeout: 60
+          
+
+    - description: "HTTP - no delay"
+      monitor:
+           attemptsBeforeDeactivation: 1
+           type: 'HTTP'
+           timeout: 60
+           path: '/'
+ 
+    - description: "HTTP - no attemptsBeforeDeactivation"
+      monitor:
+           delay: 60
+           type: 'HTTP'
+           timeout: 60
+           path: '/'
+
+  - description: "HTTP - no timeout"
+      monitor:
+           delay: 60
+           attemptsBeforeDeactivation: 1
+           type: 'HTTP'
+           path: '/'
+
+  - description: "HTTP bad path 1"
+      monitor:
+           delay: 60
+           attemptsBeforeDeactivation: 1
+           type: 'HTTP'
+           timeout: 60
+           path: 'cgi-bin/ident-cgi.py'
+
+  - description: "HTTP bad path 2"
+      monitor:
+           delay: 60
+           attemptsBeforeDeactivation: 1
+           type: 'HTTP'
+           timeout: 60
+           path: '/ cgi-bin/ident-cgi.py'
+
+ 
+ 
  
