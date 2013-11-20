@@ -126,12 +126,12 @@ class testMonitoring(unittest.TestCase):
         #self.logging.info(output)
         #lbaas_utils.wait_for_active_status(self)
 
-        self.logging.info("zero delay")
-        monitor = {'delay': 0, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 0}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
+        #self.logging.info("zero delay")
+        #monitor = {'delay': 0, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 0}
+        #output, status = self.driver.update_monitor(self.lb_id, monitor)
+        #self.logging.info(status)
+        #self.logging.info(output)
+        #lbaas_utils.wait_for_active_status(self)
 
 
         self.logging.info("fractional delay")
