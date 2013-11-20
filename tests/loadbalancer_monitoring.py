@@ -115,7 +115,9 @@ class testMonitoring(unittest.TestCase):
         self.assertEqual(output, self.default_monitor, msg="ERROR: problem with default monitor.  Expected: %s, Actual: %s" %(self.default_monitor, output))
 
         # updating the monitor...
-        for description, monitor in self.monitor_data:
+        for monitor_set in self.monitor_data:
+            description = monitor_set['description']
+            monitor = monitor_set['monitor']
             self.logging.info("Testing monitor variant: %s..." %description)
             output, status = self.driver.update_monitor(self.lb_id, monitor)
             self.logging.info("Status: %s || output: %s" %(status, output))
