@@ -191,6 +191,9 @@ class testMonitoring(unittest.TestCase):
         self.logging.info(lb_detail)
         node_detail = self.driver.list_lb_nodes(self.lb_id)
         self.logging.info(node_detail)
+        output, status = self.driver.get_monitor(self.lb_id)
+        self.logging.info(status)
+        self.logging.info(output)
         #lbaas_utils.wait_for_active_status(self)
 
         self.logging.info("No timeout value")
