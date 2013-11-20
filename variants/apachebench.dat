@@ -50,7 +50,7 @@ apache_variants:
     - description: 'stress / perf testing with apache-bench!'
       name: 'imma_stressed_out_test_loadbalancer'
       concurrency: 256
-      requests:  5000000
+      requests:  500000
       node_counts:
         - 1
         - 2
