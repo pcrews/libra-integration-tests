@@ -27,9 +27,18 @@ import lbaas_utils
 
 class testMonitoring(unittest.TestCase):
 
-    def __init__( self, test_description, args, logging, driver
-                , testname, lb_name, nodes, lb_id=None
-                , algorithm = None, expected_status=200
+    def __init__( self
+                , test_description
+                , args
+                , logging
+                , driver
+                , testname
+                , lb_name
+                , nodes
+                , lb_id=None
+                , algorithm = None
+                , monitor_data=None
+                , expected_status=200
                 ):
         super(testMonitoring, self).__init__(testname)
         self.test_description = test_description
@@ -49,6 +58,8 @@ class testMonitoring(unittest.TestCase):
         self.swift_tenant_name = self.args.ostenantname
         self.swift_pass = self.args.ospassword
         self.auth_url = self.args.osauthurl
+        self.default_monitor = {'delay': 30, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 30}
+        self.monitor_data = monitor_data
         # we override defaults if command line options given.
         if self.args.swiftuser:
             self.swift_user = self.args.swiftuser
@@ -101,179 +112,18 @@ class testMonitoring(unittest.TestCase):
         self.logging.info("Getting monitor data for default monitor...")
         output, status = self.driver.get_monitor(self.lb_id)
         self.assertEqual(status,'200',msg="ERROR: problem w/ loadbalancer: %s monitor.  Received status: %s: %s" %(self.lb_id, status, output))
-        default_monitor = {'delay': 30, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 30}
-        self.assertEqual(output, default_monitor, msg="ERROR: problem with default monitor.  Expected: %s, Actual: %s" %(default_monitor, output))
+        self.assertEqual(output, self.default_monitor, msg="ERROR: problem with default monitor.  Expected: %s, Actual: %s" %(self.default_monitor, output))
 
         # updating the monitor...
-        self.logging.info("bad delay + timeout > delay")
-        monitor = {'delay': 0, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 30}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("timeout > delay")
-        monitor = {'delay': 10, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 30}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
-
-        #self.logging.info("negative delay")
-        #monitor = {'delay': -1, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': -1}
-        #output, status = self.driver.update_monitor(self.lb_id, monitor)
-        #self.logging.info(status)
-        #self.logging.info(output)
-        #lbaas_utils.wait_for_active_status(self)
-
-        #self.logging.info("zero delay")
-        #monitor = {'delay': 0, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 0}
-        #output, status = self.driver.update_monitor(self.lb_id, monitor)
-        #self.logging.info(status)
-        #self.logging.info(output)
-        #lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("fractional delay")
-        monitor = {'delay': .5, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 0}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("nonnumeric delay")
-        monitor = {'delay': 'abbazabba', 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 0}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("overlarge values")
-        monitor = {'delay': 1000000000000, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 1000000000000}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("large values")
-        monitor = {'delay': 1000000000, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 1000000000}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("nonnumeric timeout")
-        monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 'a'}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("oversmall timeout")
-        monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 0}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
-
-        #self.logging.info("negative timeout")
-        #monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': -1}
-        #output, status = self.driver.update_monitor(self.lb_id, monitor)
-        #self.logging.info(status)
-        #self.logging.info(output)
-        #lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("NULL timeout")
-        monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': None}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lb_detail = self.driver.list_lb_detail(self.lb_id)
-        self.logging.info(lb_detail)
-        node_detail = self.driver.list_lb_nodes(self.lb_id)
-        self.logging.info(node_detail)
-        output, status = self.driver.get_monitor(self.lb_id)
-        self.logging.info(status)
-        self.logging.info(output)
-        #lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("No timeout value")
-        monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT'}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("No delay value")
-        monitor = {'attemptsBeforeDeactivation': 2, 'type': 'CONNECT', 'timeout': 30}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("No type")
-        monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'timeout': 30}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("Bad type")
-        monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'type': 'SUPERMONITOR', 'timeout': 30}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("fuzzy type")
-        monitor = {'delay': 100, 'attemptsBeforeDeactivation': 2, 'type': 'CONNECT1', 'timeout': 30}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("overlarge attempts count")
-        monitor = {'delay': 60, 'attemptsBeforeDeactivation': 11, 'type': 'CONNECT', 'timeout': 60}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("overlarge attempts count")
-        monitor = {'delay': 60, 'attemptsBeforeDeactivation': 11, 'type': 'CONNECT', 'timeout': 60}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("oversmall attempts count")
-        monitor = {'delay': 60, 'attemptsBeforeDeactivation': 0, 'type': 'CONNECT', 'timeout': 60}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("negative attempts count")
-        monitor = {'delay': 60, 'attemptsBeforeDeactivation': -1, 'type': 'CONNECT', 'timeout': 60}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("nonnumeric attempts count")
-        monitor = {'delay': 60, 'attemptsBeforeDeactivation': "a", 'type': 'CONNECT', 'timeout': 60}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
-        lbaas_utils.wait_for_active_status(self)
-
-        self.logging.info("NULL attempts count")
-        monitor = {'delay': 60, 'attemptsBeforeDeactivation': None, 'type': 'CONNECT', 'timeout': 60}
-        output, status = self.driver.update_monitor(self.lb_id, monitor)
-        self.logging.info(status)
-        self.logging.info(output)
+        for description, monitor in self.monitor_data:
+            self.logging.info("Testing monitor variant: %s..." %description)
+            output, status = self.driver.update_monitor(self.lb_id, monitor)
+            self.logging.info("Status: %s || output: %s" %(status, output))
+            current_monitor, current_status = self.driver.get_monitor(self.lb_id)
+            self.assertEqual(status,'200',msg="ERROR: problem w/ loadbalancer: %s monitor.  Received status: %s: %s" %(self.lb_id, current_status, current_monitor))
+            self.assertEqual(current_monitor, monitor, msg= "Loadbalancer: %s monitor not matching expected value:  Expected: %s || Actual %s" %(self.lb_id, monitor, current_monitor)
         lbaas_utils.wait_for_active_status(self)
         
-
     def tearDown(self):
         ##########################
         # delete the load balancer
