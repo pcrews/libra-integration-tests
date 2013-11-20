@@ -46,18 +46,18 @@ default_values:
       port: "80"
 
 monitor_variants:
- - description: 'monitoring test gauntlet'
-   monitor_values:
+  description: 'monitoring test gauntlet'
+  monitor_values:
     - description: 'bad delay + monitor timeout > delay'
       monitor:
-        - delay: 0
+          delay: 0
           attemptsBeforeDeactivation: 2
           type: CONNECT 
           timeout: 30
 
     - description: "timeout > delay"
       monitor:
-        - delay: 10
+          delay: 10
           attemptsBeforeDeactivation: 2
           type: 'CONNECT'
           timeout: 30
@@ -78,42 +78,42 @@ monitor_variants:
 
     - description: "fractional delay"
       monitor:
-         - delay: .5
+           delay: .5
            attemptsBeforeDeactivation: 2
            type: 'CONNECT'
            timeout: 0
 
     - description: "nonnumeric delay"
       monitor:
-         - delay: 'abbazabba'
+           delay: 'abbazabba'
            attemptsBeforeDeactivation: 2
            type: 'CONNECT'
            timeout: 0
 
     - description: "overlarge values"
       monitor:
-         - delay: 1000000000000
+           delay: 1000000000000
            attemptsBeforeDeactivation: 2
            type: 'CONNECT'
            timeout: 1000000000000
 
     - description: "large values"
       monitor:
-         - delay: 1000000000
+           delay: 1000000000
            attemptsBeforeDeactivation: 2
            type: 'CONNECT'
            timeout: 1000000000
 
     - description: "nonnumeric timeout"
       monitor:
-         - delay: 100
+           delay: 100
            attemptsBeforeDeactivation: 2
            type: 'CONNECT'
            timeout: 'a'
 
     - description: "oversmall timeout"
       monitor:
-         - delay: 100
+           delay: 100
            attemptsBeforeDeactivation: 2
            type: 'CONNECT'
            timeout: 0
@@ -127,14 +127,14 @@ monitor_variants:
 
     - description: "NULL timeout"
       monitor:
-         - delay: 100
+           delay: 100
            attemptsBeforeDeactivation: 2
            type: 'CONNECT'
            timeout: None
 
     - description: "No timeout value"
       monitor:
-         - delay: 100
+           delay: 100
            attemptsBeforeDeactivation: 2
            type: 'CONNECT'
 
@@ -146,55 +146,55 @@ monitor_variants:
 
     - description: "No type"
       monitor:
-         - delay: 100
+           delay: 100
            attemptsBeforeDeactivation: 2
            timeout: 30
 
     - description: "Bad type"
       monitor:
-         - delay: 100
+           delay: 100
            attemptsBeforeDeactivation: 2
            type: 'SUPERMONITOR'
            timeout: 30
 
     - description: "fuzzy type"
       monitor:
-         - delay: 100
+           delay: 100
            attemptsBeforeDeactivation: 2
            type: 'CONNECT1'
            timeout: 30
 
     - description: "overlarge attempts count"
       monitor:
-         - delay: 60
+           delay: 60
            attemptsBeforeDeactivation: 11
            type: 'CONNECT'
            timeout: 60
 
     - description: "oversmall attempts count"
       monitor:
-         - delay: 60
+           delay: 60
            attemptsBeforeDeactivation: 0
            type: 'CONNECT'
            timeout: 60
 
     - description: "negative attempts count"
       monitor:
-         - delay: 60
+           delay: 60
            attemptsBeforeDeactivation: -1
            type: 'CONNECT'
            timeout: 60
 
     - description: "nonnumeric attempts count"
       monitor:
-         - delay: 60
+           delay: 60
            attemptsBeforeDeactivation: "a"
            type: 'CONNECT'
            timeout: 60
 
     - description: "NULL attempts count"
       monitor:
-         - delay: 60
+           delay: 60
            attemptsBeforeDeactivation: None
            type: 'CONNECT'
            timeout: 60
