@@ -74,129 +74,122 @@ monitor_variants:
     #       type: 'CONNECT'
     #      timeout: 0
 
-    - description: "fractional delay
+    - description: "fractional delay"
       monitor:
          - delay: .5
            attemptsBeforeDeactivation: 2
            type: 'CONNECT'
            timeout: 0
 
-    - description: "nonnumeric delay
+    - description: "nonnumeric delay"
       monitor:
          - delay: 'abbazabba'
            attemptsBeforeDeactivation: 2
            type: 'CONNECT'
            timeout: 0
 
-    - description: "overlarge values
+    - description: "overlarge values"
       monitor:
          - delay: 1000000000000
            attemptsBeforeDeactivation: 2
            type: 'CONNECT'
            timeout: 1000000000000
 
-    - description: "large values
+    - description: "large values"
       monitor:
          - delay: 1000000000
            attemptsBeforeDeactivation: 2
            type: 'CONNECT'
            timeout: 1000000000
 
-    - description: "nonnumeric timeout
+    - description: "nonnumeric timeout"
       monitor:
          - delay: 100
            attemptsBeforeDeactivation: 2
            type: 'CONNECT'
            timeout: 'a'
 
-    - description: "oversmall timeout
+    - description: "oversmall timeout"
       monitor:
          - delay: 100
            attemptsBeforeDeactivation: 2
            type: 'CONNECT'
            timeout: 0
 
-     #- description: "negative timeout
+     #- description: "negative timeout"
      #  monitor:
      #    - delay: 100
      #      attemptsBeforeDeactivation: 2
      #      type: 'CONNECT'
      #     timeout: -1
 
-     - description: "NULL timeout
+     - description: "NULL timeout"
        monitor:
          - delay: 100
            attemptsBeforeDeactivation: 2
            type: 'CONNECT'
            timeout: None
 
-     - description: "No timeout value
+     - description: "No timeout value"
        monitor:
          - delay: 100
            attemptsBeforeDeactivation: 2
            type: 'CONNECT'
 
-     - description: "No delay value
+     - description: "No delay value"
        monitor = {'attemptsBeforeDeactivation': 2
            type: 'CONNECT'
            timeout: 30
 
-     - description: "No type
+     - description: "No type"
        monitor:
          - delay: 100
            attemptsBeforeDeactivation: 2
            timeout: 30
 
-     - description: "Bad type
+     - description: "Bad type"
        monitor:
          - delay: 100
            attemptsBeforeDeactivation: 2
            type: 'SUPERMONITOR'
            timeout: 30
 
-     - description: "fuzzy type
+     - description: "fuzzy type"
        monitor:
          - delay: 100
            attemptsBeforeDeactivation: 2
            type: 'CONNECT1'
            timeout: 30
 
-     - description: "overlarge attempts count
+     - description: "overlarge attempts count"
        monitor:
          - delay: 60
            attemptsBeforeDeactivation: 11
            type: 'CONNECT'
            timeout: 60
 
-     - description: "overlarge attempts count
-       monitor:
-         - delay: 60
-           attemptsBeforeDeactivation: 11
-           type: 'CONNECT'
-           timeout: 60
-
-     - description: "oversmall attempts count
+     - description: "oversmall attempts count"
        monitor:
          - delay: 60
            attemptsBeforeDeactivation: 0
            type: 'CONNECT'
            timeout: 60
 
-     - description: "negative attempts count
+     - description: "negative attempts count"
        monitor:
          - delay: 60
            attemptsBeforeDeactivation: -1
            type: 'CONNECT'
            timeout: 60
 
-     - description: "nonnumeric attempts count
+     - description: "nonnumeric attempts count"
        monitor:
          - delay: 60
            attemptsBeforeDeactivation: "a"
            type: 'CONNECT'
            timeout: 60
 
-     - description: "NULL attempts count
+     - description: "NULL attempts count"
        monitor:
          - delay: 60
            attemptsBeforeDeactivation: None
