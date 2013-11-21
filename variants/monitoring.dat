@@ -130,26 +130,19 @@ monitor_variants:
            delay: 100
            attemptsBeforeDeactivation: 2
            type: 'CONNECT'
-           timeout: None
-
-    - description: "NULL timeout 2"
-      monitor:
-           delay: 100
-           attemptsBeforeDeactivation: 2
-           type: 'CONNECT'
            timeout: 
 
     - description: "NULL delay"
       monitor:
-           delay: None
+           delay:
            attemptsBeforeDeactivation: 2
            type: 'CONNECT'
-           timeout: None
+           timeout:
 
     - description: "NULL attemptsBeforeDeactivation"
       monitor:
            delay: 100
-           attemptsBeforeDeactivation: None
+           attemptsBeforeDeactivation:
            type: 'CONNECT'
            timeout: 100
 
@@ -216,7 +209,7 @@ monitor_variants:
     - description: "NULL attempts count"
       monitor:
            delay: 60
-           attemptsBeforeDeactivation: None
+           attemptsBeforeDeactivation:
            type: 'CONNECT'
            timeout: 60
 
