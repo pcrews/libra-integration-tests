@@ -132,6 +132,13 @@ monitor_variants:
            type: 'CONNECT'
            timeout: None
 
+    - description: "NULL timeout 2"
+      monitor:
+           delay: 100
+           attemptsBeforeDeactivation: 2
+           type: 'CONNECT'
+           timeout: 
+
     - description: "NULL delay"
       monitor:
            delay: None
