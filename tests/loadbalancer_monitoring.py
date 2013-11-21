@@ -124,6 +124,7 @@ class testMonitoring(unittest.TestCase):
             current_monitor, current_status = self.driver.get_monitor(self.lb_id)
             if status == '202': # we have a positive result!
                 self.assertEqual(current_monitor, monitor, msg= "Loadbalancer: %s monitor not matching expected value:  Expected: %s || Actual %s" %(self.lb_id, monitor, current_monitor))
+            self.logging.info("Current monitor: %s" %current_monitor)
             lbaas_utils.wait_for_active_status(self)
         
     def tearDown(self):
