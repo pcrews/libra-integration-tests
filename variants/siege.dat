@@ -49,7 +49,7 @@ default_values:
 siege_variants:
     - description: 'stress / perf testing with siege!'
       name: 'imma_stressed_out_test_loadbalancer'
-      concurrency: 256
+      concurrency: 128
       requests:  50000
       node_counts:
         - 1
