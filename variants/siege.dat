@@ -50,7 +50,7 @@ siege_variants:
     - description: 'stress / perf testing with siege!'
       name: 'imma_stressed_out_test_loadbalancer'
       concurrency: 128
-      requests:  50000
+      requests:  5000
       node_counts:
         - 1
         - 2
