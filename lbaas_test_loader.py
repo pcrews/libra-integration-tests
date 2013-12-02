@@ -38,6 +38,7 @@ from tests.selfheal import testRecreateLoadBalancer
 from tests.multiple_client_stress import testBetaRayBill
 from tests.loadbalancer_monitoring import testMonitoring
 
+
 def load_lbaas_test_suite(args, variant_module, logging, driver):
     testloader = unittest.TestLoader()
     suite = unittest.TestSuite()
@@ -45,7 +46,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
     # get our test input variants (nodes, names, etc)
     if 'variants' not in os.path.dirname(variant_module):
         variant_module = os.path.join('variants', variant_module)
-    inputs_file = open(variant_module,'r')
+    inputs_file = open(variant_module, 'r')
     test_inputs = yaml.load(inputs_file)
     inputs_file.close()
 
@@ -56,22 +57,26 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
     for test_name in testnames:
         if 'stat_variants' in test_inputs:
             for test_variant in test_inputs['stat_variants']:
-              if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
-                if 'expected_status' in test_variant:
-                    expected_status = test_variant['expected_status']
-                else:
-                    expected_status = args.successstatuscode 
-                suite.addTest(testLoadBalancerStats( test_variant['description'], args, logging, driver
-                                                    , test_name
-                                                    , test_variant['name']
-                                                    , test_inputs['default_values']['default_nodes']
-                                                    , expected_status = expected_status))
+                # bit of a hack to help us skip tests that we know will fail
+                if 'disabled' not in test_variant:
+                    if 'expected_status' in test_variant:
+                        expected_status = test_variant['expected_status']
+                    else:
+                        expected_status = args.successstatuscode
+                suite.addTest(testLoadBalancerStats(test_variant['description'],
+                                                    args,
+                                                    logging,
+                                                    driver,
+                                                    test_name,
+                                                    test_variant['name'],
+                                                    test_inputs['default_values']['default_nodes'],
+                                                    expected_status=expected_status))
 
     #########################
     # full functional tests
     #########################
 
-    # testing full functional test variants 
+    # testing full functional test variants
     testnames = testloader.getTestCaseNames(testLoadBalancerFuncs)
     for test_name in testnames:
         if 'full_func_variants' in test_inputs:
@@ -80,14 +85,17 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                 if 'expected_status' in test_variant:
                     expected_status = test_variant['expected_status']
                 else:
-                    expected_status = args.successstatuscode 
-                suite.addTest(testLoadBalancerFuncs( test_variant['description'], args, logging, driver
-                                                    , test_name
-                                                    , test_variant['name']
-                                                    , test_inputs['default_values']['default_nodes']
-                                                    , expected_status = expected_status
-                                                    , functional_inputs = test_inputs['functional_inputs']
-                                                    , test_nodes = test_inputs['default_values']['nodes']))
+                    expected_status = args.successstatuscode
+                suite.addTest(testLoadBalancerFuncs(test_variant['description'],
+                                                    args,
+                                                    logging,
+                                                    driver,
+                                                    test_name,
+                                                    test_variant['name'],
+                                                    test_inputs['default_values']['default_nodes'],
+                                                    expected_status=expected_status,
+                                                    functional_inputs = test_inputs['functional_inputs'],
+                                                    test_nodes = test_inputs['default_values']['nodes']))
 
     #####################
     # create lb variants
@@ -96,19 +104,22 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
     testnames = testloader.getTestCaseNames(testCreateLoadBalancer)
     # lb_name variants
     for test_name in testnames:
-        # testing lb name variants 
+        # testing lb name variants
         if 'lb_name_variants' in test_inputs:
             for test_variant in test_inputs['lb_name_variants']:
               if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
                 if 'expected_status' in test_variant:
                     expected_status = test_variant['expected_status']
                 else:
-                    expected_status = args.successstatuscode 
-                suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
-                                                    , test_name
-                                                    , test_variant['name']
-                                                    , test_inputs['default_values']['default_nodes']
-                                                    , expected_status = expected_status))
+                    expected_status = args.successstatuscode
+                suite.addTest(testCreateLoadBalancer(test_variant['description'],
+                                                    args,
+                                                    logging,
+                                                    driver,
+                                                    test_name,
+                                                    test_variant['name'],
+                                                    test_inputs['default_values']['default_nodes'],
+                                                    expected_status=expected_status))
 
         # testing lb node variants
         if 'node_variants' in test_inputs:
@@ -137,46 +148,45 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                 if 'expected_status' in test_variant:
                     expected_status = test_variant['expected_status']
                 else:
-                    expected_status = args.successstatuscode 
+                    expected_status = args.successstatuscode
                 suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
                                                     , test_name
                                                     , test_inputs['default_values']['default_name']
                                                     , nodes
-                                                    , expected_status = expected_status))
+                                                    , expected_status=expected_status))
         # algorithm variants
         if 'algorithm_variants' in test_inputs:
             for test_variant in test_inputs['algorithm_variants']:
                 if 'expected_status' in test_variant:
                     expected_status = test_variant['expected_status']
                 else:
-                    expected_status = args.successstatuscode 
+                    expected_status = args.successstatuscode
                 suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
                                                     , test_name
                                                     , test_inputs['default_values']['default_name']
                                                     , test_inputs['default_values']['default_nodes']
                                                     , algorithm = test_variant['algorithm']
-                                                    , expected_status = expected_status))
+                                                    , expected_status=expected_status))
     #########################
     # update operation tests
     #########################
     testnames = testloader.getTestCaseNames(testUpdateLoadBalancer)
     # lb_name variants
     for test_name in testnames:
-        # testing lb name variants 
+        # testing lb name variants
         if 'update_variants' in test_inputs:
             for test_variant in test_inputs['update_variants']:
               if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
                 if 'expected_status' in test_variant:
                     expected_status = test_variant['expected_status']
                 else:
-                    expected_status = args.successstatuscode 
+                    expected_status = args.successstatuscode
                 suite.addTest(testUpdateLoadBalancer( test_variant['description'], args, logging, driver
                                                     , test_name
                                                     , test_inputs['default_values']['default_name']
                                                     , test_inputs['default_values']['default_nodes']
                                                     , test_variant['update_data']
-                                                    , expected_status = expected_status))
-
+                                                    , expected_status=expected_status))
 
     ###################
     # add node tests
@@ -184,7 +194,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
     testnames = testloader.getTestCaseNames(testAddNodes)
     # lb_name variants
     for test_name in testnames:
-        # testing lb name variants 
+        # testing lb name variants
         if 'add_node_variants' in test_inputs:
             for test_variant in test_inputs['add_node_variants']:
               if 'skip_test' not in test_variant or test_variant['skip_test'] != args.driver:
@@ -213,87 +223,87 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                 if 'expected_status' in test_variant:
                     expected_status = test_variant['expected_status']
                 else:
-                    expected_status = args.successstatuscode 
+                    expected_status = args.successstatuscode
                 suite.addTest(testAddNodes( test_variant['description'], args, logging, driver
                                                     , test_name
                                                     , test_inputs['default_values']['default_name']
                                                     , test_inputs['default_values']['default_nodes']
                                                     , nodes
-                                                    , expected_status = expected_status))
+                                                    , expected_status=expected_status))
     ######################
     # modify node tests
     ######################
     testnames = testloader.getTestCaseNames(testModifyNode)
     # lb_name variants
     for test_name in testnames:
-        # testing lb name variants 
+        # testing lb name variants
         if 'modify_variants' in test_inputs:
             for test_variant in test_inputs['modify_variants']:
               if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
                 if 'expected_status' in test_variant:
                     expected_status = test_variant['expected_status']
                 else:
-                    expected_status = args.successstatuscode 
+                    expected_status = args.successstatuscode
                 suite.addTest(testModifyNode( test_variant['description'], args, logging, driver
                                                     , test_name
                                                     , test_inputs['default_values']['default_name']
                                                     , test_inputs['default_values']['default_nodes']
-                                                    , expected_status = expected_status))
+                                                    , expected_status=expected_status))
 
     # multi_loadbalancer tests:
     testnames = testloader.getTestCaseNames(testMultiLoadBalancer)
     for test_name in testnames:
-        # testing lb name variants 
+        # testing lb name variants
         if 'multiLB_variants' in test_inputs:
             for test_variant in test_inputs['multiLB_variants']:
               if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
                 if 'expected_status' in test_variant:
                     expected_status = test_variant['expected_status']
                 else:
-                    expected_status = args.successstatuscode 
+                    expected_status = args.successstatuscode
                 suite.addTest(testMultiLoadBalancer( test_variant['description'], args, logging, driver
                                                     , test_name
                                                     , test_variant['name1']
                                                     , test_variant['name2']
                                                     , test_variant['nodes1']
                                                     , test_variant['nodes2']
-                                                    , expected_status = expected_status))
+                                                    , expected_status=expected_status))
 
     # log archive tests
     testnames = testloader.getTestCaseNames(testLoadBalancerLogs)
     # lb_name variants
     for test_name in testnames:
-        # testing lb name variants 
+        # testing lb name variants
         if 'log_variants' in test_inputs:
             for test_variant in test_inputs['log_variants']:
               if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
                 if 'expected_status' in test_variant:
                     expected_status = test_variant['expected_status']
                 else:
-                    expected_status = args.successstatuscode 
+                    expected_status = args.successstatuscode
                 suite.addTest(testLoadBalancerLogs( test_variant['description'], args, logging, driver
                                                   , test_name
                                                   , test_variant['name']
                                                   , test_variant['nodes']
-                                                  , expected_status = expected_status))
+                                                  , expected_status=expected_status))
 
     # monitor stage 1 tests
     testnames = testloader.getTestCaseNames(testMonitorStage1)
     # lb_name variants
     for test_name in testnames:
-        # testing lb name variants 
+        # testing lb name variants
         if 'monitor1_variants' in test_inputs:
             for test_variant in test_inputs['monitor1_variants']:
               if 'disabled' not in test_variant: # bit of a hack to help us skip tests that we know will fail
                 if 'expected_status' in test_variant:
                     expected_status = test_variant['expected_status']
                 else:
-                    expected_status = args.successstatuscode 
+                    expected_status = args.successstatuscode
                 suite.addTest(testMonitorStage1( test_variant['description'], args, logging, driver
                                                   , test_name
                                                   , test_variant['name']
                                                   , test_variant['nodes']
-                                                  , expected_status = expected_status))
+                                                  , expected_status=expected_status))
 
     #########################
     # siege tests
@@ -306,7 +316,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                 if 'expected_status' in test_variant:
                     expected_status = test_variant['expected_status']
                 else:
-                    expected_status = args.successstatuscode 
+                    expected_status = args.successstatuscode
                 suite.addTest(testLoadBalancerSiege( test_variant['description'], args, logging, driver
                                                    , test_name
                                                    , test_variant['name']
@@ -315,7 +325,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                                                    , test_variant['requests']
                                                    , test_variant['node_counts']
                                                    , test_variant['pages']
-                                                   , expected_status = expected_status))
+                                                   , expected_status=expected_status))
 
     #########################
     # apache tests
@@ -328,7 +338,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                 if 'expected_status' in test_variant:
                     expected_status = test_variant['expected_status']
                 else:
-                    expected_status = args.successstatuscode 
+                    expected_status = args.successstatuscode
                 suite.addTest(testLoadBalancerApache( test_variant['description'], args, logging, driver
                                                    , test_name
                                                    , test_variant['name']
@@ -337,7 +347,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                                                    , test_variant['requests']
                                                    , test_variant['node_counts']
                                                    , test_variant['pages']
-                                                   , expected_status = expected_status))
+                                                   , expected_status=expected_status))
 
     #####################
     # selfheal variants
@@ -351,12 +361,12 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                 if 'expected_status' in test_variant:
                     expected_status = test_variant['expected_status']
                 else:
-                    expected_status = args.successstatuscode 
+                    expected_status = args.successstatuscode
                 suite.addTest(testRecreateLoadBalancer( test_variant['description'], args, logging, driver
                                                     , test_name
                                                     , test_variant['name']
                                                     , test_inputs['default_values']['default_nodes']
-                                                    , expected_status = expected_status))
+                                                    , expected_status=expected_status))
 
     ##############################
     # multiclient stress variants
@@ -369,7 +379,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                 if 'expected_status' in test_variant:
                     expected_status = test_variant['expected_status']
                 else:
-                    expected_status = args.successstatuscode 
+                    expected_status = args.successstatuscode
                 suite.addTest(testBetaRayBill( test_variant['description']
                                                       , args
                                                       , logging
@@ -377,7 +387,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                                                       , test_name
                                                       , test_variant['name']
                                                       , test_inputs['default_values']['default_nodes']
-                                                      , expected_status = expected_status))
+                                                      , expected_status=expected_status))
 
     ##############################
     # monitor variants
@@ -390,7 +400,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                 if 'expected_status' in test_variant:
                     expected_status = test_variant['expected_status']
                 else:
-                    expected_status = args.successstatuscode 
+                    expected_status = args.successstatuscode
                 suite.addTest(testMonitoring( test_variant['description']
                                                       , args
                                                       , logging
@@ -399,7 +409,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                                                       , test_inputs['default_values']['default_name']
                                                       , test_inputs['default_values']['default_nodes']
                                                       , monitor_data = test_variant['monitor_values']
-                                                      , expected_status = expected_status))
+                                                      , expected_status=expected_status))
 
     #########################
     # cleanup tests
