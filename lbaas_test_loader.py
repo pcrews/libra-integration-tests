@@ -149,7 +149,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                     expected_status = test_variant['expected_status']
                 else:
                     expected_status = args.successstatuscode
-                suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
+                suite.addTest(testCreateLoadBalancer(test_variant['description'], args, logging, driver
                                                     , test_name
                                                     , test_inputs['default_values']['default_name']
                                                     , nodes
@@ -161,7 +161,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                     expected_status = test_variant['expected_status']
                 else:
                     expected_status = args.successstatuscode
-                suite.addTest(testCreateLoadBalancer( test_variant['description'], args, logging, driver
+                suite.addTest(testCreateLoadBalancer(test_variant['description'], args, logging, driver
                                                     , test_name
                                                     , test_inputs['default_values']['default_name']
                                                     , test_inputs['default_values']['default_nodes']
@@ -181,7 +181,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                     expected_status = test_variant['expected_status']
                 else:
                     expected_status = args.successstatuscode
-                suite.addTest(testUpdateLoadBalancer( test_variant['description'], args, logging, driver
+                suite.addTest(testUpdateLoadBalancer(test_variant['description'], args, logging, driver
                                                     , test_name
                                                     , test_inputs['default_values']['default_name']
                                                     , test_inputs['default_values']['default_nodes']
@@ -224,7 +224,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                     expected_status = test_variant['expected_status']
                 else:
                     expected_status = args.successstatuscode
-                suite.addTest(testAddNodes( test_variant['description'], args, logging, driver
+                suite.addTest(testAddNodes(test_variant['description'], args, logging, driver
                                                     , test_name
                                                     , test_inputs['default_values']['default_name']
                                                     , test_inputs['default_values']['default_nodes']
@@ -244,7 +244,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                     expected_status = test_variant['expected_status']
                 else:
                     expected_status = args.successstatuscode
-                suite.addTest(testModifyNode( test_variant['description'], args, logging, driver
+                suite.addTest(testModifyNode(test_variant['description'], args, logging, driver
                                                     , test_name
                                                     , test_inputs['default_values']['default_name']
                                                     , test_inputs['default_values']['default_nodes']
@@ -261,7 +261,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                     expected_status = test_variant['expected_status']
                 else:
                     expected_status = args.successstatuscode
-                suite.addTest(testMultiLoadBalancer( test_variant['description'], args, logging, driver
+                suite.addTest(testMultiLoadBalancer(test_variant['description'], args, logging, driver
                                                     , test_name
                                                     , test_variant['name1']
                                                     , test_variant['name2']
@@ -281,7 +281,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                     expected_status = test_variant['expected_status']
                 else:
                     expected_status = args.successstatuscode
-                suite.addTest(testLoadBalancerLogs( test_variant['description'], args, logging, driver
+                suite.addTest(testLoadBalancerLogs(test_variant['description'], args, logging, driver
                                                   , test_name
                                                   , test_variant['name']
                                                   , test_variant['nodes']
@@ -299,7 +299,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                     expected_status = test_variant['expected_status']
                 else:
                     expected_status = args.successstatuscode
-                suite.addTest(testMonitorStage1( test_variant['description'], args, logging, driver
+                suite.addTest(testMonitorStage1(test_variant['description'], args, logging, driver
                                                   , test_name
                                                   , test_variant['name']
                                                   , test_variant['nodes']
@@ -317,7 +317,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                     expected_status = test_variant['expected_status']
                 else:
                     expected_status = args.successstatuscode
-                suite.addTest(testLoadBalancerSiege( test_variant['description'], args, logging, driver
+                suite.addTest(testLoadBalancerSiege(test_variant['description'], args, logging, driver
                                                    , test_name
                                                    , test_variant['name']
                                                    , test_inputs['default_values']['nodes']
@@ -339,7 +339,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                     expected_status = test_variant['expected_status']
                 else:
                     expected_status = args.successstatuscode
-                suite.addTest(testLoadBalancerApache( test_variant['description'], args, logging, driver
+                suite.addTest(testLoadBalancerApache(test_variant['description'], args, logging, driver
                                                    , test_name
                                                    , test_variant['name']
                                                    , test_inputs['default_values']['nodes']
@@ -362,7 +362,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                     expected_status = test_variant['expected_status']
                 else:
                     expected_status = args.successstatuscode
-                suite.addTest(testRecreateLoadBalancer( test_variant['description'], args, logging, driver
+                suite.addTest(testRecreateLoadBalancer(test_variant['description'], args, logging, driver
                                                     , test_name
                                                     , test_variant['name']
                                                     , test_inputs['default_values']['default_nodes']
@@ -380,7 +380,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                     expected_status = test_variant['expected_status']
                 else:
                     expected_status = args.successstatuscode
-                suite.addTest(testBetaRayBill( test_variant['description']
+                suite.addTest(testBetaRayBill(test_variant['description']
                                                       , args
                                                       , logging
                                                       , driver
@@ -401,7 +401,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
                     expected_status = test_variant['expected_status']
                 else:
                     expected_status = args.successstatuscode
-                suite.addTest(testMonitoring( test_variant['description']
+                suite.addTest(testMonitoring(test_variant['description']
                                                       , args
                                                       , logging
                                                       , driver
@@ -418,7 +418,7 @@ def load_lbaas_test_suite(args, variant_module, logging, driver):
     for test_name in testnames:
         if 'cleanup_variants' in test_inputs:
             for test_variant in test_inputs['cleanup_variants']:
-                suite.addTest(testLoadBalancerCleanup( test_variant['description'], args, logging, driver
+                suite.addTest(testLoadBalancerCleanup(test_variant['description'], args, logging, driver
                                                     , test_name))
 
     return suite
