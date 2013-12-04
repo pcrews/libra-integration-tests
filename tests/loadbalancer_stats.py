@@ -137,14 +137,14 @@ class testLoadBalancerStats(unittest.TestCase):
         self.logging.info("Bad loadbalancers: %d" %bad_count)
         self.logging.info("Failed (bad) loadbalancers: %d" %fail_count)
 
-        self.logging.info("Iterations: %d" %(len(iterations)))
+        self.logging.info("Iterations: %d" %(test_iterations)
         avg_value = 0
         for iteration in iterations:
             avg_value += iteration
         avg_value = float(avg_value)/float(len(iterations))
-        self.logging.info("All iterations average: %f" %(avg_value))
-        self.logging.info("All iterations max: %f" %(max(iterations)))
-        self.logging.info("All iterations min: %f" %(min(iterations)))
+        self.logging.info("Good iterations average: %f" %(avg_value))
+        self.logging.info("Good iterations max: %f" %(max(iterations)))
+        self.logging.info("Good iterations min: %f" %(min(iterations)))
 
         avg_value = 0
         self.logging.info("Bad iterations: %d" %(len(bad_iterations)))
