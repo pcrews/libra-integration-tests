@@ -66,8 +66,8 @@ class testLoadBalancerStats(unittest.TestCase):
         if avg_value:
             avg_value = float(avg_value)/float(len(iterations))
         self.logging.info("%s iterations average: %f" %(descriptor, avg_value))
-        maxval = None
-        minval = None
+        maxval = 0
+        minval = 0
         if iterations:
             maxval = max(iterations)
             minval = min(iterations)
