@@ -53,6 +53,27 @@ class testLoadBalancerStats(unittest.TestCase):
         msg_data.append('')
         return '\n'.join(msg_data)
 
+    def report_stats(self, iterations, descriptor=None):
+        """ Take a set of timing values + the descriptor and produce a
+            stats report
+
+        """
+
+        avg_value = 0
+        self.logging.info("%s iterations: %d" %(descriptor, len(iterations)))
+        for iteration in iterations:
+            avg_value += iteration
+        if avg_value:
+            avg_value = float(avg_value)/float(len(iterations))
+        self.logging.info("%s iterations average: %f" %(descriptor, avg_value))
+        maxval = None
+        minval = None
+        if iterations:
+            maxval = max(iterations)
+            minval = min(iterations)
+        self.logging.info("%s iterations max: %f" %(descriptor, maxval))
+        self.logging.info("%s iterations min: %f" %(descriptor, minval))
+
     def setUp(self):
         ###########################
         # test create load balancer
@@ -129,57 +150,16 @@ class testLoadBalancerStats(unittest.TestCase):
             result = self.driver.delete_lb(self.lb_id)
             time.sleep(10)
 
-
         self.logging.info('#'*80)
         self.logging.info("Run stats:")
         self.logging.info(iterations)
         self.logging.info(bad_iterations)
         self.logging.info("Bad loadbalancers: %d" %bad_count)
         self.logging.info("Failed (bad) loadbalancers: %d" %fail_count)
-
         self.logging.info("Iterations: %d" %(test_iterations))
-        avg_value = 0
-        for iteration in iterations:
-            avg_value += iteration
-        avg_value = float(avg_value)/float(len(iterations))
-        self.logging.info("Good iterations average: %f" %(avg_value))
-        maxgood = None
-        mingood = None
-        if iterations:
-            maxgood = max(iterations)
-            mingood = min(iterations)
-        self.logging.info("Good iterations max: %f" %(maxgood))
-        self.logging.info("Good iterations min: %f" %(mingood))
-
-        avg_value = 0
-        self.logging.info("Bad iterations: %d" %(len(bad_iterations)))
-        for iteration in bad_iterations:
-            avg_value += iteration
-        if avg_value:
-            avg_value = float(avg_value)/float(len(bad_iterations))
-        self.logging.info("Bad iterations average: %f" %(avg_value))
-        maxbad = None
-        minbad = None
-        if bad_iterations:
-            maxbad = max(bad_iterations)
-            minbad = min(bad_iterations)
-        self.logging.info("Bad iterations max: %f" %(maxbad))
-        self.logging.info("Bad iterations min: %f" %(minbad))
-
-        avg_value = 0
-        self.logging.info("Failed iterations: %d" %(len(failed_iterations)))
-        for iteration in failed_iterations:
-            avg_value += iteration
-        if avg_value:
-            avg_value = float(avg_value)/float(len(failed_iterations))
-        self.logging.info("Failed iterations average: %f" %(avg_value))
-        maxfail = None
-        minfail = None
-        if failed_iterations:
-            maxfail = max(failed_iterations)
-            minfail = min(failed_iterations)
-        self.logging.info("Failed iterations max: %f" %(maxfail))
-        self.logging.info("Failed iterations min: %f" %(minfail))
+        self.report_stats(iterations, "Good")
+        self.report_stats(bad_iterations, "Bad")
+        self.report_stats(failed_iterations, "Failed")
 
     def tearDown(self):
         ##########################
