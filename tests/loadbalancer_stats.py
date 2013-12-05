@@ -143,8 +143,13 @@ class testLoadBalancerStats(unittest.TestCase):
             avg_value += iteration
         avg_value = float(avg_value)/float(len(iterations))
         self.logging.info("Good iterations average: %f" %(avg_value))
-        self.logging.info("Good iterations max: %f" %(max(iterations)))
-        self.logging.info("Good iterations min: %f" %(min(iterations)))
+        maxgood = None
+        mingood = None
+        if iterations:
+            maxgood = max(iterations)
+            mingood = min(iterations)
+        self.logging.info("Good iterations max: %f" %(maxgood))
+        self.logging.info("Good iterations min: %f" %(mingood))
 
         avg_value = 0
         self.logging.info("Bad iterations: %d" %(len(bad_iterations)))
@@ -153,8 +158,13 @@ class testLoadBalancerStats(unittest.TestCase):
         if avg_value:
             avg_value = float(avg_value)/float(len(bad_iterations))
         self.logging.info("Bad iterations average: %f" %(avg_value))
-        self.logging.info("Bad iterations max: %f" %(max(bad_iterations)))
-        self.logging.info("Bad iterations min: %f" %(min(bad_iterations)))
+        maxbad = None
+        minbad = None
+        if bad_iterations:
+            maxbad = max(bad_iterations)
+            minbad = min(bad_iterations)
+        self.logging.info("Bad iterations max: %f" %(maxbad))
+        self.logging.info("Bad iterations min: %f" %(minbad))
 
         avg_value = 0
         self.logging.info("Failed iterations: %d" %(len(failed_iterations)))
@@ -163,8 +173,13 @@ class testLoadBalancerStats(unittest.TestCase):
         if avg_value:
             avg_value = float(avg_value)/float(len(failed_iterations))
         self.logging.info("Failed iterations average: %f" %(avg_value))
-        self.logging.info("Failed iterations max: %f" %(max(failed_iterations)))
-        self.logging.info("Failed iterations min: %f" %(min(failed_iterations)))
+        maxfail = None
+        minfail = None
+        if failed_iterations:
+            maxfail = max(failed_iterations)
+            minfail = min(failed_iterations)
+        self.logging.info("Failed iterations max: %f" %(maxfail))
+        self.logging.info("Failed iterations min: %f" %(minfail))
 
     def tearDown(self):
         ##########################
