@@ -137,6 +137,13 @@ class testLoadBalancerApache(unittest.TestCase):
                 status, output = commands.getstatusoutput(cmd)
                 self.logging.info("status: %s" %status)
                 self.logging.info("output: %s" %output)       
+            # hack for m&b testing.
+            # if request is only 1, we assume we want to 
+            # wait N time units so our reporting has a chance to work
+            if self.requests == 1:
+                report_wait = 60
+                self.logging.info("Waiting %s seconds for reporting testing..." %report_wait)
+                time.sleep(report_wait) 
 
     def tearDown(self):
         ##########################
