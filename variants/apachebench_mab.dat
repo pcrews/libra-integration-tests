@@ -49,7 +49,7 @@ default_values:
 apache_variants:
     - description: 'stress / perf testing with apache-bench!'
       name: 'imma_stressed_out_test_loadbalancer'
-      concurrency: 200
+      concurrency: 300
       requests:  3000000
       node_counts:
         #- 1
@@ -58,10 +58,10 @@ apache_variants:
         #- 5
         #- 10
       pages:
-        #- description: 'basic text page'
-        #  path: ''
-        - description: '2k jpeg'
-          path: 'earth2kb.jpg'
+        - description: 'basic text page'
+          path: ''
+        #- description: '2k jpeg'
+        #  path: 'earth2kb.jpg'
         #- description: '5k jpeg'
         #  path: 'earth5kb.jpg'
         #- description: '11k jpeg'
