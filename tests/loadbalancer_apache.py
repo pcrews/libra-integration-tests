@@ -147,7 +147,7 @@ class testLoadBalancerApache(unittest.TestCase):
                 for line in output.split('\n'):
                     line.replace('bytes','')
                     if line.strip().startswith('Total transferred:'):
-                        total_bytes = int(line.split(':')[1].strop())
+                        total_bytes = int(line.split(':')[1].strip())
                         self.logging.info("Total bytes: %s" %(total_bytes))
                     if line.strip().startswith('HTML transferred:'):
                         html_bytes = int(line.split(':')[1].strip())
