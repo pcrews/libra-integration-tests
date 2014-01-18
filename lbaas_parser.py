@@ -209,6 +209,12 @@ def get_parser():
                        , default = 'https://region-a.geo-1.identity.hpcloudsvc.com:35357/v2.0/tokens'
                        , help = 'account auth url (keystone endpoint) for the haproxy devices (for advanced testing)'
                        )
+    parser.add_argument( '--test_metering'
+                       , action = 'store_true'
+                       , dest = 'testmab'
+                       , default = False
+                       , help = 'Activates metering validation for testcases that offer it.  Requires rabbit* options for validation to work'
+                       )
     parser.add_argument( '--cloud_config'
                        , action = 'store'
                        , dest = 'cloudconfig'

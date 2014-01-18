@@ -137,13 +137,22 @@ class testLoadBalancerApache(unittest.TestCase):
                 status, output = commands.getstatusoutput(cmd)
                 self.logging.info("status: %s" %status)
                 self.logging.info("output: %s" %output)       
-            # hack for m&b testing.
-            # if request is only 1, we assume we want to 
-            # wait N time units so our reporting has a chance to work
-            if self.requests == 1:
+            # determine if we want to wait for m&b testing or not
+            if self.args.testmab:
                 report_wait = 180
-                self.logging.info("Waiting %s seconds for reporting testing..." %report_wait)
+                self.logging.info("Waiting %s seconds for metering testing..." %report_wait)
                 time.sleep(report_wait) 
+                # get total html bytes and total bytes
+                for line in output:
+                    line.replace('bytes','')
+                    if line.strip().startswith('Total transferred:'):
+                        total_bytes = int(line.split(':')[1].strop())
+                        self.logging.info("Total bytes: %s" %(total_bytes))
+                    if line.strip().startswith('HTML transferred:'):
+                        html_bytes = int(line.split(':')[1].strip())
+                        self.logging.info("HTML bytes: %s" %(html_bytes))
+                # get total bytes
+                #lbaas_utils.validate_metering(self.args,total_bytes,html_bytes)
 
     def tearDown(self):
         ##########################
