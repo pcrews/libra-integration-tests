@@ -144,7 +144,7 @@ class testLoadBalancerApache(unittest.TestCase):
                 self.logging.info("Waiting %s seconds for metering testing..." %report_wait)
                 time.sleep(report_wait) 
                 # get total html bytes and total bytes
-                for line in output:
+                for line in output.split('\n'):
                     line.replace('bytes','')
                     if line.strip().startswith('Total transferred:'):
                         total_bytes = int(line.split(':')[1].strop())
