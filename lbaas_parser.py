@@ -215,6 +215,54 @@ def get_parser():
                        , default = False
                        , help = 'Activates metering validation for testcases that offer it.  Requires rabbit* options for validation to work'
                        )
+    parser.add_argument( '--kombu_user'
+                       , action = 'store'
+                       , dest ='kombuuser'
+                       , default = None
+                       , help = 'rabbitmq username for accessing the queue'
+                       )
+    parser.add_argument( '--kombu_pass'
+                       , action = 'store'
+                       , dest = 'kombupass'
+                       , default = None
+                       , help = 'rabbitmq password for kombu_user'
+                       )
+    parser.add_argument( '--kombu_host'
+                       , action = 'store'
+                       , dest = 'kombuhost'
+                       , default = None
+                       , help = 'ip address / hostname of rabbitmq server'
+                       )
+    parser.add_argument( '--kombu_virthost'
+                       , action = 'store'
+                       , dest = 'kombuvirthost'
+                       , default = None
+                       , help = 'virtual host on the rabbitmq server'
+                       )
+    parser.add_argument( '--kombu_exchange'
+                       , action = 'store'
+                       , dest = 'kombuexchange'
+                       , default = None
+                       , help = 'exchange on the rabbitmq server'
+                       )
+    parser.add_argument( '--kombu_queue'
+                       , action = 'store'
+                       , dest = 'kombuqueue'
+                       , default = None
+                       , help = 'queue on the rabbitmq server'
+                       )
+    parser.add_argument( '--kombu_port'
+                       , action = 'store'
+                       , dest = 'kombuport'
+                       , default = None
+                       , help = 'the port for the rabbitmq server'
+                       )
+    parser.add_argument( '--kombu_routing_key'
+                       , action = 'store'
+                       , dest = 'komburoutingkey'
+                       , default = None
+                       , help = 'the routing key for the rabbitmq server'
+                       )
     parser.add_argument( '--cloud_config'
                        , action = 'store'
                        , dest = 'cloudconfig'

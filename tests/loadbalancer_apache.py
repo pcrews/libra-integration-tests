@@ -153,7 +153,8 @@ class testLoadBalancerApache(unittest.TestCase):
                         html_bytes = int(line.split(':')[1].strip())
                         self.logging.info("HTML bytes: %s" %(html_bytes))
                 # get total bytes
-                #lbaas_utils.validate_metering(self.args,total_bytes,html_bytes)
+                metering_result = lbaas_utils.validate_metering(self.args,total_bytes,html_bytes, self.lb_id)
+                self.assertTrue(metering_result)
 
     def tearDown(self):
         ##########################

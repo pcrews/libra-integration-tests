@@ -1,4 +1,4 @@
-# Copyright 2012 Hewlett-Packard Development Company, L.P.
+# Copyright 2012, 2013, 2014 Hewlett-Packard Development Company, L.P.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -185,3 +185,10 @@ def validate_loadBalancer( lb_test_case
             for actual_etag, count in actual_etags.items():
                 lb_test_case.assertTrue(count <= expected_hit_count, msg = "loadbalancing appears off.  Executed requests: %d.  Actual request counts: %s" %(request_count, actual_etags))
             """
+
+
+def validate_metering(args, total_bytes,html_bytes, lb_id):
+    """ Validation function for metering and billing """
+    # get rabbitmq data for the lb
+    # compare test-detected bytes to metered bytes
+    return True
