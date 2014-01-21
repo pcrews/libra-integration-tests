@@ -11,6 +11,7 @@ def on_message(body, message):
     global counter
     global lb_counter
     global lb_messages
+    global lb_events
     global event_types
     global lb_id
     global byte_count
@@ -60,12 +61,14 @@ def on_decode_error(message, error):
     logging.info(error)
 
 def get_metering_data(args, lb_id, logging):
-    counter = 0
-    lb_counter = 0
-    event_types = {}
-    lb_events = {}
-    byte_count = []
-    lb_messages = []
+    global counter = 0
+    global lb_counter = 0
+    global event_types = {}
+    global lb_events = {}
+    global byte_count = []
+    global lb_messages = []
+    global logging
+    global lb_id
 
     mab_exchange = Exchange(args.rabbitexchange, type='topic', durable=True)
     mab_queue = Queue(args.rabbitqueue, exchange=mab_exchange, routing_key=args.rabbitroutingkey)
