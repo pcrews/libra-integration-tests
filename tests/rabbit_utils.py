@@ -95,8 +95,8 @@ def get_metering_data(args, lb_id, logging):
         logging.info("All events:")
         for key, value in event_types.items():
             logging.info("%s: %s" %(key, value))
-        logging.info("Found %d records for lb_id: %d" %(lb_counter, lb_id))
-        logging.info("Record types for lb_id: %d" %(lb_id))
+        logging.info("Found %d records for lb_id: %s" %(lb_counter, lb_id))
+        logging.info("Record types for lb_id: %s" %(lb_id))
         for key, value in lb_events.items():
             logging.info("%s: %s" %(key, value))
         logging.info("Byte total for lb:")
