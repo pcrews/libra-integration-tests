@@ -88,7 +88,7 @@ def get_metering_data(args, lb_id, logging):
             try:
                 conn.drain_events(timeout=3)
             except Exception, e:
-                print Exception, e
+                logging.info(Exception, e)
                 logging.info("out of messages or error, stopping...")
                 break
         logging.info("Scanned %d total messages" %(counter))
