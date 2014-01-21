@@ -67,13 +67,13 @@ def get_metering_data(args, lb_id, logging):
     byte_count = []
     lb_messages = []
 
-    mab_exchange = Exchange(args.kombuexchange, type='topic', durable=True)
-    mab_queue = Queue(args.kombuqueue, exchange=mab_exchange, routing_key=args.komburoutingkey)
-    connect_string = 'amqp://%s:%s@%s:%s/%s?ssl=1' %( args.kombuuser,
-                                                       args.kombupass,
-                                                       args.kombuhost,
-                                                       args.kombuport,
-                                                       args.kombuvirthost)
+    mab_exchange = Exchange(args.rabbitexchange, type='topic', durable=True)
+    mab_queue = Queue(args.rabbitqueue, exchange=mab_exchange, routing_key=args.rabbitroutingkey)
+    connect_string = 'amqp://%s:%s@%s:%s/%s?ssl=1' %( args.rabbituser,
+                                                       args.rabbitpass,
+                                                       args.rabbithost,
+                                                       args.rabbitport,
+                                                       args.rabbitvirthost)
     with BrokerConnection(connect_string) as conn:
         logging.info("Connected: %s" %conn.connected)
         #for key, item in vars(conn).items():

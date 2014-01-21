@@ -144,16 +144,18 @@ class testLoadBalancerApache(unittest.TestCase):
                 self.logging.info("Waiting %s seconds for metering testing..." %report_wait)
                 time.sleep(report_wait) 
                 # get total html bytes and total bytes
+                total_bytes = 0
+                total_requests = 0
                 for line in output.split('\n'):
                     line = line.replace('bytes','')
+                    if line.strip().startswith('Complete requests:'):
+                        total_requests = int(line.split(':')[1].strip())
+                        self.logging.info("Total bytes: %s" %(total_bytes))
                     if line.strip().startswith('Total transferred:'):
                         total_bytes = int(line.split(':')[1].strip())
                         self.logging.info("Total bytes: %s" %(total_bytes))
-                    if line.strip().startswith('HTML transferred:'):
-                        html_bytes = int(line.split(':')[1].strip())
-                        self.logging.info("HTML bytes: %s" %(html_bytes))
                 # get total bytes
-                metering_result = lbaas_utils.validate_metering(self.args,total_bytes,html_bytes, self.lb_id)
+                metering_result = lbaas_utils.validate_metering(self, total_requests, total_bytes)
                 self.assertTrue(metering_result)
 
     def tearDown(self):

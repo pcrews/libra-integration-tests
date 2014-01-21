@@ -187,7 +187,7 @@ def validate_loadBalancer( lb_test_case
             """
 
 
-def validate_metering(lb_test_case, requests, total_bytes, html_bytes):
+def validate_metering(lb_test_case, requests, total_bytes):
     """ Validation function for metering and billing """
     lb_test_case.logging.info("Validating metering information for loadbalancer: %s" %(lb_test_case.lb_id))
     # get rabbitmq data for the lb
