@@ -61,12 +61,18 @@ def on_decode_error(message, error):
     logging.info(error)
 
 def get_metering_data(args, lb_id, logging):
-    global counter = 0
-    global lb_counter = 0
-    global event_types = {}
-    global lb_events = {}
-    global byte_count = []
-    global lb_messages = []
+    global counter
+    counter = 0
+    global lb_counter
+    lb_counter = 0
+    global event_types
+    event_types = {}
+    global lb_events
+    lb_events = {}
+    global byte_count
+    byte_count = []
+    global lb_messages
+    lb_messages = []
     global logging
     global lb_id
 
