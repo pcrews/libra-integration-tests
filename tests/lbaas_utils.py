@@ -192,7 +192,9 @@ def validate_metering(lb_test_case, requests, total_bytes):
     lb_test_case.logging.info("Validating metering information for loadbalancer: %s" %(lb_test_case.lb_id))
     # get rabbitmq data for the lb
     import rabbit_utils
-    bytes, messages, total_bytes = rabbit_utils.get_metering_data(lb_test_case.args, lb_test_case.lb_id)
+    bytes, messages, total_bytes = rabbit_utils.get_metering_data(lb_test_case.args, 
+                                                                  lb_test_case.lb_id,
+                                                                  lb_test_case.logging)
     lb_test_case.logging.info(messages)
     lb_test_case.logging.info(bytes)
     lb_test_case.logging.info(total_bytes)
