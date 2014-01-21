@@ -150,7 +150,7 @@ class testLoadBalancerApache(unittest.TestCase):
                     line = line.replace('bytes','')
                     if line.strip().startswith('Complete requests:'):
                         total_requests = int(line.split(':')[1].strip())
-                        self.logging.info("Total bytes: %s" %(total_bytes))
+                        self.logging.info("Complete requests: %s" %(total_requests))
                     if line.strip().startswith('Total transferred:'):
                         total_bytes = int(line.split(':')[1].strip())
                         self.logging.info("Total bytes: %s" %(total_bytes))

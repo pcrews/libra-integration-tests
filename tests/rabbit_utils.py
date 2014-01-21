@@ -74,6 +74,7 @@ def get_metering_data(args, lb_id, logging):
                                                        args.rabbithost,
                                                        args.rabbitport,
                                                        args.rabbitvirthost)
+    logging.info(connect_string)
     with BrokerConnection(connect_string) as conn:
         logging.info("Connected: %s" %conn.connected)
         #for key, item in vars(conn).items():
