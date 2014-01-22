@@ -46,7 +46,7 @@ def on_message(body, message):
                for pkey, pval in value.items():
                    data.append('\t\t%s: %s' %(pkey, pval))
                    if pkey == u'instance_id':
-                       if pval == lb_id:
+                       if pval == the_lb_id:
                            lb_counter += 1
                            if event_type in lb_events:
                                lb_events[event_type] += 1
@@ -58,7 +58,7 @@ def on_message(body, message):
                        byte_count.append(bytes_sent)
         data.append('='*80)
         if match:
-            logging.info("Record for loadbalancer: %s found:" %(lb_id))
+            logging.info("Record for loadbalancer: %s found:" %(the_lb_id))
             logging.info("\n".join(data))
             lb_messages.append("\n".join(data))
         #message.ack()
