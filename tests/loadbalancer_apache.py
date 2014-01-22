@@ -140,7 +140,7 @@ class testLoadBalancerApache(unittest.TestCase):
             # determine if we want to wait for m&b testing or not
             self.logging.info(self.args.testmab)
             if self.args.testmab == True:
-                report_wait = 180
+                report_wait = 15
                 self.logging.info("Waiting %s seconds for metering testing..." %report_wait)
                 time.sleep(report_wait) 
                 # get total html bytes and total bytes
