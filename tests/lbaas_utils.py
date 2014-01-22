@@ -195,8 +195,10 @@ def validate_metering(lb_test_case, requests, total_bytes):
     bytes, messages, total_bytes = rabbit_utils.get_metering_data(lb_test_case.args, 
                                                                   lb_test_case.lb_id,
                                                                   lb_test_case.logging)
-    lb_test_case.logging.info(messages)
-    lb_test_case.logging.info(bytes)
-    lb_test_case.logging.info(total_bytes)
-    # compare test-detected bytes to metered bytes
+    lb_test_case.logging.info("Messages: %s" %messages)
+    lb_test_case.logging.info("Bytes: %s" %bytes)
+    lb_test_case.logging.info("Total bytes: %s" %total_bytes)
+    # compare test-detected bytes to metered bytes...
+    # scan messages for format ...
+    # scan messages for type...
     return True
