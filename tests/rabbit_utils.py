@@ -4,7 +4,6 @@
 # for testing lbaas metering and billing
 
 from kombu import BrokerConnection, Consumer, Exchange, Queue, Connection
-import sys
 import time
 
 counter = 0

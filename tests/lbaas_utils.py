@@ -221,5 +221,14 @@ def validate_metering(lb_test_case, requests, total_bytes):
         percent_diff = float(byte_diff/total_bytes)*100
         logging.info("Percentage error: %s" %percent_diff)
     # scan messages for format ...
+    logging.info("Validating message formatting for loadbalancer: %s" %(lb_id))
+    import validictory
+    import mab_schemas
+    for message in messages:
+        if 'event_type' in message:
+            event_type = message['event_type']
+            if event_type == "lbaas.instance.create":
+                schema = mab_schemas[event_type]
+            validictory.validate(message, schema)
     # scan messages for type...
     return True
