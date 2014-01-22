@@ -75,7 +75,7 @@ def get_metering_data(args, lb_id, logging):
     my_logging = logging
     global my_lb_id
     my_lb_id = lb_id
-    logging.info("lb_id: %s" my_lb_id)
+    logging.info("lb_id: %s" %my_lb_id)
     logging.info(type(my_lb_id))
     mab_exchange = Exchange(args.rabbitexchange, type='topic', durable=True)
     mab_queue = Queue(args.rabbitqueue, exchange=mab_exchange, routing_key=args.rabbitroutingkey)
