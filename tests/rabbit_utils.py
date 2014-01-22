@@ -47,7 +47,7 @@ def on_message(body, message):
                for pkey, pval in value.items():
                    data.append('\t\t%s: %s' %(pkey, pval))
                    if pkey == u'instance_id':
-                       if pval == the_lb_id:
+                       if pval == my_lb_id:
                            lb_counter += 1
                            if event_type in lb_events:
                                lb_events[event_type] += 1
