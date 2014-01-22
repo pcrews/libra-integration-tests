@@ -18,7 +18,7 @@
 
 """
 
-mab_schemas = {"lbaas.instance.create": {"type": "object",
+message_schemas = {"lbaas.instance.create": {"type": "object",
                                          "properties": {"event_type": "lbaas.instance.create",
                                                         "message_id": {"type": "string"},
                                                         "timestamp": {"type": "string"},
