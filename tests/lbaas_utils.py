@@ -214,12 +214,12 @@ def validate_metering(lb_test_case, requests, total_bytes):
     total_bytes = float(total_bytes)
     byte_diff = float(total_bytes - metered_bytes)
     if byte_diff:
-        logging.info("Difference between metered and expected bytes: %s" %byte_diff)
-        logging.info("                                             : %s GB" %convert_to_gb(byte_diff))
+        logging.info("Metered / Measured diff: %s" %byte_diff)
+        logging.info("                       : %s GB" %convert_to_gb(byte_diff))
         per_req_diff = float(byte_diff/requests)
         logging.info("Difference per request: %s" %per_req_diff)
         percent_diff = float(byte_diff/total_bytes)*100
-        logging.info("Percentage difference: %s" %percent_diff)
+        logging.info("Percentage error: %s" %percent_diff)
     # scan messages for format ...
     # scan messages for type...
     return True
