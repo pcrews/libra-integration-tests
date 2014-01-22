@@ -32,7 +32,6 @@ def on_message(body, message):
     event_type = None
 
     counter += 1
-    my_logging.info("Searching for lb: %s" %my_lb_id)
     data.append("Details:")
     try:
         for key, value in body.items():
@@ -76,7 +75,8 @@ def get_metering_data(args, lb_id, logging):
     my_logging = logging
     global my_lb_id
     my_lb_id = lb_id
-
+    logging.info("lb_id: %s" my_lb_id)
+    logging.info(type(my_lb_id))
     mab_exchange = Exchange(args.rabbitexchange, type='topic', durable=True)
     mab_queue = Queue(args.rabbitqueue, exchange=mab_exchange, routing_key=args.rabbitroutingkey)
     connect_string = 'amqp://%s:%s@%s:%s/%s?ssl=1' %( args.rabbituser,
