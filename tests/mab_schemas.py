@@ -19,22 +19,22 @@
 """
 
 message_schemas = {"lbaas.instance.create": {"type": "object",
-                                         "properties": {"event_type": "lbaas.instance.create",
-                                                        "message_id": {"type": "string"},
-                                                        "timestamp": {"type": "string"},
-                                                        "payload": {"type": "object",
-                                                                    "properties": {"version": {"type":"string"},
-                                                                                   "audit_period_beginning":{"type":"string"},
-                                                                                   "audit_period_ending": {"type":"string"},
-                                                                                   "display_name": {"type":"string"},
-                                                                                   "state_description": {"type":"string"},
-                                                                                   "tenant_id": {"type":"string"},
-                                                                                   "instance_type_id": {"type":"integer"},
-                                                                                   "instance_id": {"type":"integer"},
-                                                                                   "instance_type": {"type":"string"},
-                                                                                   "state": {"type":"string"},
-                                                                                   "mab_processing_version": {"type":"string"},
-                                                                                   "service_id": {"type":"string"}
-                                                                                    }}}
-                                        }
-              }
+                                             "properties": {"event_type": {"type": "string", "enum":["lbaas.instance.create"]},
+                                                            "message_id": {"type": "string"},
+                                                            "timestamp": {"type": "string"},
+                                                            "payload": {"type": "object",
+                                                                       "properties": {"version": {"type":"string"},
+                                                                                      "audit_period_beginning":{"type":"string"},
+                                                                                      "audit_period_ending": {"type":"string"},
+                                                                                      "display_name": {"type":"string"},
+                                                                                      "state_description": {"type":"string"},
+                                                                                      "tenant_id": {"type":"string"},
+                                                                                      "instance_type_id": {"type":"integer"},
+                                                                                      "instance_id": {"type":"integer"},
+                                                                                      "instance_type": {"type":"string"},
+                                                                                      "state": {"type":"string"},
+                                                                                      "mab_processing_version": {"type":"string"},
+                                                                                      "service_id": {"type":"string"}
+                                                                                     }}}
+                                            }
+                  }
