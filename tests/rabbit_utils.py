@@ -7,6 +7,14 @@ from kombu import BrokerConnection, Consumer, Exchange, Queue, Connection
 import sys
 import time
 
+counter = 0
+lb_counter = 0
+event_types = {}
+lb_events = {}
+byte_count = []
+lb_messages = []
+
+
 def on_message(body, message):
     global counter
     global lb_counter
@@ -62,18 +70,11 @@ def on_decode_error(message, error):
 
 def get_metering_data(args, lb_id, logging):
     global counter
-    counter = 0
     global lb_counter
-    lb_counter = 0
     global event_types
-    event_types = {}
     global lb_events
-    lb_events = {}
     global byte_count
-    byte_count = []
     global lb_messages
-    lb_messages = []
-    global lb_id
 
     mab_exchange = Exchange(args.rabbitexchange, type='topic', durable=True)
     mab_queue = Queue(args.rabbitqueue, exchange=mab_exchange, routing_key=args.rabbitroutingkey)
