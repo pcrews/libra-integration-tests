@@ -32,6 +32,7 @@ def on_message(body, message):
     event_type = None
 
     counter += 1
+    logging.info("Record: %s" %counter)
     data.append("Details:")
     try:
         for key, value in body.items():
@@ -60,7 +61,7 @@ def on_message(body, message):
         if match:
             logging.info("Record for loadbalancer: %s found:" %(the_lb_id))
             logging.info("\n".join(data))
-            lb_messages.append("\n".join(data))
+            lb_messages.append(body)
         #message.ack()
     except Exception, e:
         print Exception, e
