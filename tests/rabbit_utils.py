@@ -13,6 +13,7 @@ event_types = {}
 lb_events = {}
 byte_count = []
 lb_messages = []
+the_lb_id = None
 
 
 def on_message(body, message):
@@ -24,6 +25,7 @@ def on_message(body, message):
     global lb_id
     global byte_count
     global logging
+    global the_lb_id
 
     data = []
     match = False
@@ -75,6 +77,8 @@ def get_metering_data(args, lb_id, logging):
     global lb_events
     global byte_count
     global lb_messages
+    global the_lb_id
+    the_lb_id = lb_id
 
     mab_exchange = Exchange(args.rabbitexchange, type='topic', durable=True)
     mab_queue = Queue(args.rabbitqueue, exchange=mab_exchange, routing_key=args.rabbitroutingkey)
