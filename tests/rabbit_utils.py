@@ -13,8 +13,8 @@ event_types = {}
 lb_events = {}
 byte_count = []
 lb_messages = []
-the_lb_id = None
-
+my_lb_id = None
+my_logging = None
 
 def on_message(body, message):
     global counter
@@ -24,15 +24,15 @@ def on_message(body, message):
     global event_types
     global lb_id
     global byte_count
-    global logging
-    global the_lb_id
+    #global my_logging
+    #global my_lb_id
 
     data = []
     match = False
     event_type = None
 
     counter += 1
-    logging.info("Record: %s" %counter)
+    my_logging.info("Record: %s" %counter)
     data.append("Details:")
     try:
         for key, value in body.items():
@@ -59,8 +59,8 @@ def on_message(body, message):
                        byte_count.append(bytes_sent)
         data.append('='*80)
         if match:
-            logging.info("Record for loadbalancer: %s found:" %(the_lb_id))
-            logging.info("\n".join(data))
+            my_logging.info("Record for loadbalancer: %s found:" %(my_lb_id))
+            my_logging.info("\n".join(data))
             lb_messages.append(body)
         #message.ack()
     except Exception, e:
@@ -72,14 +72,10 @@ def on_decode_error(message, error):
     logging.info(error)
 
 def get_metering_data(args, lb_id, logging):
-    global counter
-    global lb_counter
-    global event_types
-    global lb_events
-    global byte_count
-    global lb_messages
-    global the_lb_id
-    the_lb_id = lb_id
+    global my_logging
+    my_logging = logging
+    global my_lb_id
+    my_lb_id = lb_id
 
     mab_exchange = Exchange(args.rabbitexchange, type='topic', durable=True)
     mab_queue = Queue(args.rabbitqueue, exchange=mab_exchange, routing_key=args.rabbitroutingkey)
