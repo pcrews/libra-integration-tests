@@ -58,10 +58,10 @@ apache_variants:
         #- 5
         #- 10
       pages:
-        - description: 'basic text page'
-          path: ''
-        #- description: '2k jpeg'
-        #  path: 'earth2kb.jpg'
+        #- description: 'basic text page'
+        #  path: ''
+        - description: '2k jpeg'
+          path: 'earth2kb.jpg'
         #- description: '5k jpeg'
         #  path: 'earth5kb.jpg'
         #- description: '11k jpeg'
