@@ -18,6 +18,7 @@
 
 import ast
 import json
+import math
 import time
 import requests
 
@@ -186,19 +187,39 @@ def validate_loadBalancer( lb_test_case
                 lb_test_case.assertTrue(count <= expected_hit_count, msg = "loadbalancing appears off.  Executed requests: %d.  Actual request counts: %s" %(request_count, actual_etags))
             """
 
+def convert_to_gb(bytes):
+    p = math.pow(1024,3)
+    gb = round(bytes/p,2)
+    return gb
 
 def validate_metering(lb_test_case, requests, total_bytes):
     """ Validation function for metering and billing """
-    lb_test_case.logging.info("Validating metering information for loadbalancer: %s" %(lb_test_case.lb_id))
+    logging = lb_test_case.logging
+    lb_id = lb_test_case.lb_id
+    logging.info("Validating metering information for loadbalancer: %s" %(lb_id))
     # get rabbitmq data for the lb
     import rabbit_utils
-    bytes, messages, total_bytes = rabbit_utils.get_metering_data(lb_test_case.args, 
+    bytes, messages, metered_bytes = rabbit_utils.get_metering_data(lb_test_case.args, 
                                                                   lb_test_case.lb_id,
                                                                   lb_test_case.logging)
-    lb_test_case.logging.info("Messages: %s" %messages)
-    lb_test_case.logging.info("Bytes: %s" %bytes)
-    lb_test_case.logging.info("Total bytes: %s" %total_bytes)
+    logging.info("Messages: %s" %messages)
+    logging.info("Bytes: %s" %bytes)
+    logging.info("Metered bytes: %s" %metered_bytes)
+    logging.info("             : %s GB" %convert_to_gb(metered_bytes))
+    logging.info("Measured bytes: %s" %total_bytes)
+    logging.info("             : %s GB" %convert_to_gb(total_bytes))
     # compare test-detected bytes to metered bytes...
+    logging.info("Comparing test-tool received bytes to metered bytes...")
+    metered_bytes = long(metered_bytes)
+    total_bytes = long(total_bytes)
+    byte_diff = total_bytes - metered_bytes
+    if byte_diff:
+        logging.info("Difference between metered and expected bytes: %s" %byte_diff)
+        logging.info("                                             : %s GB" %convert_to_gb(byte_diff))
+        per_req_diff = float(byte_diff)/float(requests)
+        logging.info("Difference per request: %s" %per_req_diff)
+        percent_diff = (metered_bytes/total_bytes)*100
+        logging.info("Percentage difference: %s" %percent_diff)
     # scan messages for format ...
     # scan messages for type...
     return True
