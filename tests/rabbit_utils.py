@@ -32,7 +32,7 @@ def on_message(body, message):
     event_type = None
 
     counter += 1
-    my_logging.info("Record: %s" %counter)
+    my_logging.info("Searching for lb: %s" %lb_id)
     data.append("Details:")
     try:
         for key, value in body.items():
