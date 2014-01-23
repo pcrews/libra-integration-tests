@@ -53,7 +53,7 @@ message_schemas = {"lbaas.instance.create": {"type": "object",
                                                                                       "instance_type": {"type":"string"},
                                                                                       "state": {"type":"string"},
                                                                                       "mab_processing_version": {"type":"string"},
-                                                                                      "service_id": {"type":"string"}
+                                                                                      "service_id": {"type":"string"},
                                                                                       "metrics": {"type": "object",
                                                                                                   "properties": { "metric_type": {"type":"string"},
                                                                                                                   "metric_units": {"type":"string", "enum":["BYTES"]},
