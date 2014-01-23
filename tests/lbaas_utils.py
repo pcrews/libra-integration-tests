@@ -233,7 +233,7 @@ def validate_metering(lb_test_case, requests, total_bytes):
                 schema = mab_schemas.message_schemas[event_type]
                 validictory.validate(message, schema)
             except Exception, e:
-                logging.info("Error in validation of message format"
+                logging.info("Error in validation of message format")
                 logging.info(e)
     # scan messages for type...
     return True
