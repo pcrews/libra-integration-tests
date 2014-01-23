@@ -37,7 +37,7 @@ message_schemas = {"lbaas.instance.create": {"type": "object",
                                                                                       "service_id": {"type":"string"}
                                                                                      }}}
                                             },
-                  {"lbaas.instance.exists": {"type": "object",
+                   "lbaas.instance.exists": {"type": "object",
                                              "properties": {"event_type": {"type": "string", "enum":["lbaas.instance.exists"]},
                                                             "message_id": {"type": "string"},
                                                             "timestamp": {"type": "string"},
