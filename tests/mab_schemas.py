@@ -59,8 +59,9 @@ message_schemas = {"lbaas.instance.create": {"type": "object",
                                                                                                                   "metric_units": {"type":"string", "enum":["BYTES"]},
                                                                                                                   "metric_name": {"type":"string", "enum":["lbaas.network.outgoing.bytes"]},
                                                                                                                   "metric_value": {"type":"integer"}
+                                                                                                                }
                                                                                                  }
-                                                                                     }}}
+                                                                                     }
+                                                                        }}
                                             }
                   }
-
