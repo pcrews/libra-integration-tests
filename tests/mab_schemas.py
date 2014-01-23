@@ -36,9 +36,8 @@ message_schemas = {"lbaas.instance.create": {"type": "object",
                                                                                       "mab_processing_version": {"type":"string"},
                                                                                       "service_id": {"type":"string"}
                                                                                      }}}
-                                            }
-                  },
-                  {"lbaas.bandwidth.usage": {"type": "object",
+                                            },
+                  "lbaas.bandwidth.usage": {"type": "object",
                                              "properties": {"event_type": {"type": "string", "enum":["lbaas.bandwidth.usage"]},
                                                             "message_id": {"type": "string"},
                                                             "timestamp": {"type": "string"},
