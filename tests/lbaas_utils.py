@@ -225,11 +225,15 @@ def validate_metering(lb_test_case, requests, total_bytes):
     import validictory
     import mab_schemas
     for message in messages:
+        schema = None
         if 'event_type' in message:
             event_type = message['event_type']
-            if event_type == "lbaas.instance.create":
-                logging.info("Validating event_type: %s" %event_type)
+            logging.info("Validating event_type: %s" %event_type)
+            try:
                 schema = mab_schemas.message_schemas[event_type]
-            validictory.validate(message, schema)
+                validictory.validate(message, schema)
+            except Exception, e:
+                logging.info("Error in validation of message format"
+                logging.info(e)
     # scan messages for type...
     return True
