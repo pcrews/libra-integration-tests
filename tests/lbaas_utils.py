@@ -202,7 +202,7 @@ def validate_metering(lb_test_case, requests, total_bytes):
     bytes, messages, metered_bytes = rabbit_utils.get_metering_data(lb_test_case.args, 
                                                                   lb_test_case.lb_id,
                                                                   lb_test_case.logging)
-    logging.info("Messages: %s" %messages)
+    logging.info("Message count: %s" %len(messages))
     logging.info("Bytes: %s" %bytes)
     logging.info("Metered bytes: %s" %metered_bytes)
     logging.info("             : %s GB" %convert_to_gb(metered_bytes))
