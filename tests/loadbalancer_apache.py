@@ -142,7 +142,13 @@ class testLoadBalancerApache(unittest.TestCase):
             if self.args.testmab == True:
                 report_wait = 180
                 self.logging.info("Waiting %s seconds for metering testing..." %report_wait)
-                time.sleep(report_wait) 
+                time.sleep(report_wait)
+                # delete the lb
+                if self.args.cleanupoff:
+                    self.logging.info("NOT deleting loadbalancer: %s per user-specified flag..." %self.lb_id)
+                else:
+                    self.logging.info("Deleting loadbalancer: %s" %self.lb_id)
+                    result = self.driver.delete_lb(self.lb_id)
                 # get total html bytes and total bytes
                 total_bytes = 0
                 total_requests = 0
@@ -154,7 +160,7 @@ class testLoadBalancerApache(unittest.TestCase):
                     if line.strip().startswith('Total transferred:'):
                         total_bytes = int(line.split(':')[1].strip())
                         self.logging.info("Total bytes: %s" %(total_bytes))
-                # get total bytes
+                # get total bytes / messages from metering server
                 metering_result = lbaas_utils.validate_metering(self, total_requests, total_bytes)
                 self.assertTrue(metering_result)
 

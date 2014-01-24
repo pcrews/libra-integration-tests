@@ -92,7 +92,7 @@ def get_metering_data(args, lb_id, logging):
         logging.info("Starting consumer")
         x = conn.Consumer(mab_queue, callbacks=[on_message], accept=['json'], on_decode_error=on_decode_error, auto_declare=True)
         x.consume()
-        for i in range(100000):
+        for i in range(1000000):
             try:
                 conn.drain_events(timeout=3)
             except Exception, e:
