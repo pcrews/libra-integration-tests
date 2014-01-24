@@ -177,9 +177,12 @@ def validate_loadBalancer( lb_test_case
                     size += 1
                 lb_test_case.logging.info("Result.content size: %s" %size)
                 header_size = 0
+                alt_header = 0
                 for key, value in result.headers.items():
                     header_size += (len(key) + len(value))
+                    alt_header += (sys.sizeof(key) + sys.sizeof(value))
                 lb_test_case.logging.info("headers size: %s" %(header_size))
+                lb_test_case.logging.info("alt headers: %s" %(alt_header))
                 if result.headers['etag'] in actual_etags:
                     actual_etags[result.headers['etag']] += 1
                 else:
