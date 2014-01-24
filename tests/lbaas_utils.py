@@ -16,6 +16,7 @@
     common code shared among test cases
 """
 
+import sys
 import ast
 import json
 import math
