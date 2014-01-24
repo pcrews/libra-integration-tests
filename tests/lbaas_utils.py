@@ -171,7 +171,10 @@ def validate_loadBalancer( lb_test_case
             for request_iter in range(request_count):
                 lb_url = '%s://%s' %(url_base, lb_ip)
                 result = requests.get(lb_url, verify= False)
-                lb_test_case.logging.info("Result.content: %s" %result.content)
+                size = 0
+                for byte in result.iter_content():
+                    size += 1
+                lb_test_case.logging.info("Result.content: %s" %size)
                 if result.headers['etag'] in actual_etags:
                     actual_etags[result.headers['etag']] += 1
                 else:
