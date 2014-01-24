@@ -91,11 +91,12 @@ class testLoadBalancerLogs(unittest.TestCase):
         self.logging.info('load balancer id: %s' %self.lb_id)
         self.logging.info('load balancer ip addr: %s' %self.lb_addr)
         lbaas_utils.wait_for_active_status(self, active_wait_time=180)
-
+        self.logging.info('gathering logs, 1st attempt...')
         self.actual_status = self.driver.get_logs(self.lb_id, auth_token = self.swift_auth_token, obj_endpoint = self.swift_endpoint, obj_basepath = self.args.swiftbasepath)
         self.assertEqual(str(self.actual_status), str(self.expected_status), msg = "ERROR: Attempt to gather lb logs produced status: %s.  Expected status: %s" %(self.actual_status, self.expected_status))
         lbaas_utils.validate_loadBalancer(self)
         lbaas_utils.wait_for_active_status(self, active_wait_time=180)
+        self.logging.info('gathering logs, 2nd attempt...')
         self.actual_status = self.driver.get_logs(self.lb_id, auth_token = self.swift_auth_token, obj_endpoint = self.swift_endpoint, obj_basepath = self.args.swiftbasepath)
         self.assertEqual(str(self.actual_status), str(self.expected_status), msg = "ERROR: Attempt to gather lb logs produced status: %s.  Expected status: %s" %(self.actual_status, self.expected_status))
 
