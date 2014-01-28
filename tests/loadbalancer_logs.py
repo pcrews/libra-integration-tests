@@ -107,7 +107,12 @@ class testLoadBalancerLogs(unittest.TestCase):
         ##########################
         self.logging.info("Deleting loadbalancer: %s" %self.lb_id)
         lbaas_utils.wait_for_active_status(self, active_wait_time=180)
-        result = self.driver.delete_lb(self.lb_id)
+        if self.args.cleanupoff:
+            self.logging.info("NOT deleting loadbalancer: %s per user-specified flag..." %self.lb_id)
+        else:
+            self.logging.info("Deleting loadbalancer: %s" %self.lb_id)
+            result = self.driver.delete_lb(self.lb_id)
+
 
 
 
