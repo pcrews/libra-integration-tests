@@ -47,6 +47,7 @@ def get_auth_token_endpoint(auth_url, username, password, tenant_name, desired_s
     return auth_token, endpoint, tenant_id
 
 def wait_for_active_status(test_case, lb_id=None, active_wait_time=None, desired_status='ACTIVE',must_pass=True):
+    logging = test_case.logging
     total_wait_time = 0
     time_decrement = 3
     status_pass = False
@@ -58,9 +59,9 @@ def wait_for_active_status(test_case, lb_id=None, active_wait_time=None, desired
     result_data = test_case.driver.list_lb_detail(lb_id)
     while total_wait_time != active_wait_time and not status_pass:
         if 'status' not in result_data:
-            test_case.logging.info('WARNING: no status in result data...')
-            test_case.logging.info('result_data:')
-            test_case.logging.info(result_data)
+            logging.info('WARNING: no status in result data...')
+            logging.info('result_data:')
+            logging.info(result_data)
             result_data['status'] = None
         if result_data['status'] != desired_status:
             time.sleep(time_decrement)
@@ -69,7 +70,7 @@ def wait_for_active_status(test_case, lb_id=None, active_wait_time=None, desired
         else:
             status_pass = True
             if test_case.args.activepause:
-                test_case.logging.info("Waiting %d seconds from %s status..." %(test_case.args.activepause, desired_status))
+                logging.info("Waiting %d seconds from %s status..." %(test_case.args.activepause, desired_status))
                 time.sleep(test_case.args.activepause)
     if must_pass:
         test_case.assertEqual(result_data['status'], desired_status, msg = 'loadbalancer: %s not in %s status after %d seconds' %(lb_id, desired_status, active_wait_time))
