@@ -172,14 +172,18 @@ def validate_loadBalancer( lb_test_case
             for request_iter in range(request_count):
                 lb_url = '%s://%s' %(url_base, lb_ip)
                 result = requests.get(lb_url, verify= False)
+                # calculate size of headers in bytes
+                # used in testing metering
                 size = 0
                 for byte in result.iter_content():
                     size += 1
-                lb_test_case.logging.info("Result.content size: %s" %size)
+                # headers approximation - metering testing
                 header_size = 0
                 for key, value in result.headers.items():
                     header_size += (len(key) + len(value))
-                lb_test_case.logging.info("headers size: %s" %(header_size))
+                if self.args.verbose:
+                    lb_test_case.logging.info("Result.content size: %s" %size)
+                    lb_test_case.logging.info("headers size: %s" %(header_size))
                 if result.headers['etag'] in actual_etags:
                     actual_etags[result.headers['etag']] += 1
                 else:
