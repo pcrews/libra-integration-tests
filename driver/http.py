@@ -18,7 +18,6 @@
 """
 
 import sys
-import ast
 import json
 import time
 import requests
@@ -66,7 +65,7 @@ class lbaasDriver:
         if self.verbose:
             print 'Status: %s' %request_result.status_code
             print 'Output:\n%s' %(request_result.text)
-        request_data = ast.literal_eval(request_result.text)
+        request_data = json.loads(request_result.text)
         for service_data in request_data['access']['serviceCatalog']:
             if service_data['name'] == 'Load Balancer':
                 if self.region_name:
@@ -156,7 +155,7 @@ class lbaasDriver:
 
         url = "%s/loadbalancers" %self.api_user_url
         request_result = self.__get(url, headers=self.api_headers, verify=False)
-        return ast.literal_eval(request_result.text)['loadBalancers']
+        return json.loads(request_result.text)['loadBalancers']
  
     def list_lb_detail(self, lb_id):
         """ Get the detailed info returned by the api server for the specified id """
@@ -170,7 +169,7 @@ class lbaasDriver:
     
         url = "%s/loadbalancers/%s/nodes" %(self.api_user_url, lb_id)
         request_result = self.__get(url, headers=self.api_headers, verify=False)
-        return ast.literal_eval(request_result.text)
+        return json.loads(request_result.text)
 
     def delete_lb_node(self, lb_id, node_id):
         """ Remove specified node_id from lb_id """
@@ -199,7 +198,7 @@ class lbaasDriver:
         node_data['nodes'] = add_node_data
         node_data = json.dumps(node_data)
         request_result = requests.post(url, data=node_data, headers=self.api_headers, verify=False)
-        return ast.literal_eval(request_result.text), str(request_result.status_code)
+        return json.loads(request_result.text), str(request_result.status_code)
 
     def modify_node(self, lb_id, node_id, node_data):
         """ Set the node's condition to the value specified """
@@ -217,7 +216,7 @@ class lbaasDriver:
         """ Get health monitor information """
         url = "%s/loadbalancers/%s/healthmonitor" %(self.api_user_url, lb_id)
         request_result = requests.get(url, headers=self.api_headers, verify=False)
-        return ast.literal_eval(request_result.text), str(request_result.status_code)
+        return json.loads(request_result.text), str(request_result.status_code)
 
     def update_monitor(self, lb_id, monitor_data):
         """ Get health monitor information """
@@ -227,7 +226,7 @@ class lbaasDriver:
         monitor_data = json.dumps(monitor_data)
         request_result = requests.put(url, data=monitor_data, headers=self.api_headers, verify=False)
         try:
-            output = ast.literal_eval(request_result.text)
+            output = json.loads(request_result.text)
         except ValueError:
             output = request_result.text
         if request_result.status_code:
