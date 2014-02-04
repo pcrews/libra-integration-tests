@@ -38,7 +38,7 @@ def get_auth_token_endpoint(auth_url, username, password, tenant_name, desired_s
     if verbose:
         print 'Status: %s' %request_result.status_code
         print 'Output:\n%s' %(request_result.text)
-    request_data = ast.literal_eval(request_result.text)
+    request_data = json.loads(request_result.text)
     for service_data in request_data['access']['serviceCatalog']:
         if service_data['name'] == desired_service_name:
             endpoint = service_data['endpoints'][0]['publicURL'].replace('\\','')
