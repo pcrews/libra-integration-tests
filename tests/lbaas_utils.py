@@ -49,7 +49,7 @@ def get_auth_token_endpoint( auth_url,
         if service_data['name'] == desired_service_name:
             for test_endpoint in service_data['endpoints']:
                 if test_endpoint['region'] == region:
-                    endpoint = endpoint['publicURL'].replace('\\','')
+                    endpoint = test_endpoint['publicURL'].replace('\\','')
     auth_token = request_data['access']['token']['id']
     tenant_id = request_data['access']['token']['tenant']['id']
     return auth_token, endpoint, tenant_id
