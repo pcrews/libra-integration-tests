@@ -27,7 +27,7 @@ def get_auth_token_endpoint( auth_url,
                              username,
                              password,
                              tenant_name,
-                             region
+                             region,
                              desired_service_name='Object Storage',
                              verbose = False):
     """ Used for testing the lbaas log archiving feature """
