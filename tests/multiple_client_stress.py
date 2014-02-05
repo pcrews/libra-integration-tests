@@ -45,19 +45,6 @@ class testBetaRayBill(unittest.TestCase):
         self.nodes = nodes
         self.lb_id = lb_id
         self.expected_status = expected_status
-        self.swift_user = self.args.osusername
-        self.swift_tenant_name = self.args.ostenantname
-        self.swift_pass = self.args.ospassword
-        self.auth_url = self.args.osauthurl
-        # we override defaults if command line options given.
-        if self.args.swiftuser:
-            self.swift_user = self.args.swiftuser
-        if self.args.swiftpw:
-            self.swift_pass = self.args.swiftpw
-        if self.args.swifttenantname:
-            self.swift_tenant_name = self.args.swifttenantname
-        self.swift_auth_token, self.swift_endpoint, self.swift_tenant_id = lbaas_utils.get_auth_token_endpoint(self.auth_url, self.swift_user, self.swift_pass, self.swift_tenant_name, verbose = args.verbose)
-
 
     def report_info(self):
         """ function for dumping info on test failures """

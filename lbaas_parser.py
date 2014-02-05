@@ -173,6 +173,12 @@ def get_parser():
                        , default = 'libra_test_logs'
                        , help = 'username for object storage (for haproxy log archiving).  Defaults to lbaas_tenant_name'
                        )
+    parser.add_argument( '--swift_region'
+                       , action = 'store'
+                       , dest = 'swiftbasepath'
+                       , default = 'region-a.geo-1'
+                       , help = 'username for object storage (for haproxy log archiving).  Defaults to lbaas_tenant_name'
+                       )
     parser.add_argument( '--lbaas_db'
                        , action = 'store'
                        , dest = 'lbaasdbserver'

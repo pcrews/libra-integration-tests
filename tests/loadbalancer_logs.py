@@ -50,6 +50,7 @@ class testLoadBalancerLogs(unittest.TestCase):
         self.swift_tenant_name = self.args.ostenantname
         self.swift_pass = self.args.ospassword
         self.auth_url = self.args.osauthurl
+        self.swift_region = self.args.swiftregion
         # we override defaults if command line options given.
         if self.args.swiftuser:
             self.swift_user = self.args.swiftuser
@@ -57,7 +58,7 @@ class testLoadBalancerLogs(unittest.TestCase):
             self.swift_pass = self.args.swiftpw
         if self.args.swifttenantname:
             self.swift_tenant_name = self.args.swifttenantname
-        self.swift_auth_token, self.swift_endpoint, self.swift_tenant_id = lbaas_utils.get_auth_token_endpoint(self.auth_url, self.swift_user, self.swift_pass, self.swift_tenant_name, verbose = args.verbose)
+        self.swift_auth_token, self.swift_endpoint,self.swift_tenant_id = lbaas_utils.get_auth_token_endpoint(self.auth_url, self.swift_user, self.swift_pass, self.swift_tenant_name, self.swift_region, verbose = args.verbose)
 
     def report_info(self):
         """ function for dumping info on test failures """

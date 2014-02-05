@@ -23,7 +23,13 @@ import math
 import time
 import requests
 
-def get_auth_token_endpoint(auth_url, username, password, tenant_name, desired_service_name='Object Storage', verbose = False):
+def get_auth_token_endpoint( auth_url,
+                             username,
+                             password,
+                             tenant_name,
+                             region
+                             desired_service_name='Object Storage',
+                             verbose = False):
     """ Used for testing the lbaas log archiving feature """
         
     endpoint = None
@@ -41,7 +47,9 @@ def get_auth_token_endpoint(auth_url, username, password, tenant_name, desired_s
     request_data = json.loads(request_result.text)
     for service_data in request_data['access']['serviceCatalog']:
         if service_data['name'] == desired_service_name:
-            endpoint = service_data['endpoints'][0]['publicURL'].replace('\\','')
+            for test_endpoint in service_data['endpoints']:
+                if test_endpoint['region'] == region:
+                    endpoint = endpoint['publicURL'].replace('\\','')
     auth_token = request_data['access']['token']['id']
     tenant_id = request_data['access']['token']['tenant']['id']
     return auth_token, endpoint, tenant_id
