@@ -175,7 +175,7 @@ def get_parser():
                        )
     parser.add_argument( '--swift_region'
                        , action = 'store'
-                       , dest = 'swiftbasepath'
+                       , dest = 'swiftregion'
                        , default = 'region-a.geo-1'
                        , help = 'username for object storage (for haproxy log archiving).  Defaults to lbaas_tenant_name'
                        )
