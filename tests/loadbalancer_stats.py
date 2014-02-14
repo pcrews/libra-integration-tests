@@ -95,7 +95,7 @@ class testLoadBalancerStats(unittest.TestCase):
         failed_iterations = []
         bad_count = 0
         fail_count = 0
-        test_iterations=100
+        test_iterations=25
         for i in range(test_iterations):
             self.logging.info("Iteration: %d" %i)
             # Create our loadbalancer

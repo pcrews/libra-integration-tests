@@ -53,7 +53,7 @@ def on_message(body, message):
                                lb_events[event_type] = 1
                            match = True
                    if pkey == u'metrics' and match: #bandwidth message
-                       bytes_sent = pval[u'metric_value']
+                       bytes_sent = pval[0][u'metric_value']
                        byte_count.append(bytes_sent)
         data.append('='*80)
         if match:
