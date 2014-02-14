@@ -76,10 +76,10 @@ message_schemas = {"lbaas.instance.create": {"type": "object",
                                                                                      }}}
                                             },
                   "lbaas.bandwidth.usage": {"type": "object",
-                                             "properties": {"event_type": {"type": "string", "enum":["lbaas.bandwidth.usage"]},
-                                                            "message_id": {"type": "string"},
-                                                            "timestamp": {"type": "string"},
-                                                            "payload": {"type": "object",
+                                            "properties": {"event_type": {"type": "string", "enum":["lbaas.bandwidth.usage"]},
+                                                           "message_id": {"type": "string"},
+                                                           "timestamp": {"type": "string"},
+                                                           "payload": {"type": "object",
                                                                        "properties": {"version": {"type":"string"},
                                                                                       "audit_period_beginning":{"type":"string"},
                                                                                       "audit_period_ending": {"type":"string"},
@@ -94,14 +94,15 @@ message_schemas = {"lbaas.instance.create": {"type": "object",
                                                                                       "service_id": {"type":"string"},
                                                                                       "metrics": {"type": "array",
                                                                                                   "items":[
-                                                                                                          "type":"object",
-                                                                                                          "properties": { "metric_type": {"type":"string"},
+                                                                                                          {"type":"object",
+                                                                                                           "properties": { "metric_type": {"type":"string"},
                                                                                                                           "metric_units": {"type":"string", 
                                                                                                                           "enum":["BYTES"]},
                                                                                                                           "metric_name": {"type":"string", 
                                                                                                                           "enum":["lbaas.network.outgoing.bytes"]},
                                                                                                                           "metric_value": {"type":"integer"}
-                                                                                                                        }
+                                                                                                                          }
+                                                                                                           }
                                                                                                            ]
                                                                                                  }
                                                                                      }
