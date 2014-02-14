@@ -92,13 +92,18 @@ message_schemas = {"lbaas.instance.create": {"type": "object",
                                                                                       "state": {"type":"string"},
                                                                                       "mab_processing_version": {"type":"string"},
                                                                                       "service_id": {"type":"string"},
-                                                                                      "metrics": [{"type": "object",
-                                                                                                  "properties": { "metric_type": {"type":"string"},
-                                                                                                                  "metric_units": {"type":"string", "enum":["BYTES"]},
-                                                                                                                  "metric_name": {"type":"string", "enum":["lbaas.network.outgoing.bytes"]},
-                                                                                                                  "metric_value": {"type":"integer"}
-                                                                                                                }
-                                                                                                 }]
+                                                                                      "metrics": {"type": "array",
+                                                                                                  "items":[
+                                                                                                          "type":"object",
+                                                                                                          "properties": { "metric_type": {"type":"string"},
+                                                                                                                          "metric_units": {"type":"string", 
+                                                                                                                          "enum":["BYTES"]},
+                                                                                                                          "metric_name": {"type":"string", 
+                                                                                                                          "enum":["lbaas.network.outgoing.bytes"]},
+                                                                                                                          "metric_value": {"type":"integer"}
+                                                                                                                        }
+                                                                                                           ]
+                                                                                                 }
                                                                                      }
                                                                         }}
                                             }
