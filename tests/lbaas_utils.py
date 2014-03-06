@@ -22,6 +22,7 @@ import json
 import math
 import time
 import requests
+import pprint
 
 def get_auth_token_endpoint( auth_url,
                              username,
@@ -81,7 +82,11 @@ def wait_for_active_status(test_case, lb_id=None, active_wait_time=None, desired
                 logging.info("Waiting %d seconds from %s status..." %(test_case.args.activepause, desired_status))
                 time.sleep(test_case.args.activepause)
     if must_pass:
-        test_case.assertEqual(result_data['status'], desired_status, msg = 'loadbalancer: %s not in %s status after %d seconds' %(lb_id, desired_status, active_wait_time))
+        failure_msg = 'loadbalancer: %s in status %s (expected %s) after %d seconds: %s' %(
+          lb_id, result_data['status'], desired_status, active_wait_time, pprint.pformat( result_data ))
+        test_case.assertEqual(result_data['status'],
+                              desired_status,
+                              msg = failure_msg)
 
 def validate_loadBalancer( test_case
                          , disabled_node_list=[]
