@@ -22,7 +22,9 @@ import json
 import time
 import requests
 
+
 class lbaasDriver:
+
     """ Driver to handle http interaction with the libra lbaas service
         Contains methods to call the various api methods as well as
         code for validating the actions
@@ -32,7 +34,7 @@ class lbaasDriver:
     def __init__(self, args, api_user_url):
         """ TODO: put in validation and api-specific whatnot here """
         self.args = args
-        self.wait_decrement = 1 # duration of sleep when we wait for things
+        self.wait_decrement = 1  # duration of sleep when we wait for things
         self.user_name = args.osusername
         self.auth_url = args.osauthurl
         self.tenant_name = args.ostenantname
@@ -40,10 +42,10 @@ class lbaasDriver:
         self.password = args.ospassword
         self.verbose = args.verbose
         self.auth_token, self.api_user_url, self.swift_endpoint, self.tenant_id = self.get_auth_token()
-        if api_user_url: # if the user supplies an api_user_url, we use that vs. service_catalog value
+        if api_user_url:  # if the user supplies an api_user_url, we use that vs. service_catalog value
             self.api_user_url = api_user_url
-        self.api_headers = {"Content-Type": "application/json"
-              ,"X-Auth-Token": "%s" %(self.auth_token) }
+        self.api_headers = {"Content-Type": "application/json",
+                            "X-Auth-Token": self.auth_token}
         return
 
     #------------------
@@ -51,33 +53,33 @@ class lbaasDriver:
     #------------------
     def get_auth_token(self):
         """ Get our keystone auth token to work with the api server """
-        
+
         lbaas_endpoint = None
         swift_endpoint = None
         headers = {"Content-Type": "application/json"}
-        request_data = {'auth':{ 'tenantName': self.tenant_name
-                               , 'passwordCredentials':{'username': self.user_name
-                                                       , 'password': self.password}
-                               }
+        request_data = {'auth': {'tenantName': self.tenant_name,
+                                 'passwordCredentials': {'username': self.user_name,
+                                                          'password': self.password}
+                                }
                        }
         request_data = json.dumps(request_data)
         request_result = requests.post(self.auth_url, data=request_data, headers=headers, verify=False)
         if self.verbose:
-            print 'Status: %s' %request_result.status_code
-            print 'Output:\n%s' %(request_result.text)
+            print 'Status: %s' % request_result.status_code
+            print 'Output:\n%s' % (request_result.text)
         request_data = json.loads(request_result.text)
         for service_data in request_data['access']['serviceCatalog']:
             if service_data['name'] == 'Load Balancer':
                 if self.region_name:
                     for endpoint in service_data['endpoints']:
                         if endpoint['region'] == self.region_name:
-                            lbaas_endpoint = endpoint['publicURL'].replace('\\','')
+                            lbaas_endpoint = endpoint['publicURL'].replace('\\', '')
                 else:
-                    lbaas_endpoint = service_data['endpoints'][0]['publicURL'].replace('\\','')
+                    lbaas_endpoint = service_data['endpoints'][0]['publicURL'].replace('\\', '')
                 if self.verbose:
-                    print "LBAAS_ENDPOINT: %s" %lbaas_endpoint
+                    print "LBAAS_ENDPOINT: %s" % lbaas_endpoint
             if service_data['name'] == 'Object Storage':
-                swift_endpoint = service_data['endpoints'][0]['publicURL'].replace('\\','')
+                swift_endpoint = service_data['endpoints'][0]['publicURL'].replace('\\', '')
         auth_token = request_data['access']['token']['id']
         tenant_id = request_data['access']['token']['tenant']['id']
         return auth_token, lbaas_endpoint, swift_endpoint, tenant_id
@@ -86,18 +88,18 @@ class lbaasDriver:
     # lbaas functions
     #-----------------
     def create_lb(self, name, nodes, algorithm, bad_statuses, vip=None):
-        """ Create a load balancer via the requests library 
+        """ Create a load balancer via the requests library
             We expect the url to be the proper, fully constructed base url
-            we add the 'loadbalancers suffix to the base 
+            we add the 'loadbalancers suffix to the base
 
             nodes is expected to be a list of nodes in this format:
             nodes = [{"address": "15.185.227.167","port": "80"},{"address": "15.185.227.165","port": "80"}]
 
         """
 
-        url = "%s/loadbalancers" %self.api_user_url
-        request_data = { "name": "%s" %name
-                       , "nodes": nodes 
+        url = "%s/loadbalancers" % self.api_user_url
+        request_data = {"name": name,
+                        "nodes": nodes
                        }
         lb_id = None
         lb_addr = None
@@ -106,7 +108,7 @@ class lbaasDriver:
             if 'port' in node and str(node['port']) == '443':
                 tcp_https_flag = True
         if algorithm:
-            request_data["algorithm"] = "%s" %algorithm
+            request_data["algorithm"] = "%s" % algorithm
         if tcp_https_flag:
             request_data['protocol'] = 'TCP'
             request_data['port'] = '443'
@@ -114,14 +116,14 @@ class lbaasDriver:
         if vip:
             request_data['virtualIps'] = [{"id":vip}]
         request_data = json.dumps(request_data)
-        request_result = requests.post(url, data=request_data, headers=self.api_headers, verify= False)
+        request_result = requests.post(url, data=request_data, headers=self.api_headers, verify=False)
         result_data = json.loads(request_result.text)
         request_status = str(request_result.status_code)
         if self.verbose:
-            print "url: %s" %url
-            print "status: %s" %request_status
-            print "request_data: %s" %request_data
-            print "request result: %s" %result_data
+            print "url: %s" % url
+            print "status: %s" % request_status
+            print "request_data: %s" % request_data
+            print "request result: %s" % result_data
         if request_status not in bad_statuses:
             lb_id = result_data['id']
             lb_addr = result_data['virtualIps'][0]['address']
@@ -143,7 +145,7 @@ class lbaasDriver:
 
     def delete_lb(self, lb_id):
         """ Delete the loadbalancer identified by 'lb_id' """
-        url = "%s/loadbalancers/%s" %(self.api_user_url, lb_id)
+        url = "%s/loadbalancers/%s" % (self.api_user_url, lb_id)
         request_result = requests.delete(url, headers=self.api_headers, verify=False)
         if self.verbose:
             print request_result.status_code
@@ -153,27 +155,27 @@ class lbaasDriver:
     def list_lbs(self):
         """ List all loadbalancers for the given auth token / tenant id """
 
-        url = "%s/loadbalancers" %self.api_user_url
+        url = "%s/loadbalancers" % self.api_user_url
         request_result = self.__get(url, headers=self.api_headers, verify=False)
         return json.loads(request_result.text)['loadBalancers']
- 
+
     def list_lb_detail(self, lb_id):
         """ Get the detailed info returned by the api server for the specified id """
 
-        url = "%s/loadbalancers/%s" %(self.api_user_url, lb_id)
+        url = "%s/loadbalancers/%s" % (self.api_user_url, lb_id)
         request_result = self.__get(url, headers=self.api_headers, verify=False)
         return json.loads(request_result.text)
 
     def list_lb_nodes(self, lb_id):
         """ Get list of nodes for the specified lb_id """
-    
-        url = "%s/loadbalancers/%s/nodes" %(self.api_user_url, lb_id)
+
+        url = "%s/loadbalancers/%s/nodes" % (self.api_user_url, lb_id)
         request_result = self.__get(url, headers=self.api_headers, verify=False)
         return json.loads(request_result.text)
 
     def delete_lb_node(self, lb_id, node_id):
         """ Remove specified node_id from lb_id """
-        url = "%s/loadbalancers/%s/nodes/%s" %(self.api_user_url, lb_id, node_id)
+        url = "%s/loadbalancers/%s/nodes/%s" % (self.api_user_url, lb_id, node_id)
         request_result = requests.delete(url, headers=self.api_headers, verify=False)
         return str(request_result.status_code)
 
@@ -183,7 +185,7 @@ class lbaasDriver:
             and we execute an UPDATE API call and see
             what happens
         """
-        url = "%s/loadbalancers/%s" %(self.api_user_url, lb_id)
+        url = "%s/loadbalancers/%s" % (self.api_user_url, lb_id)
         request_data = json.dumps(update_data)
         request_result = requests.put(url, data=request_data, headers=self.api_headers, verify=False)
         return str(request_result.status_code)
@@ -193,7 +195,7 @@ class lbaasDriver:
             try to add them :)
 
         """
-        url = "%s/loadbalancers/%s/nodes" %(self.api_user_url, lb_id)
+        url = "%s/loadbalancers/%s/nodes" % (self.api_user_url, lb_id)
         node_data = {}
         node_data['nodes'] = add_node_data
         node_data = json.dumps(node_data)
@@ -203,7 +205,7 @@ class lbaasDriver:
     def modify_node(self, lb_id, node_id, node_data):
         """ Set the node's condition to the value specified """
 
-        url = "%s/loadbalancers/%s/nodes/%s" %(self.api_user_url, lb_id, node_id)
+        url = "%s/loadbalancers/%s/nodes/%s" % (self.api_user_url, lb_id, node_id)
         node_data = json.dumps(node_data)
         request_result = requests.put(url, data=node_data, headers=self.api_headers, verify=False)
         if self.verbose:
@@ -214,13 +216,13 @@ class lbaasDriver:
 
     def get_monitor(self, lb_id):
         """ Get health monitor information """
-        url = "%s/loadbalancers/%s/healthmonitor" %(self.api_user_url, lb_id)
+        url = "%s/loadbalancers/%s/healthmonitor" % (self.api_user_url, lb_id)
         request_result = requests.get(url, headers=self.api_headers, verify=False)
         return json.loads(request_result.text), str(request_result.status_code)
 
     def update_monitor(self, lb_id, monitor_data):
         """ Get health monitor information """
-        url = "%s/loadbalancers/%s/healthmonitor" %(self.api_user_url, lb_id)
+        url = "%s/loadbalancers/%s/healthmonitor" % (self.api_user_url, lb_id)
         output = ''
         status = ''
         monitor_data = json.dumps(monitor_data)
@@ -235,8 +237,8 @@ class lbaasDriver:
 
     def get_logs(self, lb_id, auth_token=None, obj_endpoint=None, obj_basepath=None):
         """ Get the logs / archive them for the listed lb_id """
-        
-        url = "%s/loadbalancers/%s/logs" %(self.api_user_url, lb_id)
+
+        url = "%s/loadbalancers/%s/logs" % (self.api_user_url, lb_id)
         data = {}
         if auth_token:
             data['authToken'] = auth_token
@@ -268,30 +270,30 @@ class lbaasDriver:
             request_result = requests.get(url, headers=headers, verify=False)
             if self.verbose:
                 print 'http GET request...'
-                print 'caller: %s' %caller_info
-                print 'url: %s' %url
-                print 'status: %s' %request_result.status_code
-                print 'returned: %s' %request_result.text
-                print '+'*80
+                print 'caller: %s' % caller_info
+                print 'url: %s' % url
+                print 'status: %s' % request_result.status_code
+                print 'returned: %s' % request_result.text
+                print '+' * 80
             if str(request_result.status_code) == '401':
                 retries -= 1
                 time.sleep(self.wait_decrement)
             else:
                 good_request = True
         return request_result
-    
+
     # validation functions
     # these should likely live in a separate file, but putting
-    # validation + actions together for now 
+    # validation + actions together for now
 
-    def validate_lb_nodes(self,expected_nodes, system_nodes):
+    def validate_lb_nodes(self, expected_nodes, system_nodes):
         """ We go through our list of expected nodes and compare them
             to our system nodes
         """
         error = 0
         error_list = []
         if len(expected_nodes) != len(system_nodes):
-            error_list.append("ERROR: Node mismatch between request and api server detail: %s || %s" %(expected_nodes, system_nodes))
+            error_list.append("ERROR: Node mismatch between request and api server detail: %s || %s" % (expected_nodes, system_nodes))
             error = 1
         for node in expected_nodes:
             match = 0
@@ -299,14 +301,14 @@ class lbaasDriver:
                 if not match and node['address'] == sys_node['address'] and int(node['port']) == int(sys_node['port']):
                     match = 1
             if not match:
-                error_list.append("ERROR: Node: %s has no match from api server" %(node))
-                error = 1                
+                error_list.append("ERROR: Node: %s has no match from api server" % (node))
+                error = 1
         return error, error_list
 
-    def validate_status(self,expected_status, actual_status):
+    def validate_status(self, expected_status, actual_status):
         """ See what the result_dictionary status_code is and
             compare it to our expected result """
-        
+
         if str(actual_status) == str(expected_status):
             result = True
         else:
@@ -319,9 +321,8 @@ class lbaasDriver:
             """
             if self.args.verbose:
                 for key, item in loadbalancer.items():
-                    self.logging.info('%s: %s' %(key, item))
+                    self.logging.info('%s: %s' % (key, item))
             """
-            if loadbalancer['name'] == lb_name[0:128]: # api_server trims whitespace...
+            if loadbalancer['name'] == lb_name[0:128]:  # api_server trims whitespace...
                     match = True
         return match
-
