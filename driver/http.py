@@ -41,7 +41,7 @@ class lbaasDriver:
         self.region_name = args.osregionname
         self.password = args.ospassword
         self.verbose = args.verbose
-        self.logging.info = logging
+        self.logging = logging
         self.auth_token, self.api_user_url, self.swift_endpoint, self.tenant_id = self.get_auth_token()
         if api_user_url:  # if the user supplies an api_user_url, we use that vs. service_catalog value
             self.api_user_url = api_user_url
