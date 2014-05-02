@@ -67,7 +67,7 @@ if api_base_url:
 # load our specific driver
 driver_module = imp.load_source(args.driver,
                                 os.path.join(driver_path, args.driver + '.py'))
-driver = driver_module.lbaasDriver(args, api_user_url)
+driver = driver_module.lbaasDriver(args, api_user_url, logging)
 
 ##################################
 # test away!

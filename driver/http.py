@@ -31,7 +31,7 @@ class lbaasDriver:
 
     """
 
-    def __init__(self, args, api_user_url):
+    def __init__(self, args, api_user_url, logging):
         """ TODO: put in validation and api-specific whatnot here """
         self.args = args
         self.wait_decrement = 1  # duration of sleep when we wait for things
@@ -41,6 +41,7 @@ class lbaasDriver:
         self.region_name = args.osregionname
         self.password = args.ospassword
         self.verbose = args.verbose
+        self.logging = logging
         self.auth_token, self.api_user_url, self.swift_endpoint, self.tenant_id = self.get_auth_token()
         if api_user_url:  # if the user supplies an api_user_url, we use that vs. service_catalog value
             self.api_user_url = api_user_url
@@ -65,8 +66,8 @@ class lbaasDriver:
         request_data = json.dumps(request_data)
         request_result = requests.post(self.auth_url, data=request_data, headers=headers, verify=False)
         if self.verbose:
-            print 'Status: %s' % request_result.status_code
-            print 'Output:\n%s' % (request_result.text)
+            self.logging('Status: %s' % request_result.status_code)
+            self.logging('Output:\n%s' % (request_result.text))
         request_data = json.loads(request_result.text)
         for service_data in request_data['access']['serviceCatalog']:
             if service_data['name'] == 'Load Balancer':
@@ -77,7 +78,7 @@ class lbaasDriver:
                 else:
                     lbaas_endpoint = service_data['endpoints'][0]['publicURL'].replace('\\', '')
                 if self.verbose:
-                    print "LBAAS_ENDPOINT: %s" % lbaas_endpoint
+                    self.logging("LBAAS_ENDPOINT: %s" % lbaas_endpoint)
             if service_data['name'] == 'Object Storage':
                 swift_endpoint = service_data['endpoints'][0]['publicURL'].replace('\\', '')
         auth_token = request_data['access']['token']['id']
@@ -120,10 +121,10 @@ class lbaasDriver:
         result_data = json.loads(request_result.text)
         request_status = str(request_result.status_code)
         if self.verbose:
-            print "url: %s" % url
-            print "status: %s" % request_status
-            print "request_data: %s" % request_data
-            print "request result: %s" % result_data
+            self.logging("url: %s" % url)
+            self.logging("status: %s" % request_status)
+            self.logging("request_data: %s" % request_data)
+            self.logging("request result: %s" % result_data)
         if request_status not in bad_statuses:
             lb_id = result_data['id']
             lb_addr = result_data['virtualIps'][0]['address']
@@ -148,8 +149,8 @@ class lbaasDriver:
         url = "%s/loadbalancers/%s" % (self.api_user_url, lb_id)
         request_result = requests.delete(url, headers=self.api_headers, verify=False)
         if self.verbose:
-            print request_result.status_code
-            print request_result.text
+            self.logging(request_result.status_code)
+            self.logging(request_result.text)
         return request_result
 
     def list_lbs(self):
@@ -209,9 +210,9 @@ class lbaasDriver:
         node_data = json.dumps(node_data)
         request_result = requests.put(url, data=node_data, headers=self.api_headers, verify=False)
         if self.verbose:
-            print 'http driver modify_node()'
-            print request_result.status_code
-            print request_result.text
+            self.logging('http driver modify_node()')
+            self.logging(request_result.status_code)
+            self.logging(request_result.text)
         return request_result.status_code
 
     def get_monitor(self, lb_id):
@@ -256,11 +257,11 @@ class lbaasDriver:
         else:
             request_result = requests.post(url, headers=self.api_headers, verify=False)
         if self.verbose:
-            print 'http driver get_logs()'
-            print url
-            print data
-            print request_result.status_code
-            print request_result.text
+            self.logging('http driver get_logs()')
+            self.logging(url)
+            self.logging(data)
+            self.logging(request_result.status_code)
+            self.logging(request_result.text)
         return request_result.status_code
 
     # http functions
@@ -269,12 +270,12 @@ class lbaasDriver:
         while retries and not good_request:
             request_result = requests.get(url, headers=headers, verify=False)
             if self.verbose:
-                print 'http GET request...'
-                print 'caller: %s' % caller_info
-                print 'url: %s' % url
-                print 'status: %s' % request_result.status_code
-                print 'returned: %s' % request_result.text
-                print '+' * 80
+                self.logging('http GET request...')
+                self.logging('caller: %s' % caller_info)
+                self.logging('url: %s' % url)
+                self.logging('status: %s' % request_result.status_code)
+                self.logging('returned: %s' % request_result.text)
+                self.logging('+' * 80)
             if str(request_result.status_code) == '401':
                 retries -= 1
                 time.sleep(self.wait_decrement)
