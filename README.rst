@@ -16,10 +16,10 @@ python-requests
 
 optional requirements:
 ----------------------
-apachebench (ab)
-siege
-python-swiftclient
-python-novaclient
+ - apachebench (ab)
+ - siege
+ - python-swiftclient
+ - python-novaclient
 
 Basic execution:
 -----------------
